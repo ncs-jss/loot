@@ -30,6 +30,7 @@ public class Locator extends Fragment {
 
 
     final private int Camera_Request=1;
+    Camera camera;
 
     public Locator() {
         // Required empty public constructor
@@ -62,15 +63,18 @@ public class Locator extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        
+        //getActivity().getActionBar().hide();
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         FrameLayout camera_frame=(FrameLayout)getActivity().findViewById(R.id.camera_frame);
-        Camera camera=getCameraInstance();
+        camera=getCameraInstance();
         CameraPreview preview=new CameraPreview(getContext(),camera);
         camera_frame.addView(preview,0);
-        getActivity().getActionBar().hide();
-
-
-
     }
 
     public Camera getCameraInstance(){
@@ -92,8 +96,15 @@ public class Locator extends Fragment {
 
     }
 
-
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(camera!=null)
+        {
+            camera.stopPreview();
+            camera.release();
+        }
+    }
 
     private void checkPermission()
     {

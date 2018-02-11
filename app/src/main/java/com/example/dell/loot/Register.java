@@ -132,14 +132,9 @@ public class Register extends Fragment {
     {
 
         users.child(user.getUserId()).setValue(user);
-        SharedPreferences sharedPreferences=getActivity().getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putString("Uid",user.getUserId());
-        editor.putString("Uname",user.getUsername());
-        editor.putInt("Score",user.getScore());
-        editor.apply();
+
         Intent i=new Intent(getContext(),Main2Activity.class);
-        i.putExtra("userID",user.getUserId());
+        i.putExtra("UID",user.getUserId());
         startActivity(i);
     }
 

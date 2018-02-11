@@ -2,7 +2,9 @@ package com.example.dell.loot;
 
 import android.app.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -17,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,7 +30,7 @@ public class Main2Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     FirebaseDatabase database;
-    DatabaseReference users;
+    DatabaseReference users,missions;
     User user;
 
 
@@ -48,9 +51,10 @@ public class Main2Activity extends AppCompatActivity
 
         database=FirebaseDatabase.getInstance();
         users=database.getReference("Users");
+        missions=database.getReference("Missions");
 
         Intent intent=getIntent();
-        String userId=intent.getStringExtra("userID");
+        String userId=intent.getStringExtra("UID");
 
         users.child(userId).addValueEventListener(new ValueEventListener() {
             @Override
@@ -59,6 +63,7 @@ public class Main2Activity extends AppCompatActivity
                 // whenever data at this location is updated.
                 user= dataSnapshot.getValue(User.class);
                 Log.i("User Email", "Value is: " + user.getEmail());
+                syncSharedPrefs(user);
 
 
             }
@@ -70,13 +75,33 @@ public class Main2Activity extends AppCompatActivity
             }
         });
 
+        missions.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                
+                Log.i("key",s);
+            }
 
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
+            }
 
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
 
+            }
 
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
@@ -145,5 +170,17 @@ public class Main2Activity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void syncSharedPrefs(User user)
+    {
+        SharedPreferences sharedPreferences=getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString("Uid",user.getUserId());
+        editor.putString("Username",user.getUsername());
+        editor.putInt("Score",user.getScore());
+        editor.putString("mActive",user.getActive());
+        editor.apply();
+
     }
 }

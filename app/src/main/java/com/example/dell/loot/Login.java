@@ -40,7 +40,6 @@ public class Login extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
     DatabaseReference users;
-    User user;
     public Login() {
         // Required empty public constructor
     }
@@ -78,7 +77,7 @@ public class Login extends Fragment {
                                     Toast.makeText(getContext(),"Register Successful",Toast.LENGTH_SHORT).show();
                                     FirebaseUser firebaseUser = mAuth.getCurrentUser();
 
-                                    updateSharedPrefs(firebaseUser.getUid());
+                                    success(firebaseUser.getUid());
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     //Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -115,36 +114,14 @@ public class Login extends Fragment {
 
     }
 
-    private void updateSharedPrefs(String uid)
+    private void success(String uid)
     {
-        users.child(uid).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                user= dataSnapshot.getValue(User.class);
-                Log.i("User Email", "Value is: " + user.getEmail());
-                SharedPreferences sharedPreferences=getActivity().getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor=sharedPreferences.edit();
-                editor.putString("Uid",user.getUserId());
-                editor.putString("Uname",user.getUsername());
-                editor.putInt("Score",user.getScore());
-                editor.putString("mActive",user.getActive());
-                editor.putString("mFound",user.getFound().get(user.getFound().size()-1));
-                editor.putString("mCompleted",user.getCompleted().get(user.getCompleted().size()-1));
-                editor.putString("mDropped",user.getDropped().get(user.getDropped().size()-1));
-                editor.apply();
-                Intent i=new Intent(getContext(),Main2Activity.class);
-                i.putExtra("userID",user.getUserId());
-                startActivity(i);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.i("Error",  error.toException().getMessage());
-            }
-        });
+        Intent i=new Intent(getContext(),Main2Activity.class);
+        i.putExtra("UID",uid);
+        startActivity(i);
+
+
     }
 
 }

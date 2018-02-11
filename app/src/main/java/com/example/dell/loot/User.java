@@ -21,11 +21,12 @@ public class User {
     String active;
     ArrayList<String> completed;
     ArrayList<String> dropped;
+    boolean online;
     public User()
     {
 
     }
-     public User(String userId, String username, String name,String email,String password,String zealID,long contact,int score,int avtarId,String active,ArrayList<String> found, ArrayList<String> completed, ArrayList<String> dropped)
+     public User(String userId, String username, String name,String email,String password,String zealID,long contact,int score,int avtarId,String active,ArrayList<String> found, ArrayList<String> completed, ArrayList<String> dropped,boolean online)
      {
 
          this.active=active;
@@ -41,8 +42,13 @@ public class User {
          this.found=found;
          this.userId=userId;
          this.zealID=zealID;
+         this.online=online;
 
      }
+
+    public void setOnline(boolean online) {
+        this.online = online;
+    }
 
     public void setUserId(String userId) {
         this.userId = userId;
@@ -148,4 +154,7 @@ public class User {
         return zealID;
     }
 
+    public boolean isOnline() {
+        return online;
+    }
 }

@@ -95,7 +95,7 @@ public class Splash extends Fragment {
         if(user!=null)
         {
             Intent i=new Intent(getContext(),Main2Activity.class);
-            i.putExtra("userID",user.getUid());
+            i.putExtra("UID",user.getUid());
             startActivity(i);
         }
     }

@@ -19,6 +19,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,13 +33,17 @@ public class Main2Activity extends AppCompatActivity
 
     FirebaseDatabase database;
     DatabaseReference users,missions;
+    FirebaseAuth mAuth;
     User user;
-
+    String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+        Intent intent=getIntent();
+        userId=intent.getStringExtra("UID");
+        Log.i("UID",userId);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -48,60 +54,14 @@ public class Main2Activity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        mAuth=FirebaseAuth.getInstance();
         database=FirebaseDatabase.getInstance();
         users=database.getReference("Users");
         missions=database.getReference("Missions");
-
-        Intent intent=getIntent();
-        String userId=intent.getStringExtra("UID");
-
-        users.child(userId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                user= dataSnapshot.getValue(User.class);
-                Log.i("User Email", "Value is: " + user.getEmail());
-                syncSharedPrefs(user);
+       // users.child(userId).child("online").setValue(true);
 
 
-            }
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.i("Error",  error.toException().getMessage());
-            }
-        });
-
-        missions.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                
-                Log.i("key",s);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
     }
 
@@ -152,7 +112,7 @@ public class Main2Activity extends AppCompatActivity
         if (id == R.id.nav_dashboard) {
             // Handle the camera action
             Dashboard fragment=new Dashboard();
-            fragmentTransaction.add(R.id.frame, fragment);
+            fragmentTransaction.replace(R.id.frame, fragment);
             fragmentTransaction.commit();
         }
 //            else if (id == R.id.nav_gallery) {
@@ -172,6 +132,19 @@ public class Main2Activity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        FirebaseUser currentUser=mAuth.getCurrentUser();
+        attach(currentUser.getUid());
+    }
+
     public void syncSharedPrefs(User user)
     {
         SharedPreferences sharedPreferences=getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
@@ -181,6 +154,60 @@ public class Main2Activity extends AppCompatActivity
         editor.putInt("Score",user.getScore());
         editor.putString("mActive",user.getActive());
         editor.apply();
+
+
+
+
+    }
+
+    private void attach(String userId)
+    {
+        users.child(userId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                user= dataSnapshot.getValue(User.class);
+                Log.i("User Email", "Value is: " + user.getEmail());
+                syncSharedPrefs(user);
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.i("Error",  error.toException().getMessage());
+            }
+        });
+
+        missions.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                Log.i("Missions",dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 }

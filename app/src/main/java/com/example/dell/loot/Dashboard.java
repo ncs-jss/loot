@@ -35,6 +35,7 @@ public class Dashboard extends Fragment {
         ViewPager viewPager=(ViewPager)getView().findViewById(R.id.pager);
         DashboardPagerAdapter dashboardPagerAdapter=new DashboardPagerAdapter(getActivity().getSupportFragmentManager());
         viewPager.setAdapter(dashboardPagerAdapter);
+        
 
 
 

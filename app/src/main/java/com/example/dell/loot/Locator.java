@@ -52,6 +52,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.ArrayList;
+
 
 public class Locator extends Fragment /*implements
         LocationListener,
@@ -74,6 +76,7 @@ public class Locator extends Fragment /*implements
     private FusedLocationProviderClient mFusedLocationClient;
     Vibrator vibrator;
     ProgressBar hot_cold;
+    ArrayList<Location> geocodes;
     public Locator() {
         // Required empty public constructor
     }
@@ -399,9 +402,11 @@ public class Locator extends Fragment /*implements
 
     protected void updateHot_Cold(Location location)
     {
-        Location location1=new Location("");
-        location1.setLatitude(28.6148327d);
-        location1.setLongitude(77.3588033d);
+//        Location location1=new Location("");
+//        location1.setLatitude(28.6148327d);
+//        location1.setLongitude(77.3588033d);
+
+        Location location1=findNearest(location);
 
         if(location1!=null) {
             double dist = location.distanceTo(location1);
@@ -414,5 +419,54 @@ public class Locator extends Fragment /*implements
                     Toast.LENGTH_SHORT).show();
         }
 
+    }
+    protected Location findNearest(Location location)
+    {
+        double minDist=0;
+        int minDistI=-1;
+        for(int i=0;i<geocodes.size();i++)
+        {
+            Location location1=geocodes.get(i);
+            double dist=location.distanceTo(location1);
+            if(i==0||minDist<dist)
+            {
+                minDist=dist;
+                minDistI=i;
+            }
+
+        }
+
+        return geocodes.get(minDistI);
+
+    }
+
+    private void updateGeocode()
+    {
+        geocodes=new ArrayList<>();
+        Loot_Application app=(Loot_Application)getActivity().getApplication();
+        ArrayList <String> completed=app.user.getCompleted();
+        ArrayList<Mission> missions=app.missions;
+
+        for (Mission mission : missions)
+        {
+            if(completed!=null)
+            {
+                if(!(completed.contains(mission.getMissionId())))
+                {
+                    Location loc=new Location("");
+                    loc.setLongitude(mission.getLng());
+                    loc.setLongitude(mission.getLng());
+                    geocodes.add(loc);
+                }
+            }
+            else
+            {
+                Location loc=new Location("");
+                loc.setLongitude(mission.getLng());
+                loc.setLongitude(mission.getLng());
+                geocodes.add(loc);
+
+            }
+        }
     }
 }

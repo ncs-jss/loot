@@ -14,24 +14,42 @@
         android:textSize="50sp"
         android:id="@+id/textView2" />
 
-    <Button
-        android:id="@+id/login_button"
+    <RelativeLayout
+        android:id="@+id/rel_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:layout_marginTop="40dp"
+        android:layout_centerHorizontal="true"
+        android:visibility="visible">
+
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="Login" />
+
+        <Button
+            android:id="@+id/register_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/login_button"
+            android:layout_alignStart="@+id/login_button"
+            android:layout_below="@+id/login_button"
+            android:layout_marginTop="25dp"
+            android:text="Register" />
+
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/loader"
+        style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="66dp"
-        android:text="Login" />
-
-    <Button
-        android:id="@+id/register_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/login_button"
-        android:layout_alignStart="@+id/login_button"
-        android:layout_below="@+id/login_button"
-        android:layout_marginTop="25dp"
-        android:text="Register" />
+        android:layout_marginTop="59dp" />
 
 
 </RelativeLayout>

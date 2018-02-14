@@ -28,6 +28,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 public class Main2Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -36,6 +38,7 @@ public class Main2Activity extends AppCompatActivity
     FirebaseAuth mAuth;
     User user;
     String userId;
+    ArrayList<Mission> missionsList=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,14 @@ public class Main2Activity extends AppCompatActivity
         users=database.getReference("Users");
         missions=database.getReference("Missions");
        // users.child(userId).child("online").setValue(true);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Dashboard fragment=new Dashboard();
+        fragmentTransaction.replace(R.id.frame, fragment);
+        fragmentTransaction.commit();
+//        MenuItem menuItem=(MenuItem)findViewById(R.id.nav_dashboard);
+//        menuItem.setChecked(true);
 
 
 
@@ -123,9 +134,13 @@ public class Main2Activity extends AppCompatActivity
 //
 //        } else if (id == R.id.nav_share) {
 //
-//        } else if (id == R.id.nav_send) {
-//
 //        }
+        else if (id == R.id.nav_logout) {
+            mAuth.signOut();
+            Intent intent=new Intent(this,Main3Activity.class);
+            startActivity(intent);
+
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -142,7 +157,11 @@ public class Main2Activity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         FirebaseUser currentUser=mAuth.getCurrentUser();
-        attach(currentUser.getUid());
+        Loot_Application app=(Loot_Application)getApplication();
+        Log.i("Name",app.user.getEmail());
+        Log.i("Misison",app.missions.get(0).missionId);
+
+        //attach(currentUser.getUid());
     }
 
     public void syncSharedPrefs(User user)
@@ -154,6 +173,11 @@ public class Main2Activity extends AppCompatActivity
         editor.putInt("Score",user.getScore());
         editor.putString("mActive",user.getActive());
         editor.apply();
+
+        Loot_Application app=(Loot_Application)getApplication();
+        app.user=user;
+        app.missions=missionsList;
+
 
 
 
@@ -169,6 +193,10 @@ public class Main2Activity extends AppCompatActivity
                 // whenever data at this location is updated.
                 user= dataSnapshot.getValue(User.class);
                 Log.i("User Email", "Value is: " + user.getEmail());
+                Loot_Application app=(Loot_Application)getApplication();
+                app.user=user;
+
+
                 syncSharedPrefs(user);
 
 
@@ -186,6 +214,10 @@ public class Main2Activity extends AppCompatActivity
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                 Log.i("Missions",dataSnapshot.getKey());
+                missionsList.add(dataSnapshot.getValue(Mission.class));
+                Loot_Application app=(Loot_Application)getApplication();
+                app.missions=missionsList;
+
             }
 
             @Override

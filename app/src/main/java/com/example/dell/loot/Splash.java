@@ -45,7 +45,7 @@ public class Splash extends Fragment {
     User user;
     ArrayList<Mission> missionsList=new ArrayList<>();
 
-    boolean isConnected,logged_in;
+    boolean isConnected,logged_in,synced_user,synced_missions;
     public Splash() {
         // Required empty public constructor
     }
@@ -94,9 +94,12 @@ public class Splash extends Fragment {
             public void run() {
                 if (isConnected) {
                     if (logged_in) {
-                        Intent i = new Intent(getContext(), Main2Activity.class);
-                        i.putExtra("UID", fbuser.getUid());
-                        startActivity(i);
+
+                        if(synced_user&&synced_missions)
+                        syncSharedPrefs(user);
+
+
+
                     } else {
                         changeView();
                     }
@@ -106,7 +109,7 @@ public class Splash extends Fragment {
                     getActivity().finish();
                 }
             }
-        }, 3750);
+        }, 5000);
 
 
     }
@@ -126,7 +129,8 @@ public class Splash extends Fragment {
 
                 user = dataSnapshot.getValue(User.class);
                 Log.i("User Email", "Value is: " + user.getEmail());
-                syncSharedPrefs(user);
+                synced_user=true;
+
 
 
             }
@@ -137,12 +141,26 @@ public class Splash extends Fragment {
                 Log.i("Error", error.toException().getMessage());
             }
         });
+        missions.addListenerForSingleValueEvent(new ValueEventListener() {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+               synced_missions=true;
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+
+        });
         missions.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                 missionsList.add(dataSnapshot.getValue(Mission.class));
+                Loot_Application app=(Loot_Application)getActivity().getApplication();
+
+                app.missions=missionsList;
             }
 
             @Override
@@ -180,6 +198,10 @@ public class Splash extends Fragment {
         app.user=user;
         app.missions=missionsList;
 
+        Intent i = new Intent(getContext(), Main2Activity.class);
+        i.putExtra("UID", fbuser.getUid());
+        startActivity(i);
+
 
 
     }
@@ -209,16 +231,20 @@ public class Splash extends Fragment {
         }
     }
 
-    private void backgroundTasks() {
+    private  void backgroundTasks() {
 
         isConnected = isOnline();
         logged_in = mAuth.getCurrentUser()!=null;
         fbuser=mAuth.getCurrentUser();
-        attach(fbuser.getUid());
+        if(logged_in)
+        {
+            attach(fbuser.getUid());
+        }
+
 
 
     }
-    public class BackgroundTasks extends AsyncTask<String, Integer, String> {
+    public  class BackgroundTasks extends AsyncTask<String, Integer, String> {
 
         @Override
         protected String doInBackground(String... params) {
@@ -235,12 +261,13 @@ public class Splash extends Fragment {
     }
     private void changeView()
     {
-        ProgressBar loader=(ProgressBar)getView().findViewById(R.id.loader);
-        RelativeLayout layout=(RelativeLayout)getView().findViewById(R.id.rel_layout);
-        Button login_button = (Button) getView().findViewById(R.id.login_button);
-        Button register_button = (Button) getView().findViewById(R.id.register_button);
+        ProgressBar loader=getView().findViewById(R.id.loader);
+        RelativeLayout layout=getView().findViewById(R.id.rel_layout);
+
         loader.setVisibility(View.GONE);
         layout.setVisibility(View.VISIBLE);
+        Button login_button =  getView().findViewById(R.id.login_button);
+        Button register_button =  getView().findViewById(R.id.register_button);
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

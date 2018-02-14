@@ -116,12 +116,13 @@ public class Locator extends Fragment /*implements
 
        checkPermission();
 
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
+        updateGeocode();
         startCameraUpdates();
         startLocationUpdates();
 //        if (mGoogleApiClient.isConnected()) {
@@ -428,7 +429,13 @@ public class Locator extends Fragment /*implements
         {
             Location location1=geocodes.get(i);
             double dist=location.distanceTo(location1);
-            if(i==0||minDist<dist)
+
+            Log.i("LatM",location.getLatitude()+"");
+            Log.i("LngM",location.getLongitude()+"");
+            Log.i("Lat",location1.getLatitude()+"");
+            Log.i("Lng",location1.getLongitude()+"");
+            Log.i("Dist",dist+"");
+            if(i==0||minDist>dist)
             {
                 minDist=dist;
                 minDistI=i;
@@ -454,18 +461,23 @@ public class Locator extends Fragment /*implements
                 if(!(completed.contains(mission.getMissionId())))
                 {
                     Location loc=new Location("");
-                    loc.setLongitude(mission.getLng());
+                    loc.setLatitude(mission.getLat());
                     loc.setLongitude(mission.getLng());
                     geocodes.add(loc);
+                    Log.i("Mission Id",mission.getMissionId());
+                    Log.i("Lat",mission.getLat()+"");
+                    Log.i("Lng",mission.getLng()+"");
                 }
             }
             else
             {
                 Location loc=new Location("");
-                loc.setLongitude(mission.getLng());
+                loc.setLatitude(mission.getLat());
                 loc.setLongitude(mission.getLng());
                 geocodes.add(loc);
-
+                Log.i("Mission Id",mission.getMissionId());
+                Log.i("Lat",mission.getLat()+"");
+                Log.i("Lng",mission.getLng()+"");
             }
         }
     }

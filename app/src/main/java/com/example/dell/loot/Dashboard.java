@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 public class Dashboard extends Fragment {
 
 
+    private ViewPager viewPager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,9 @@ public class Dashboard extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ViewPager viewPager=(ViewPager)getView().findViewById(R.id.viewpager);
+        viewPager=(ViewPager)getView().findViewById(R.id.viewpager);
+        Loot_Application app=(Loot_Application) getActivity().getApplication();
+
         DashboardPagerAdapter dashboardPagerAdapter=new DashboardPagerAdapter(getActivity().getSupportFragmentManager());
         viewPager.setAdapter(dashboardPagerAdapter);
 
@@ -43,19 +46,20 @@ public class Dashboard extends Fragment {
         tabLayout.setSelectedTabIndicatorColor(Color.WHITE);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
-        Loot_Application app=(Loot_Application) getActivity().getApplication();
         if(app.user.getActive()==null||app.user.getActive().equalsIgnoreCase(""))
         {
-            viewPager.setCurrentItem(1,true);
+            switchTab(1);
         }
-
-        
-
-
-
     }
+    public void switchTab(int tab)
+    {
 
+        viewPager.setCurrentItem(tab,true);
+    }
+    public int getCurrentTab()
+    {
+        return viewPager.getCurrentItem();
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

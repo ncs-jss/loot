@@ -1,12 +1,16 @@
 package com.example.dell.loot;
 
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -133,14 +137,13 @@ public class Current_Mission extends Fragment {
     @Override
     public void onStart() {
 
-            Dashboard fragment=(Dashboard)this.getParentFragment();
+          if(app.user.getActive()==null)
+          {
+            showDialog();
+          }
 
-//        if(mission==null)
-//        {
-//
-//            progressDialog.show();
-//        }
-        super.onStart();
+              super.onStart();
+
     }
 
     @Override
@@ -148,5 +151,37 @@ public class Current_Mission extends Fragment {
 
         Log.i("Current Mission","Stop");
         super.onStop();
+    }
+    private void showDialog()
+    {
+        AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+
+        // Setting Dialog Title
+        alertDialog.setTitle("Alert");
+
+        // Setting Dialog Message
+        alertDialog.setMessage("No Active Mission");
+
+        // Setting Icon to Dialog
+//       alertDialog.setIcon(R.drawable);
+
+        // Setting OK Button
+        alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // Write your code here to execute after dialog closed
+//               Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
+
+                BottomNavigationView navigationView=(BottomNavigationView)getActivity().findViewById(R.id.navigation);
+                navigationView.getMenu().getItem(0).setChecked(true);
+                android.support.v4.app.Fragment fragment=new Locator();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.frame_container, fragment,"locator");
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+
+        // Showing Alert Message
+        alertDialog.show();
     }
 }

@@ -5,7 +5,10 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -40,6 +43,7 @@ public class Main2Activity extends AppCompatActivity
     String userId;
     ArrayList<Mission> missionsList=new ArrayList<>();
 
+    private NavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +59,7 @@ public class Main2Activity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         mAuth=FirebaseAuth.getInstance();
         database=FirebaseDatabase.getInstance();
@@ -66,8 +70,9 @@ public class Main2Activity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Dashboard fragment=new Dashboard();
-        fragmentTransaction.replace(R.id.frame, fragment);
+        fragmentTransaction.replace(R.id.frame, fragment,"dashboard");
         fragmentTransaction.commit();
+        navigationView.getMenu().getItem(0).setChecked(true);
 //        MenuItem menuItem=(MenuItem)findViewById(R.id.nav_dashboard);
 //        menuItem.setChecked(true);
 
@@ -76,16 +81,49 @@ public class Main2Activity extends AppCompatActivity
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            int size=getSupportFragmentManager().getFragments().size();
+
+            String fragmentTag=getSupportFragmentManager().getFragments().get(size-1).getTag();
+            Log.i("Fragment",fragmentTag);
+
+
+            if(fragmentTag.equals("locator")||fragmentTag.equals("stats")||fragmentTag.equals("leaderboard")) {
+
+                BottomNavigationView navigationView=(BottomNavigationView)findViewById(R.id.navigation);
+                navigationView.getMenu().getItem(0).setChecked(true);
+                android.support.v4.app.Fragment fragment=new Current_Mission();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.frame_container, fragment,"current_mission");
+                transaction.addToBackStack(null);
+                transaction.commit();
+
+            }
+            else if (fragmentTag.equals("current_mission"))
+            {
+                finishAffinity();
+            }
+            else if(fragmentTag.equals("about")||fragmentTag.equals("how_to")||fragmentTag.equals("help")||fragmentTag.equals("contact_us"))
+            {
+                navigationView.getMenu().getItem(0).setChecked(true);
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Dashboard fragment=new Dashboard();
+                fragmentTransaction.replace(R.id.frame, fragment,"dashboard");
+                fragmentTransaction.commit();
+            }
+
+            else {
+                super.onBackPressed();
+            }
         }
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -123,7 +161,7 @@ public class Main2Activity extends AppCompatActivity
         if (id == R.id.nav_dashboard) {
             // Handle the camera action
             Dashboard fragment=new Dashboard();
-            fragmentTransaction.replace(R.id.frame, fragment);
+            fragmentTransaction.replace(R.id.frame, fragment,"dashboard");
             fragmentTransaction.commit();
         }
 //            else if (id == R.id.nav_gallery) {
@@ -242,4 +280,6 @@ public class Main2Activity extends AppCompatActivity
         });
 
     }
+
+
 }

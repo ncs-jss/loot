@@ -19,10 +19,13 @@ import android.os.Looper;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,8 +72,8 @@ public class Locator extends Fragment implements
     Camera camera;
     private static final String TAG = "LocationActivity";
     private static final long INTERVAL = 1000;
-    private static final long FASTEST_INTERVAL = 1000 * 5;
-
+//    private static final long FASTEST_INTERVAL = 1000 * 5;
+    private Loot_Application app;
     private GoogleApiClient googleApiClient;
     private LocationRequest mLocationRequest;
     int minDistI;
@@ -92,7 +95,7 @@ public class Locator extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
+        Log.i("Locator","createView");
         View view = inflater.inflate(R.layout.fragment_locator, container, false);
         checkPermission();
         vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
@@ -105,13 +108,14 @@ public class Locator extends Fragment implements
 
     @Override
     public void onAttach(Context context) {
+        Log.i("Locator","attach");
         super.onAttach(context);
-
 
     }
 
     @Override
     public void onDetach() {
+        Log.i("Locator","detach");
         super.onDetach();
 
     }
@@ -121,7 +125,7 @@ public class Locator extends Fragment implements
         super.onActivityCreated(savedInstanceState);
 
         checkPermission();
-
+        app = (Loot_Application) getActivity().getApplication();
         googleApiClient = new GoogleApiClient.Builder(getContext())
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
@@ -134,8 +138,11 @@ public class Locator extends Fragment implements
 
     }
 
+
+
     @Override
     public void onResume() {
+        Log.i("Locator","Resume");
         super.onResume();
         updateGeocode();
         startCameraUpdates();
@@ -170,6 +177,7 @@ public class Locator extends Fragment implements
 
     @Override
     public void onPause() {
+        Log.i("Locator","pause");
         super.onPause();
         stopCameraUpdates();
 //        stopLocationUpdates();
@@ -352,12 +360,17 @@ public class Locator extends Fragment implements
 
         if (location1 != null) {
             double dist = location.distanceTo(location1);
-            int progress = hot_cold.getMax()-(int)((dist/maxDist)*hot_cold.getMax());
-            hot_cold.setProgress(progress);
+//            int progress = hot_cold.getMax()-(int)((dist/maxDist)*hot_cold.getMax());
+            int progress=hot_cold.getMax()-(int)dist;
+            hot_cold.setProgress(progress>0?progress:0);
             if (dist <= 10) {
                 vibrator.vibrate(7000);
                 Loot_Application app = (Loot_Application) getActivity().getApplication();
                 app.user.active = mission.getMissionId();
+                if(app.user.found==null)
+                {
+                    app.user.found=new ArrayList<>();
+                }
                 if (!(app.user.found.contains(mission.getMissionId()))) {
                     app.user.found.add(mission.getMissionId());
                     app.user.active = mission.getMissionId();
@@ -376,8 +389,24 @@ public class Locator extends Fragment implements
 
     private void changeTab()
     {
-        Dashboard fragment=(Dashboard)this.getParentFragment();
-        fragment.switchTab(0);
+////        Dashboard fragment=(Dashboard)getParentFragment();
+////        fragment.switchTab(0);
+//            ViewPager viewPager=getView().findViewById(R.id.viewpager);
+//            viewPager.setCurrentItem(0,tr
+
+        BottomNavigationView navigationView=(BottomNavigationView)getActivity().findViewById(R.id.navigation);
+        navigationView.getMenu().getItem(0).setChecked(true);
+        Fragment fragment=new Current_Mission();
+        loadFragment(fragment);
+
+    }
+
+    private void loadFragment(Fragment fragment) {
+        // load fragment
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     protected Mission findNearest(Location location) {
@@ -403,7 +432,7 @@ public class Locator extends Fragment implements
         }
         if(minI!=minDistI)
         {
-            maxDist=minDist;
+            hot_cold.setMax((int)minDist);
         }
         return missions_left.get(minDistI);
 
@@ -411,7 +440,7 @@ public class Locator extends Fragment implements
 
     private void updateGeocode() {
         missions_left = new ArrayList<>();
-        Loot_Application app = (Loot_Application) getActivity().getApplication();
+
         ArrayList<String> completed = app.user.getCompleted();
         ArrayList<Mission> missions = app.missions;
 
@@ -468,13 +497,23 @@ public class Locator extends Fragment implements
 
     @Override
     public void onStart() {
-        googleApiClient.connect();
+        Log.i("Locator","start");
+
+        if(app.user.getActive()!=null)
+        {
+            showDialog();
+        }
+        else {
+            googleApiClient.connect();
+
+        }
         super.onStart();
 
     }
 
     @Override
     public void onStop() {
+        Log.i("Locator","stop");
         googleApiClient.disconnect();
         super.onStop();
 
@@ -492,4 +531,30 @@ public class Locator extends Fragment implements
         updateHot_Cold(location);
     }
 
+   private void showDialog()
+   {
+       AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+       alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+           @Override
+           public void onClick(DialogInterface dialogInterface, int i) {
+
+               BottomNavigationView navigationView=(BottomNavigationView)getActivity().findViewById(R.id.navigation);
+               navigationView.getMenu().getItem(0).setChecked(true);
+               android.support.v4.app.Fragment fragment=new Current_Mission();
+               FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+               transaction.replace(R.id.frame_container, fragment,"current_mission");
+               transaction.addToBackStack(null);
+               transaction.commit();
+
+           }
+       });
+
+       // Setting Dialog Title
+       alertDialog.setTitle("Alert");
+
+       // Setting Dialog Message
+       alertDialog.setMessage("You already have a active Mission");
+
+       alertDialog.create().show();
+   }
 }

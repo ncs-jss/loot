@@ -133,8 +133,7 @@ public class Register extends Fragment {
 
         users.child(user.getUserId()).setValue(user);
 
-        Intent i=new Intent(getContext(),Main2Activity.class);
-        i.putExtra("UID",user.getUserId());
+        Intent i=new Intent(getContext(),WelcomeSlider.class);
         startActivity(i);
     }
 

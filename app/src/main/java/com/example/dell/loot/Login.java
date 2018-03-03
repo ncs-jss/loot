@@ -95,6 +95,7 @@ public class Login extends Fragment {
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     //Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                    dialog.dismiss();
                                     Toast.makeText(getContext(), "Authentication failed."+ task.getException().getMessage(),
                                             Toast.LENGTH_SHORT).show();
 
@@ -132,8 +133,8 @@ public class Login extends Fragment {
     {
 
         dialog.dismiss();
-        Intent i=new Intent(getContext(),Main2Activity.class);
-        i.putExtra("UID",uid);
+        Intent i=new Intent(getContext(),DashboardLoot.class);
+//        i.putExtra("UID",uid);
         startActivity(i);
 
 

@@ -21,7 +21,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -33,8 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class Main2Activity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class Main2Activity extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference users,missions;
@@ -43,7 +41,7 @@ public class Main2Activity extends AppCompatActivity
     String userId;
     ArrayList<Mission> missionsList=new ArrayList<>();
 
-    private NavigationView navigationView;
+//    private NavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,14 +51,14 @@ public class Main2Activity extends AppCompatActivity
         Log.i("UID",userId);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.addDrawerListener(toggle);
+//        toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+//        navigationView = (NavigationView) findViewById(R.id.nav_view);
+//        navigationView.setNavigationItemSelectedListener(this);
         mAuth=FirebaseAuth.getInstance();
         database=FirebaseDatabase.getInstance();
         users=database.getReference("Users");
@@ -72,7 +70,7 @@ public class Main2Activity extends AppCompatActivity
         Dashboard fragment=new Dashboard();
         fragmentTransaction.replace(R.id.frame, fragment,"dashboard");
         fragmentTransaction.commit();
-        navigationView.getMenu().getItem(0).setChecked(true);
+//        navigationView.getMenu().getItem(0).setChecked(true);
 //        MenuItem menuItem=(MenuItem)findViewById(R.id.nav_dashboard);
 //        menuItem.setChecked(true);
 
@@ -84,10 +82,10 @@ public class Main2Activity extends AppCompatActivity
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        if (drawer.isDrawerOpen(GravityCompat.START)) {
+//            drawer.closeDrawer(GravityCompat.START);
+//        } else {
             int size=getSupportFragmentManager().getFragments().size();
 
             String fragmentTag=getSupportFragmentManager().getFragments().get(size-1).getTag();
@@ -111,7 +109,7 @@ public class Main2Activity extends AppCompatActivity
             }
             else if(fragmentTag.equals("about")||fragmentTag.equals("how_to")||fragmentTag.equals("help")||fragmentTag.equals("contact_us"))
             {
-                navigationView.getMenu().getItem(0).setChecked(true);
+//                navigationView.getMenu().getItem(0).setChecked(true);
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Dashboard fragment=new Dashboard();
@@ -122,7 +120,7 @@ public class Main2Activity extends AppCompatActivity
             else {
                 super.onBackPressed();
             }
-        }
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -146,44 +144,55 @@ public class Main2Activity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-
-
-
-        if (id == R.id.nav_dashboard) {
-            // Handle the camera action
-            Dashboard fragment=new Dashboard();
-            fragmentTransaction.replace(R.id.frame, fragment,"dashboard");
-            fragmentTransaction.commit();
-        }
-//            else if (id == R.id.nav_gallery) {
+//    @SuppressWarnings("StatementWithEmptyBody")
+//    @Override
+//    public boolean onNavigationItemSelected(MenuItem item) {
+//        // Handle navigation view item clicks here.
+//        int id = item.getItemId();
 //
-//        } else if (id == R.id.nav_slideshow) {
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 //
-//        } else if (id == R.id.nav_manage) {
+//        android.support.v4.app.Fragment  fragment=new android.support.v4.app.Fragment();
+//        String tag="";
 //
-//        } else if (id == R.id.nav_share) {
+//        if (id == R.id.nav_dashboard) {
+//            // Handle the camera action
+//            fragment=new Dashboard();
+//            tag="dashboard";
 //
 //        }
-        else if (id == R.id.nav_logout) {
-            mAuth.signOut();
-            Intent intent=new Intent(this,Main3Activity.class);
-            startActivity(intent);
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
+//        else if (id == R.id.nav_about) {
+//            fragment=new About();
+//            tag="about";
+//
+//
+//        } else if (id == R.id.nav_howTo) {
+//            fragment=new HowTo();
+//            tag="how_to";
+//
+//        } else if (id == R.id.nav_help) {
+//            fragment=new Help();
+//            tag="help";
+//
+//        } else if (id == R.id.nav_contact) {
+//            fragment=new ContactUs();
+//            tag="contact_us";
+//
+//
+//        }
+//        else if (id == R.id.nav_logout) {
+//            mAuth.signOut();
+//            Intent intent=new Intent(this,Main3Activity.class);
+//            startActivity(intent);
+//
+//        }
+//        fragmentTransaction.replace(R.id.frame, fragment,tag);
+//        fragmentTransaction.commit();
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        drawer.closeDrawer(GravityCompat.START);
+//        return true;
+//    }
 
     @Override
     protected void onStart() {
@@ -195,9 +204,9 @@ public class Main2Activity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         FirebaseUser currentUser=mAuth.getCurrentUser();
-        Loot_Application app=(Loot_Application)getApplication();
-        Log.i("Name",app.user.getEmail());
-        Log.i("Misison",app.missions.get(0).missionId);
+//        Loot_Application app=(Loot_Application)getApplication();
+//        Log.i("Name",app.user.getEmail());
+//        Log.i("Misison",app.missions.get(0).missionId);
 
         //attach(currentUser.getUid());
     }
@@ -215,10 +224,6 @@ public class Main2Activity extends AppCompatActivity
         Loot_Application app=(Loot_Application)getApplication();
         app.user=user;
         app.missions=missionsList;
-
-
-
-
 
     }
 

@@ -85,14 +85,14 @@ public class Dashboard extends Fragment {
                     fragment=new Current_Mission();
                     loadFragment(fragment,"current_mission");
                     return true;
-                case R.id.navigation_locator:
-                    fragment=new Locator();
-                    loadFragment(fragment,"locator");
-                    return true;
-                case R.id.navigation_stats:
-                    fragment=new Stats();
-                    loadFragment(fragment,"stats");
-                    return true;
+//                case R.id.navigation_locator:
+//                    fragment=new Locator();
+//                    loadFragment(fragment,"locator");
+//                    return true;
+//                case R.id.navigation_stats:
+//                    fragment=new Stats();
+//                    loadFragment(fragment,"stats");
+//                    return true;
                 case R.id.navigation_leaderboard:
                     fragment=new LeaderBoard();
                     loadFragment(fragment,"leaderboard");

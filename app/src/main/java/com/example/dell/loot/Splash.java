@@ -95,11 +95,6 @@ public class Splash extends Fragment {
                 if (isConnected) {
                     if (logged_in) {
 
-                        if(synced_user&&synced_missions)
-                        syncSharedPrefs(user);
-
-
-
                     } else {
                         changeView();
                     }
@@ -130,6 +125,8 @@ public class Splash extends Fragment {
                 user = dataSnapshot.getValue(User.class);
                 Log.i("User Email", "Value is: " + user.getEmail());
                 synced_user=true;
+                if(synced_user&&synced_missions)
+                    syncSharedPrefs(user);
 
 
 
@@ -144,6 +141,8 @@ public class Splash extends Fragment {
         missions.addListenerForSingleValueEvent(new ValueEventListener() {
             public void onDataChange(DataSnapshot dataSnapshot) {
                synced_missions=true;
+                if(synced_user&&synced_missions)
+                    syncSharedPrefs(user);
             }
 
             @Override
@@ -161,6 +160,7 @@ public class Splash extends Fragment {
                 Loot_Application app=(Loot_Application)getActivity().getApplication();
 
                 app.missions=missionsList;
+
             }
 
             @Override
@@ -198,8 +198,8 @@ public class Splash extends Fragment {
         app.user=user;
         app.missions=missionsList;
 
-        Intent i = new Intent(getContext(), Main2Activity.class);
-        i.putExtra("UID", fbuser.getUid());
+        Intent i = new Intent(getContext(), DashboardLoot.class);
+//        i.putExtra("UID", fbuser.getUid());
         startActivity(i);
 
 

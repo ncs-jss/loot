@@ -1,6 +1,5 @@
 package com.example.dell.loot;
 
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,80 +33,62 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class Login extends Fragment {
-
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
-    DatabaseReference users,missions;
-    ArrayList<Mission> missionsList=new ArrayList<>();
+    DatabaseReference users, missions;
+    ArrayList<Mission> missionsList = new ArrayList<>();
     User user;
     ProgressDialog dialog;
     public Login() {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mAuth=FirebaseAuth.getInstance();
-        database=FirebaseDatabase.getInstance();
-        users=database.getReference("Users");
-        missions=database.getReference("Missions");
-        dialog=new ProgressDialog(getContext());
+        mAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        users = database.getReference("Users");
+        missions = database.getReference("Missions");
+        dialog = new ProgressDialog(getContext());
         dialog.setTitle("Please Wait");
         dialog.setCancelable(false);
-        dialog.setMessage("Signing In....");
-        final EditText email_field=(EditText)getView().findViewById(R.id.email);
-        final EditText password_field=(EditText)getView().findViewById(R.id.password);
-        Button login=(Button)getView().findViewById(R.id.login);
+        dialog.setMessage("Signing in...");
+        final EditText email_field = getView().findViewById(R.id.email);
+        final EditText password_field = getView().findViewById(R.id.password);
+        Button login = getView().findViewById(R.id.login);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 dialog.show();
-                String email=String.valueOf(email_field.getText());
-                String password=String.valueOf(password_field.getText());
+                String email = String.valueOf(email_field.getText());
+                String password = String.valueOf(password_field.getText());
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    // Log.d(TAG, "createUserWithEmail:success");
-                                    Toast.makeText(getContext(),"Register Successful",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(),"Login Successful",Toast.LENGTH_SHORT).show();
                                     FirebaseUser firebaseUser = mAuth.getCurrentUser();
-
                                     attach(firebaseUser.getUid());
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    //Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                }
+                                else {
                                     Toast.makeText(getContext(), "Authentication failed."+ task.getException().getMessage(),
                                             Toast.LENGTH_SHORT).show();
-
                                 }
-
-                                // ...
                             }
                         });
             }
         });
-
-
-        final TextView register=(TextView)getView().findViewById(R.id.goto_register);
-
+        final TextView register = getView().findViewById(R.id.goto_register);
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,69 +98,49 @@ public class Login extends Fragment {
 
     }
 
-    public void register()
-    {
+    public void register() {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Register fragment = new Register();
         fragmentTransaction.replace(R.id.login_frame, fragment);
         fragmentTransaction.commit();
-
     }
 
-    private void success(String uid)
-    {
-
+    private void success(String uid) {
         dialog.dismiss();
-        Intent i=new Intent(getContext(),Main2Activity.class);
-        i.putExtra("UID",uid);
+        Intent i = new Intent(getContext(),Main2Activity.class);
+        i.putExtra("UID", uid);
         startActivity(i);
-
-
     }
 
-    public void syncSharedPrefs(User user)
-    {
+    public void syncSharedPrefs(User user) {
         dialog.setMessage("Completing...");
-        SharedPreferences sharedPreferences=getActivity().getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=sharedPreferences.edit();
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("Uid",user.getUserId());
         editor.putString("Username",user.getUsername());
         editor.putInt("Score",user.getScore());
         editor.putString("mActive",user.getActive());
         editor.apply();
 
-        Loot_Application app=(Loot_Application)getActivity().getApplication();
-        app.user=user;
-        app.missions=missionsList;
+        LootApplication app = (LootApplication)getActivity().getApplication();
+        app.user = user;
+        app.missions = missionsList;
         success(user.getUserId());
-
-
-
-
-
     }
 
-    private void attach(String userId)
-    {
+    private void attach(String userId) {
         dialog.setMessage("Syncing Data...");
         users.child(userId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                user= dataSnapshot.getValue(User.class);
+                user = dataSnapshot.getValue(User.class);
                 Log.i("User Email", "Value is: " + user.getEmail());
-
-
                 syncSharedPrefs(user);
-
-
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
-                // Failed to read value
                 Log.i("Error",  error.toException().getMessage());
             }
         });
@@ -188,14 +148,10 @@ public class Login extends Fragment {
         missions.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
                 Log.i("Missions",dataSnapshot.getKey());
                 missionsList.add(dataSnapshot.getValue(Mission.class));
-
-                Loot_Application app=(Loot_Application)getActivity().getApplication();
-
+                LootApplication app = (LootApplication)getActivity().getApplication();
                 app.missions=missionsList;
-
             }
 
             @Override
@@ -218,7 +174,5 @@ public class Login extends Fragment {
 
             }
         });
-
     }
-
 }

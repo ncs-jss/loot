@@ -1,11 +1,8 @@
 package com.example.dell.loot;
 
-
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
@@ -19,69 +16,58 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+public class CurrentMission extends Fragment {
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class Current_Mission extends Fragment {
-
-    Button submit,drop_mission;
-    TextView story,question;
+    Button submit, drop_mission;
+    TextView story, question;
     EditText answer;
     FirebaseDatabase database;
-    DatabaseReference users,missions;
+    DatabaseReference users, missions;
     Mission mission;
     ProgressDialog progressDialog;
-    Loot_Application app;
+    LootApplication app;
 
-    public Current_Mission() {
+    public CurrentMission() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_current__mission, container, false);
-        story=view.findViewById(R.id.story);
-        question=view.findViewById(R.id.question);
-        answer=view.findViewById(R.id.answer);
-        submit=view.findViewById(R.id.submit);
-        drop_mission=view.findViewById(R.id.drop_mission);
-
+        View view = inflater.inflate(R.layout.fragment_current_mission, container, false);
+        story = view.findViewById(R.id.story);
+        question = view.findViewById(R.id.question);
+        answer = view.findViewById(R.id.answer);
+        submit = view.findViewById(R.id.submit);
+        drop_mission = view.findViewById(R.id.drop_mission);
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-       database=FirebaseDatabase.getInstance();
-       users=database.getReference("Users");
-       missions=database.getReference("Missions");
-       progressDialog=new ProgressDialog(getContext());
-       app=(Loot_Application)getActivity().getApplication();
-        if(app.user.active!=null)
-        {
+        database = FirebaseDatabase.getInstance();
+        users = database.getReference("Users");
+        missions = database.getReference("Missions");
+        progressDialog = new ProgressDialog(getContext());
+        app = (LootApplication)getActivity().getApplication();
+        if(app.user.active != null) {
             progressDialog.setMessage("Loading Mission...");
-            progressDialog.setTitle("Please wait..");
+            progressDialog.setTitle("Please Wait...");
             progressDialog.show();
             missions.child(app.user.active).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    mission=dataSnapshot.getValue(Mission.class);
+                    mission = dataSnapshot.getValue(Mission.class);
                     story.setText(mission.getStory());
                     question.setText(mission.getDescription());
-                    if(progressDialog.isShowing())
-                    {
+                    if(progressDialog.isShowing()) {
                         progressDialog.dismiss();
                     }
                 }
@@ -95,40 +81,30 @@ public class Current_Mission extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if(answer.getText().toString().equalsIgnoreCase(mission.getAnswer()))
-                {
-                    app.user.active=null;
+                if(answer.getText().toString().equalsIgnoreCase(mission.getAnswer())) {
+                    app.user.active = null;
                     app.user.completed.add(mission.getMissionId());
-                    app.user.score+=10;
+                    app.user.score += 10;
                     users.child(app.user.getUserId()).setValue(app.user);
                 }
-
             }
         });
 
         drop_mission.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-                    app.user.active=null;
+                    app.user.active = null;
                     app.user.dropped.add(mission.getMissionId());
-                    app.user.score-=2;
+                    app.user.score -= 2;
                     users.child(app.user.getUserId()).setValue(app.user);
-
-
             }
         });
-
     }
 
     @Override
     public void onDestroyView() {
-
         Log.i("Current Mission","Destroy View");
-        if(progressDialog.isShowing())
-        {
+        if(progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
         super.onDestroyView();
@@ -136,52 +112,34 @@ public class Current_Mission extends Fragment {
 
     @Override
     public void onStart() {
-
-          if(app.user.getActive()==null)
-          {
+          if(app.user.getActive()==null) {
             showDialog();
           }
-
-              super.onStart();
-
+          super.onStart();
     }
 
     @Override
     public void onStop() {
-
         Log.i("Current Mission","Stop");
         super.onStop();
     }
+
     private void showDialog()
     {
         AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
-
-        // Setting Dialog Title
         alertDialog.setTitle("Alert");
-
-        // Setting Dialog Message
         alertDialog.setMessage("No Active Mission");
-
-        // Setting Icon to Dialog
-//       alertDialog.setIcon(R.drawable);
-
-        // Setting OK Button
         alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                // Write your code here to execute after dialog closed
-//               Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
-
-                BottomNavigationView navigationView=(BottomNavigationView)getActivity().findViewById(R.id.navigation);
+                BottomNavigationView navigationView = getActivity().findViewById(R.id.navigation);
                 navigationView.getMenu().getItem(0).setChecked(true);
-                android.support.v4.app.Fragment fragment=new Locator();
+                android.support.v4.app.Fragment fragment = new Locator();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.frame_container, fragment,"locator");
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
         });
-
-        // Showing Alert Message
         alertDialog.show();
     }
 }

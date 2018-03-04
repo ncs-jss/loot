@@ -1,33 +1,22 @@
 package com.example.dell.loot;
 
-/**
- * Created by DELL on 2/12/2018.
- */
-
 public class Mission {
 
-    String missionId;
-    String mName;
-    String story;
-    String description;
-    double lat;
-    double lng;
-    String answer;
+    String missionId, mName, story, description, answer;
+    double lat, lng;
 
-    public Mission()
-    {
-
+    public Mission() {
     }
 
-    public Mission(String missionId,String mName,String story,String description,String answer,double lat,double lng)
-    {
-        this.missionId=missionId;
-        this.mName=mName;
-        this.story=story;
-        this.description=description;
-        this.lat=lat;
-        this.lng=lng;
-        this.answer=answer;
+    public Mission(String missionId, String mName, String story, String description, String answer,
+                   double lat, double lng) {
+        this.missionId = missionId;
+        this.mName = mName;
+        this.story = story;
+        this.description = description;
+        this.lat = lat;
+        this.lng = lng;
+        this.answer = answer;
     }
 
     public void setDescription(String description) {

@@ -1,7 +1,5 @@
 package com.example.dell.loot;
 
-import android.app.Fragment;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,16 +7,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -37,98 +34,94 @@ public class Main2Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     FirebaseDatabase database;
-    DatabaseReference users,missions;
+    DatabaseReference users, missions;
     FirebaseAuth mAuth;
     User user;
     String userId;
-    ArrayList<Mission> missionsList=new ArrayList<>();
-
+    ArrayList<Mission> missionsList = new ArrayList<>();
     private NavigationView navigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-        Intent intent=getIntent();
-        userId=intent.getStringExtra("UID");
+        Intent intent = getIntent();
+        userId = intent.getStringExtra("UID");
         Log.i("UID",userId);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        mAuth=FirebaseAuth.getInstance();
-        database=FirebaseDatabase.getInstance();
-        users=database.getReference("Users");
-        missions=database.getReference("Missions");
-       // users.child(userId).child("online").setValue(true);
+
+        mAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        users = database.getReference("Users");
+        missions = database.getReference("Missions");
+//        users.child(userId).child("online").setValue(true);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Dashboard fragment=new Dashboard();
+        Dashboard fragment = new Dashboard();
         fragmentTransaction.replace(R.id.frame, fragment,"dashboard");
         fragmentTransaction.commit();
+
         navigationView.getMenu().getItem(0).setChecked(true);
-//        MenuItem menuItem=(MenuItem)findViewById(R.id.nav_dashboard);
-//        menuItem.setChecked(true);
-
-
-
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            int size=getSupportFragmentManager().getFragments().size();
-
-            String fragmentTag=getSupportFragmentManager().getFragments().get(size-1).getTag();
-            Log.i("Fragment",fragmentTag);
-
-
-            if(fragmentTag.equals("locator")||fragmentTag.equals("stats")||fragmentTag.equals("leaderboard")) {
-
-                BottomNavigationView navigationView=(BottomNavigationView)findViewById(R.id.navigation);
+        }
+        else {
+            int size = getSupportFragmentManager().getFragments().size();
+            String fragmentTag = getSupportFragmentManager().getFragments().get(size-1).getTag();
+            Log.i("Fragment", fragmentTag);
+            if(fragmentTag.equals("locator") ||
+                    fragmentTag.equals("stats") ||
+                    fragmentTag.equals("leaderboard")) {
+                BottomNavigationView navigationView = findViewById(R.id.navigation);
                 navigationView.getMenu().getItem(0).setChecked(true);
-                android.support.v4.app.Fragment fragment=new Current_Mission();
+                android.support.v4.app.Fragment fragment = new CurrentMission();
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.frame_container, fragment,"current_mission");
                 transaction.addToBackStack(null);
                 transaction.commit();
-
             }
-            else if (fragmentTag.equals("current_mission"))
-            {
+            else if (fragmentTag.equals("current_mission")) {
                 finishAffinity();
             }
-            else if(fragmentTag.equals("about")||fragmentTag.equals("how_to")||fragmentTag.equals("help")||fragmentTag.equals("contact_us"))
-            {
+            else if(fragmentTag.equals("about") ||
+                    fragmentTag.equals("how_to") ||
+                    fragmentTag.equals("help") ||
+                    fragmentTag.equals("contact_us")) {
                 navigationView.getMenu().getItem(0).setChecked(true);
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                Dashboard fragment=new Dashboard();
+                Dashboard fragment = new Dashboard();
                 fragmentTransaction.replace(R.id.frame, fragment,"dashboard");
                 fragmentTransaction.commit();
             }
-
             else {
                 super.onBackPressed();
             }
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main2, menu);
-        return true;
+        return false;
     }
 
     @Override
@@ -142,7 +135,6 @@ public class Main2Activity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -155,32 +147,17 @@ public class Main2Activity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-
-
-
         if (id == R.id.nav_dashboard) {
-            // Handle the camera action
-            Dashboard fragment=new Dashboard();
+            Dashboard fragment = new Dashboard();
             fragmentTransaction.replace(R.id.frame, fragment,"dashboard");
             fragmentTransaction.commit();
         }
-//            else if (id == R.id.nav_gallery) {
-//
-//        } else if (id == R.id.nav_slideshow) {
-//
-//        } else if (id == R.id.nav_manage) {
-//
-//        } else if (id == R.id.nav_share) {
-//
-//        }
         else if (id == R.id.nav_logout) {
             mAuth.signOut();
             Intent intent=new Intent(this,Main3Activity.class);
             startActivity(intent);
-
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -188,22 +165,20 @@ public class Main2Activity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        FirebaseUser currentUser=mAuth.getCurrentUser();
-        Loot_Application app=(Loot_Application)getApplication();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        LootApplication app = (LootApplication)getApplication();
         Log.i("Name",app.user.getEmail());
-        Log.i("Misison",app.missions.get(0).missionId);
+        Log.i("Mission",app.missions.get(0).missionId);
 
-        //attach(currentUser.getUid());
+//        attach(currentUser.getUid());
     }
 
-    public void syncSharedPrefs(User user)
-    {
+    public void syncSharedPrefs(User user) {
         SharedPreferences sharedPreferences=getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putString("Uid",user.getUserId());
@@ -212,14 +187,9 @@ public class Main2Activity extends AppCompatActivity
         editor.putString("mActive",user.getActive());
         editor.apply();
 
-        Loot_Application app=(Loot_Application)getApplication();
-        app.user=user;
-        app.missions=missionsList;
-
-
-
-
-
+        LootApplication app = (LootApplication)getApplication();
+        app.user = user;
+        app.missions = missionsList;
     }
 
     private void attach(String userId)
@@ -229,15 +199,11 @@ public class Main2Activity extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                user= dataSnapshot.getValue(User.class);
+                user = dataSnapshot.getValue(User.class);
                 Log.i("User Email", "Value is: " + user.getEmail());
-                Loot_Application app=(Loot_Application)getApplication();
-                app.user=user;
-
-
+                LootApplication app = (LootApplication)getApplication();
+                app.user = user;
                 syncSharedPrefs(user);
-
-
             }
 
             @Override
@@ -250,12 +216,10 @@ public class Main2Activity extends AppCompatActivity
         missions.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
                 Log.i("Missions",dataSnapshot.getKey());
                 missionsList.add(dataSnapshot.getValue(Mission.class));
-                Loot_Application app=(Loot_Application)getApplication();
-                app.missions=missionsList;
-
+                LootApplication app = (LootApplication)getApplication();
+                app.missions = missionsList;
             }
 
             @Override
@@ -280,6 +244,5 @@ public class Main2Activity extends AppCompatActivity
         });
 
     }
-
 
 }

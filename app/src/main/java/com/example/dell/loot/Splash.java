@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,30 +36,26 @@ import static com.google.android.gms.internal.zzahn.runOnUiThread;
 
 public class Splash extends Fragment {
 
-
     private FirebaseAuth mAuth;
     FirebaseDatabase database;
     DatabaseReference users,missions;
     FirebaseUser fbuser;
     User user;
-    ArrayList<Mission> missionsList=new ArrayList<>();
+    ArrayList<Mission> missionsList = new ArrayList<>();
+    boolean isConnected, logged_in, synced_user, synced_missions;
 
-    boolean isConnected,logged_in,synced_user,synced_missions;
     public Splash() {
         // Required empty public constructor
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_splash, container, false);
     }
 
@@ -68,82 +63,63 @@ public class Splash extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         mAuth = FirebaseAuth.getInstance();
-        database=FirebaseDatabase.getInstance();
-        users=database.getReference("Users");
-        missions=database.getReference("Missions");
-
-
-
+        database = FirebaseDatabase.getInstance();
+        users = database.getReference("Users");
+        missions = database.getReference("Missions");
         new BackgroundTasks().execute();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (isConnected) {
                     if (logged_in) {
-
-                        if(synced_user&&synced_missions)
-                        syncSharedPrefs(user);
-
-
-
-                    } else {
+                        if(synced_user && synced_missions)
+                            syncSharedPrefs(user);
+                    }
+                    else {
                         changeView();
                     }
-                } else {
-
+                }
+                else {
                     Toast.makeText(getActivity(),"Not Connected",Toast.LENGTH_SHORT).show();
                     getActivity().finish();
                 }
             }
-        }, 5000);
-
-
+        }, 3500);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
     }
 
     private void attach(String userId) {
         users.child(userId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-
                 user = dataSnapshot.getValue(User.class);
                 Log.i("User Email", "Value is: " + user.getEmail());
-                synced_user=true;
-
-
-
+                synced_user = true;
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
-                // Failed to read value
                 Log.i("Error", error.toException().getMessage());
             }
         });
         missions.addListenerForSingleValueEvent(new ValueEventListener() {
             public void onDataChange(DataSnapshot dataSnapshot) {
-               synced_missions=true;
+               synced_missions = true;
             }
 
             @Override
@@ -151,16 +127,13 @@ public class Splash extends Fragment {
 
             }
 
-
         });
         missions.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
                 missionsList.add(dataSnapshot.getValue(Mission.class));
-                Loot_Application app=(Loot_Application)getActivity().getApplication();
-
-                app.missions=missionsList;
+                LootApplication app = (LootApplication)getActivity().getApplication();
+                app.missions = missionsList;
             }
 
             @Override
@@ -185,8 +158,8 @@ public class Splash extends Fragment {
         });
 
     }
-    public void syncSharedPrefs(User user)
-    {
+
+    public void syncSharedPrefs(User user) {
         SharedPreferences sharedPreferences=getActivity().getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putString("Uid",user.getUserId());
@@ -194,16 +167,13 @@ public class Splash extends Fragment {
         editor.putInt("Score",user.getScore());
         editor.putString("mActive",user.getActive());
         editor.apply();
-        Loot_Application app=(Loot_Application)getActivity().getApplication();
-        app.user=user;
-        app.missions=missionsList;
+        LootApplication app = (LootApplication)getActivity().getApplication();
+        app.user = user;
+        app.missions = missionsList;
 
         Intent i = new Intent(getContext(), Main2Activity.class);
         i.putExtra("UID", fbuser.getUid());
         startActivity(i);
-
-
-
     }
 
     public boolean isOnline() {
@@ -234,17 +204,14 @@ public class Splash extends Fragment {
     private  void backgroundTasks() {
 
         isConnected = isOnline();
-        logged_in = mAuth.getCurrentUser()!=null;
-        fbuser=mAuth.getCurrentUser();
-        if(logged_in)
-        {
+        logged_in = mAuth.getCurrentUser() != null;
+        fbuser = mAuth.getCurrentUser();
+        if(logged_in) {
             attach(fbuser.getUid());
         }
-
-
-
     }
-    public  class BackgroundTasks extends AsyncTask<String, Integer, String> {
+
+    public class BackgroundTasks extends AsyncTask<String, Integer, String> {
 
         @Override
         protected String doInBackground(String... params) {
@@ -255,15 +222,13 @@ public class Splash extends Fragment {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-//
-
         }
     }
+
     private void changeView()
     {
-        ProgressBar loader=getView().findViewById(R.id.loader);
-        RelativeLayout layout=getView().findViewById(R.id.rel_layout);
-
+        ProgressBar loader = getView().findViewById(R.id.loader);
+        RelativeLayout layout = getView().findViewById(R.id.rel_layout);
         loader.setVisibility(View.GONE);
         layout.setVisibility(View.VISIBLE);
         Button login_button =  getView().findViewById(R.id.login_button);
@@ -271,20 +236,16 @@ public class Splash extends Fragment {
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Login fragment = new Login();
                 fragmentTransaction.replace(R.id.login_frame, fragment);
                 fragmentTransaction.commit();
-
             }
         });
-
         register_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Register fragment = new Register();
@@ -292,12 +253,5 @@ public class Splash extends Fragment {
                 fragmentTransaction.commit();
             }
         });
-
-
     }
-
-
-
-
-
 }

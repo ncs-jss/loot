@@ -2,48 +2,36 @@ package com.example.dell.loot;
 
 import java.util.ArrayList;
 
-/**
- * Created by DELL on 2/9/2018.
- */
-
 public class User {
 
-    int avtarId;
-    String userId;
-    String username;
-    String zealID;
-    int score;
-    String name;
+    int avatarId, score;
     long contact;
-    String email;
-    String password;
-    ArrayList<String> found;
-    String active;
-    ArrayList<String> completed;
-    ArrayList<String> dropped;
     boolean online;
-    public User()
-    {
+    String userId, username, zealID, name, email, password, active;
+    ArrayList<String> found, completed, dropped;
+
+    public User() {
 
     }
-     public User(String userId, String username, String name,String email,String password,String zealID,long contact,int score,int avtarId,String active,ArrayList<String> found, ArrayList<String> completed, ArrayList<String> dropped,boolean online)
-     {
 
-         this.active=active;
-         this.avtarId=avtarId;
-         this.completed=completed;
-         this.contact=contact;
-         this.dropped=dropped;
-         this.email=email;
-         this.name=name;
-         this.username=username;
-         this.password=password;
-         this.score=score;
-         this.found=found;
-         this.userId=userId;
-         this.zealID=zealID;
-         this.online=online;
-
+    public User(String userId, String username, String name, String email, String password,
+                String zealID, long contact, int score, int avatarId, String active,
+                ArrayList<String> found, ArrayList<String> completed, ArrayList<String> dropped,
+                boolean online) {
+        this.active=active;
+        this.avatarId = avatarId;
+        this.completed=completed;
+        this.contact=contact;
+        this.dropped=dropped;
+        this.email=email;
+        this.name=name;
+        this.username=username;
+        this.password=password;
+        this.score=score;
+        this.found=found;
+        this.userId=userId;
+        this.zealID=zealID;
+        this.online=online;
      }
 
     public void setOnline(boolean online) {
@@ -74,8 +62,8 @@ public class User {
         this.username = username;
     }
 
-    public void setAvtarId(int avtarId) {
-        this.avtarId = avtarId;
+    public void setAvatarId(int avatarId) {
+        this.avatarId = avatarId;
     }
 
     public void setScore(int score) {
@@ -106,8 +94,8 @@ public class User {
         return email;
     }
 
-    public int getAvtarId() {
-        return avtarId;
+    public int getAvatarId() {
+        return avatarId;
     }
 
     public String getName() {
@@ -157,4 +145,5 @@ public class User {
     public boolean isOnline() {
         return online;
     }
+
 }

@@ -1,21 +1,15 @@
 package com.example.dell.loot;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.location.Location;
-import android.net.Uri;
-import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,56 +18,37 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-
 
 public class Locator extends Fragment implements
         LocationListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
-
-    final private int Camera_Request = 1;
-    final private int Location_Request = 2;
+    final private int CAMERA_REQUEST_CODE = 1;
+    final private int LOCATION_REQUEST_CODE = 2;
     Camera camera;
     private static final String TAG = "LocationActivity";
     private static final long INTERVAL = 1000;
 //    private static final long FASTEST_INTERVAL = 1000 * 5;
-    private Loot_Application app;
+    private LootApplication app;
     private GoogleApiClient googleApiClient;
     private LocationRequest mLocationRequest;
     int minDistI;
@@ -90,55 +65,42 @@ public class Locator extends Fragment implements
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         Log.i("Locator","createView");
         View view = inflater.inflate(R.layout.fragment_locator, container, false);
         checkPermission();
         vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
-        hot_cold = (ProgressBar) view.findViewById(R.id.hot_cold);
+        hot_cold = view.findViewById(R.id.hot_cold);
         return view;
-
-
     }
-
 
     @Override
     public void onAttach(Context context) {
         Log.i("Locator","attach");
         super.onAttach(context);
-
     }
 
     @Override
     public void onDetach() {
         Log.i("Locator","detach");
         super.onDetach();
-
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         checkPermission();
-        app = (Loot_Application) getActivity().getApplication();
+        app = (LootApplication) getActivity().getApplication();
         googleApiClient = new GoogleApiClient.Builder(getContext())
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
-
         database = FirebaseDatabase.getInstance();
         users = database.getReference("Users");
-
-
     }
-
-
 
     @Override
     public void onResume() {
@@ -146,21 +108,18 @@ public class Locator extends Fragment implements
         super.onResume();
         updateGeocode();
         startCameraUpdates();
-//
     }
 
     protected void startCameraUpdates() {
-        FrameLayout camera_frame = (FrameLayout) getActivity().findViewById(R.id.camera_frame);
+        FrameLayout camera_frame = getActivity().findViewById(R.id.camera_frame);
         camera = getCameraInstance();
         CameraPreview preview = new CameraPreview(getContext(), camera);
         camera_frame.addView(preview, 0);
-
     }
 
     public Camera getCameraInstance() {
         Camera c = null;
         try {
-
             c = Camera.open();
             if (c == null) {
                 checkPermission();
@@ -169,10 +128,7 @@ public class Locator extends Fragment implements
         } catch (Exception e) {
             Toast.makeText(getContext(), "Unable to Open Camera", Toast.LENGTH_SHORT).show();
         }
-
         return c;
-
-
     }
 
     @Override
@@ -191,20 +147,20 @@ public class Locator extends Fragment implements
     }
 
     private void checkPermission() {
-        if (ContextCompat.checkSelfPermission(getContext(),
-                Manifest.permission.CAMERA)
-                == PackageManager.PERMISSION_DENIED) {
-
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) ==
+                PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(getActivity(),
                     new String[]{Manifest.permission.CAMERA},
-                    Camera_Request);
+                    CAMERA_REQUEST_CODE);
         }
 
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(),
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
-                    Location_Request);
+                    LOCATION_REQUEST_CODE);
         }
 
     }
@@ -212,13 +168,12 @@ public class Locator extends Fragment implements
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
-        if (requestCode == Camera_Request) {
+        if (requestCode == CAMERA_REQUEST_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
                 Toast.makeText(getContext(), "Permission Granted", Toast.LENGTH_SHORT).show();
-            } else {
-
+            }
+            else {
                 Toast.makeText(getContext(), "Please provide the required Permissions", Toast.LENGTH_SHORT).show();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
@@ -233,17 +188,14 @@ public class Locator extends Fragment implements
                                 });
                     }
                 }
-
-
             }
         }
-        if (requestCode == Location_Request) {
+        if (requestCode == LOCATION_REQUEST_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
                 Toast.makeText(getContext(), "Permission Granted", Toast.LENGTH_SHORT).show();
-            } else {
-
+            }
+            else
                 Toast.makeText(getContext(), "Please provide the required Permissions", Toast.LENGTH_SHORT).show();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
@@ -258,14 +210,8 @@ public class Locator extends Fragment implements
                                 });
                     }
                 }
-
-
             }
-        }
-
-
     }
-
 
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(getContext())
@@ -361,30 +307,26 @@ public class Locator extends Fragment implements
         if (location1 != null) {
             double dist = location.distanceTo(location1);
 //            int progress = hot_cold.getMax()-(int)((dist/maxDist)*hot_cold.getMax());
-            int progress=hot_cold.getMax()-(int)dist;
+            int progress = hot_cold.getMax()-(int)dist;
             hot_cold.setProgress(progress>0?progress:0);
             if (dist <= 10) {
                 vibrator.vibrate(7000);
-                Loot_Application app = (Loot_Application) getActivity().getApplication();
+                LootApplication app = (LootApplication) getActivity().getApplication();
                 app.user.active = mission.getMissionId();
-                if(app.user.found==null)
-                {
-                    app.user.found=new ArrayList<>();
+                if(app.user.found == null) {
+                    app.user.found = new ArrayList<>();
                 }
                 if (!(app.user.found.contains(mission.getMissionId()))) {
                     app.user.found.add(mission.getMissionId());
                     app.user.active = mission.getMissionId();
                     app.user.score += 2;
                     users.child(app.user.getUserId()).setValue(app.user);
-
                 }
-
                 changeTab();
             }
             Toast.makeText(getActivity(), "Distance Left :" + dist,
                     Toast.LENGTH_SHORT).show();
         }
-
     }
 
     private void changeTab()
@@ -394,15 +336,13 @@ public class Locator extends Fragment implements
 //            ViewPager viewPager=getView().findViewById(R.id.viewpager);
 //            viewPager.setCurrentItem(0,tr
 
-        BottomNavigationView navigationView=(BottomNavigationView)getActivity().findViewById(R.id.navigation);
+        BottomNavigationView navigationView = getActivity().findViewById(R.id.navigation);
         navigationView.getMenu().getItem(0).setChecked(true);
-        Fragment fragment=new Current_Mission();
+        Fragment fragment = new CurrentMission();
         loadFragment(fragment);
-
     }
 
     private void loadFragment(Fragment fragment) {
-        // load fragment
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_container, fragment);
         transaction.addToBackStack(null);
@@ -411,7 +351,7 @@ public class Locator extends Fragment implements
 
     protected Mission findNearest(Location location) {
         double minDist = 0;
-        int minI=-1;
+        int minI = -1;
         for (int i = 0; i < missions_left.size(); i++) {
             Location loc = new Location("");
             loc.setLatitude(missions_left.get(i).getLat());
@@ -430,12 +370,10 @@ public class Locator extends Fragment implements
             }
 
         }
-        if(minI!=minDistI)
-        {
+        if(minI != minDistI) {
             hot_cold.setMax((int)minDist);
         }
         return missions_left.get(minDistI);
-
     }
 
     private void updateGeocode() {
@@ -471,26 +409,21 @@ public class Locator extends Fragment implements
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(INTERVAL);
         checkPermission();
         LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, mLocationRequest, this);
-
-
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-
         checkPermission();
         Log.i("Connection","Suspended");
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
         Log.i("Connection","Failed");
         checkPermission();
     }
@@ -498,17 +431,13 @@ public class Locator extends Fragment implements
     @Override
     public void onStart() {
         Log.i("Locator","start");
-
-        if(app.user.getActive()!=null)
-        {
+        if(app.user.getActive()!=null) {
             showDialog();
         }
         else {
             googleApiClient.connect();
-
         }
         super.onStart();
-
     }
 
     @Override
@@ -516,12 +445,10 @@ public class Locator extends Fragment implements
         Log.i("Locator","stop");
         googleApiClient.disconnect();
         super.onStop();
-
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        // New location has now been determined
         String msg = "Updated Location: " +
                 Double.toString(location.getLatitude()) + "," +
                 Double.toString(location.getLongitude());
@@ -531,30 +458,22 @@ public class Locator extends Fragment implements
         updateHot_Cold(location);
     }
 
-   private void showDialog()
-   {
+   private void showDialog() {
        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
            @Override
            public void onClick(DialogInterface dialogInterface, int i) {
-
-               BottomNavigationView navigationView=(BottomNavigationView)getActivity().findViewById(R.id.navigation);
+               BottomNavigationView navigationView = getActivity().findViewById(R.id.navigation);
                navigationView.getMenu().getItem(0).setChecked(true);
-               android.support.v4.app.Fragment fragment=new Current_Mission();
+               android.support.v4.app.Fragment fragment = new CurrentMission();
                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                transaction.replace(R.id.frame_container, fragment,"current_mission");
                transaction.addToBackStack(null);
                transaction.commit();
-
            }
        });
-
-       // Setting Dialog Title
        alertDialog.setTitle("Alert");
-
-       // Setting Dialog Message
        alertDialog.setMessage("You already have a active Mission");
-
        alertDialog.create().show();
    }
 }

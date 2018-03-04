@@ -1,6 +1,5 @@
 package com.example.dell.loot;
 
-
 import android.annotation.SuppressLint;
 
 import android.content.Context;
@@ -17,15 +16,11 @@ import java.io.IOException;
 
 import static android.content.ContentValues.TAG;
 
-/**
- * Created by DELL on 1/21/2018.
- */
-
 @SuppressLint("ViewConstructor")
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
+
     private SurfaceHolder mHolder;
     private Camera mCamera;
-
 
     public CameraPreview(Context context, Camera camera) {
         super(context);
@@ -33,7 +28,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         mHolder = getHolder();
         Log.i("holder",mHolder.getSurface().toString());
         mHolder.addCallback(this);
-
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
@@ -42,8 +36,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                 mCamera.setPreviewDisplay(holder);
                 mCamera.startPreview();
             }
-            else
-            {
+            else {
 
             }
         } catch (IOException e) {
@@ -53,15 +46,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     public void surfaceDestroyed(SurfaceHolder holder) {
 
-
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-
         if (mHolder.getSurface() == null){
             return;
         }
-
         try {
             mCamera.stopPreview();
         } catch (Exception e){
@@ -69,7 +59,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         }
 
         try {
-
             mCamera.setPreviewDisplay(mHolder);
             Camera.Parameters parameters = mCamera.getParameters();
             if (this.getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
@@ -79,12 +68,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             }
             mCamera.setParameters(parameters);
             mCamera.startPreview();
-
         } catch (Exception e){
             Log.d(TAG, "Error starting camera preview: " + e.getMessage());
         }
     }
-
-
-
 }

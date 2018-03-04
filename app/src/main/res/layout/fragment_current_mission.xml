@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.dell.loot.Current_Mission">
+    tools:context="com.example.dell.loot.CurrentMission">
 
 
     <TextView
@@ -50,7 +50,9 @@
         app:layout_constraintBottom_toTopOf="@+id/drop_mission"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/answer"
-        app:layout_constraintTop_toBottomOf="@+id/question" />
+        app:layout_constraintTop_toBottomOf="@+id/question"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="8dp" />
 
     <TextView
         android:id="@+id/question"

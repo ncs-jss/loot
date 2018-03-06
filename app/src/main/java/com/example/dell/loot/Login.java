@@ -19,6 +19,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -32,15 +38,20 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Login extends Fragment {
 
     private FirebaseAuth mAuth;
-    private FirebaseDatabase database;
-    DatabaseReference users, missions;
-    ArrayList<Mission> missionsList = new ArrayList<>();
+//    private FirebaseDatabase database;
+//    DatabaseReference users, missions;
+//    ArrayList<Mission> missionsList = new ArrayList<>();
     User user;
     ProgressDialog dialog;
+    EditText email, password;
+    TextView register;
+    Button login;
+
     public Login() {
         // Required empty public constructor
     }
@@ -54,31 +65,27 @@ public class Login extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        initializeViews();
         mAuth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
-        users = database.getReference("Users");
-        missions = database.getReference("Missions");
+//        database = FirebaseDatabase.getInstance();
+//        users = database.getReference("Users");
+//        missions = database.getReference("Missions");
         dialog = new ProgressDialog(getContext());
         dialog.setTitle("Please Wait");
         dialog.setCancelable(false);
         dialog.setMessage("Signing in...");
-        final EditText email_field = getView().findViewById(R.id.email);
-        final EditText password_field = getView().findViewById(R.id.password);
-        Button login = getView().findViewById(R.id.login);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.show();
-                String email = String.valueOf(email_field.getText());
-                String password = String.valueOf(password_field.getText());
-                mAuth.signInWithEmailAndPassword(email, password)
+                mAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
                         .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(getContext(),"Login Successful",Toast.LENGTH_SHORT).show();
                                     FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                                    attach(firebaseUser.getUid());
+                                    syncUser(firebaseUser.getUid());
                                 }
                                 else {
                                     Toast.makeText(getContext(), "Authentication failed."+ task.getException().getMessage(),
@@ -88,7 +95,6 @@ public class Login extends Fragment {
                         });
             }
         });
-        final TextView register = getView().findViewById(R.id.goto_register);
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,6 +102,13 @@ public class Login extends Fragment {
             }
         });
 
+    }
+
+    private void initializeViews() {
+        email = getView().findViewById(R.id.email);
+        password = getView().findViewById(R.id.password);
+        login = getView().findViewById(R.id.login);
+        register = getView().findViewById(R.id.goto_register);
     }
 
     public void register() {
@@ -106,73 +119,112 @@ public class Login extends Fragment {
         fragmentTransaction.commit();
     }
 
-    private void success(String uid) {
-        dialog.dismiss();
-        Intent i = new Intent(getContext(),Main2Activity.class);
-        i.putExtra("UID", uid);
-        startActivity(i);
-    }
-
     public void syncSharedPrefs(User user) {
         dialog.setMessage("Completing...");
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("Uid",user.getUserId());
-        editor.putString("Username",user.getUsername());
-        editor.putInt("Score",user.getScore());
-        editor.putString("mActive",user.getActive());
+//        editor.putString("com.hackncs.userID", user.getUserID());
+//        editor.putString("com.hackncs.username", user.getUsername());
+//        editor.putString("com.hackncs.zealID", user.getZealID());
+//        editor.putString("com.hackncs.name", user.getName());
+//        editor.putString("com.hackncs.email", user.getEmail());
+//        editor.putInt("com.hackncs.avatarID", user.getAvatarID());
+//        editor.putInt("com.hackncs.score", user.getScore());
+//        editor.putInt("com.hackncs.stage", user.getStage());
+//        editor.putInt("com.hackncs.state", user.getState());
+//        editor.putInt("com.hackncs.dropCount", user.getDropCount());
+//        editor.putInt("com.hackncs.duelWon", user.getDuelWon());
+//        editor.putInt("com.hackncs.duelLost", user.getDuelLost());
+//        editor.putLong("com.hackncs.contactNumber", user.getContactNumber());
+//        editor.putStringSet("com.hackncs.dropped", new HashSet<>(user.getDropped()));
         editor.apply();
 
-        LootApplication app = (LootApplication)getActivity().getApplication();
-        app.user = user;
-        app.missions = missionsList;
-        success(user.getUserId());
+//        LootApplication app = (LootApplication)getActivity().getApplication();
+//        app.user = user;
+//        app.missions = missionsList;
+        dialog.dismiss();
+        Intent i = new Intent(getContext(),MainActivity.class);
+        //TODO: update below
+        i.putExtra("UID", /*user.getUserID()*/ "x");
+        startActivity(i);
     }
 
-    private void attach(String userId) {
+    private void syncUser(final String userID) {
         dialog.setMessage("Syncing Data...");
-        users.child(userId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                user = dataSnapshot.getValue(User.class);
-                Log.i("User Email", "Value is: " + user.getEmail());
-                syncSharedPrefs(user);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Log.i("Error",  error.toException().getMessage());
-            }
-        });
-
-        missions.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.i("Missions",dataSnapshot.getKey());
-                missionsList.add(dataSnapshot.getValue(Mission.class));
-                LootApplication app = (LootApplication)getActivity().getApplication();
-                app.missions=missionsList;
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+//        users.child(userId).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                user = dataSnapshot.getValue(User.class);
+//                Log.i("User Email", "Value is: " + user.getEmail());
+//                syncSharedPrefs(user);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError error) {
+//                Log.i("Error",  error.toException().getMessage());
+//            }
+//        });
+//
+//        missions.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                Log.i("Missions",dataSnapshot.getKey());
+//                missionsList.add(dataSnapshot.getValue(Mission.class));
+//                LootApplication app = (LootApplication)getActivity().getApplication();
+//                app.missions=missionsList;
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+        StringRequest syncRequest = new StringRequest(Request.Method.GET, Endpoints.syncRequest+userID,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+//                        user.setUserID();
+//                        user.setUsername();
+//                        user.setZealID();
+//                        user.setName();
+//                        user.setEmail();
+//                        user.setAvatarID();
+//                        user.setScore();
+//                        user.setStage();
+//                        user.setState();
+//                        user.setDropCount();
+//                        user.setDuelWon();
+//                        user.setDuelLost();
+//                        user.setContactNumber();
+//                        user.setDropped();
+                        syncSharedPrefs(user);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        dialog.dismiss();
+                        Toast.makeText(getContext(), "Error while syncing data!", Toast.LENGTH_SHORT).show();
+                        //TODO: remove the statement below
+                        syncSharedPrefs(user);
+                    }
+                });
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue.add(syncRequest);
     }
 }

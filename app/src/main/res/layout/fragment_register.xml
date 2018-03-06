@@ -19,7 +19,7 @@
             android:layout_marginTop="16dp">
 
             <ImageView
-                android:id="@+id/avtar"
+                android:id="@+id/avatar"
                 android:layout_width="wrap_content"
                 android:layout_height="72dp"
                 android:layout_centerInParent="true"
@@ -27,21 +27,6 @@
                 />
 
         </RelativeLayout>
-
-
-        <EditText
-            android:id="@+id/username"
-            android:layout_width="match_parent"
-            android:layout_height="46dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:ems="10"
-            android:hint="Username"
-            android:inputType="textPersonName"
-            android:singleLine="true"
-            />
 
         <EditText
             android:id="@+id/name"
@@ -58,7 +43,7 @@
             />
 
         <EditText
-            android:id="@+id/zealId"
+            android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="46dp"
             android:layout_marginBottom="8dp"
@@ -66,11 +51,13 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:ems="10"
-            android:hint="Zeal_ID"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:singleLine="true"
             />
 
         <EditText
-            android:id="@+id/contact"
+            android:id="@+id/contactNumber"
             android:layout_width="match_parent"
             android:layout_height="46dp"
             android:layout_marginBottom="8dp"
@@ -84,7 +71,7 @@
             />
 
         <EditText
-            android:id="@+id/email"
+            android:id="@+id/zealId"
             android:layout_width="match_parent"
             android:layout_height="46dp"
             android:layout_marginBottom="8dp"
@@ -92,10 +79,22 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:ems="10"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
+            android:hint="Zeal_ID"
+            />
+
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:hint="Username"
+            android:inputType="textPersonName"
             android:singleLine="true"
-             />
+            />
 
         <EditText
             android:id="@+id/password"
@@ -108,9 +107,9 @@
             android:ems="10"
             android:hint="Password"
             android:inputType="textPassword"
-             />
+            />
 
-       <RelativeLayout
+        <RelativeLayout
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:layout_marginBottom="8dp"
@@ -126,7 +125,6 @@
                android:text="Register"
                />
 
-
        </RelativeLayout>
 
         <TextView
@@ -141,6 +139,6 @@
             android:textSize="20sp"
             />
 
-
     </LinearLayout>
+
 </ScrollView>

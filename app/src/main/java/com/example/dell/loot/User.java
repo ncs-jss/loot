@@ -4,146 +4,142 @@ import java.util.ArrayList;
 
 public class User {
 
-    int avatarId, score;
-    long contact;
-    boolean online;
-    String userId, username, zealID, name, email, password, active;
-    ArrayList<String> found, completed, dropped;
+    int avatarID, score, stage, state, dropCount, duelWon, duelLost;
+    long contactNumber;
+    String userID, username, zealID, name, email;
+    ArrayList<String> dropped;
 
     public User() {
-
     }
 
-    public User(String userId, String username, String name, String email, String password,
-                String zealID, long contact, int score, int avatarId, String active,
-                ArrayList<String> found, ArrayList<String> completed, ArrayList<String> dropped,
-                boolean online) {
-        this.active=active;
-        this.avatarId = avatarId;
-        this.completed=completed;
-        this.contact=contact;
-        this.dropped=dropped;
-        this.email=email;
-        this.name=name;
-        this.username=username;
-        this.password=password;
-        this.score=score;
-        this.found=found;
-        this.userId=userId;
-        this.zealID=zealID;
-        this.online=online;
-     }
-
-    public void setOnline(boolean online) {
-        this.online = online;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setActive(String active) {
-        this.active = active;
-    }
-
-    public void setZealID(String zealID) {
-        this.zealID = zealID;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setAvatarId(int avatarId) {
-        this.avatarId = avatarId;
-    }
-
-    public void setScore(int score) {
+    public User(int avatarID, int score, int stage, int state, int dropCount, int duelWon,
+                int duelLost, long contactNumber, String userID, String username, String zealID,
+                String name, String email, ArrayList<String> dropped) {
+        this.avatarID = avatarID;
         this.score = score;
-    }
-
-    public void setDropped(ArrayList<String> dropped) {
+        this.stage = stage;
+        this.state = state;
+        this.dropCount = dropCount;
+        this.duelWon = duelWon;
+        this.duelLost = duelLost;
+        this.contactNumber = contactNumber;
+        this.userID = userID;
+        this.username = username;
+        this.zealID = zealID;
+        this.name = name;
+        this.email = email;
         this.dropped = dropped;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public int getAvatarID() {
+        return avatarID;
     }
 
-    public void setCompleted(ArrayList<String> completed) {
-        this.completed = completed;
-    }
-
-    public void setContact(long contact) {
-        this.contact = contact;
-    }
-
-    public void setFound(ArrayList<String> found) {
-        this.found = found;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public int getAvatarId() {
-        return avatarId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public ArrayList<String> getCompleted() {
-        return completed;
+    public void setAvatarID(int avatarID) {
+        this.avatarID = avatarID;
     }
 
     public int getScore() {
         return score;
     }
 
-    public ArrayList<String> getFound() {
-        return found;
+    public void setScore(int score) {
+        this.score = score;
     }
 
-    public long getContact() {
-        return contact;
+    public int getStage() {
+        return stage;
     }
 
-    public String getUserId() {
-        return userId;
+    public void setStage(int stage) {
+        this.stage = stage;
     }
 
-    public ArrayList<String> getDropped() {
-        return dropped;
+    public int getState() {
+        return state;
     }
 
-    public String getActive() {
-        return active;
+    public void setState(int state) {
+        this.state = state;
     }
 
-    public String getPassword() {
-        return password;
+    public int getDropCount() {
+        return dropCount;
+    }
+
+    public void setDropCount(int dropCount) {
+        this.dropCount = dropCount;
+    }
+
+    public int getDuelWon() {
+        return duelWon;
+    }
+
+    public void setDuelWon(int duelWon) {
+        this.duelWon = duelWon;
+    }
+
+    public int getDuelLost() {
+        return duelLost;
+    }
+
+    public void setDuelLost(int duelLost) {
+        this.duelLost = duelLost;
+    }
+
+    public long getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(long contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
     public String getUsername() {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getZealID() {
         return zealID;
     }
 
-    public boolean isOnline() {
-        return online;
+    public void setZealID(String zealID) {
+        this.zealID = zealID;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public ArrayList<String> getDropped() {
+        return dropped;
+    }
+
+    public void setDropped(ArrayList<String> dropped) {
+        this.dropped = dropped;
+    }
 }

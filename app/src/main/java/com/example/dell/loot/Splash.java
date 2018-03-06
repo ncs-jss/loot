@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,16 +20,20 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.google.android.gms.internal.zzahn.runOnUiThread;
 
@@ -83,19 +86,18 @@ public class Splash extends Fragment {
             public void run() {
                 if (isConnected) {
                     if (logged_in) {
-                        if(synced_user && synced_missions)
-                            syncSharedPrefs(user);
+                        syncSharedPrefs(user);
                     }
                     else {
                         changeView();
                     }
                 }
                 else {
-                    Toast.makeText(getActivity(),"Not Connected",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),"You're not connected!",Toast.LENGTH_SHORT).show();
                     getActivity().finish();
                 }
             }
-        }, 3500);
+        }, 5000);
     }
 
     @Override
@@ -103,75 +105,112 @@ public class Splash extends Fragment {
         super.onStart();
     }
 
-    private void attach(String userId) {
-        users.child(userId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                user = dataSnapshot.getValue(User.class);
-                Log.i("User Email", "Value is: " + user.getEmail());
-                synced_user = true;
-            }
+    private void syncUser(String userID) {
+//        users.child(userId).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                user = dataSnapshot.getValue(User.class);
+//                Log.i("User Email", "Value is: " + user.getEmail());
+//                synced_user = true;
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError error) {
+//                Log.i("Error", error.toException().getMessage());
+//            }
+//        });
+//        missions.addListenerForSingleValueEvent(new ValueEventListener() {
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//               synced_missions = true;
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//
+//        });
+//        missions.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                missionsList.add(dataSnapshot.getValue(Mission.class));
+//                LootApplication app = (LootApplication)getActivity().getApplication();
+//                app.missions = missionsList;
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+        StringRequest syncRequest = new StringRequest(Request.Method.GET, Endpoints.syncRequest+userID,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+//                        user.setUserID();
+//                        user.setUsername();
+//                        user.setZealID();
+//                        user.setName();
+//                        user.setEmail();
+//                        user.setAvatarID();
+//                        user.setScore();
+//                        user.setStage();
+//                        user.setState();
+//                        user.setDropCount();
+//                        user.setDuelWon();
+//                        user.setDuelLost();
+//                        user.setContactNumber();
+//                        user.setDropped();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Log.i("Error", error.toException().getMessage());
-            }
-        });
-        missions.addListenerForSingleValueEvent(new ValueEventListener() {
-            public void onDataChange(DataSnapshot dataSnapshot) {
-               synced_missions = true;
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-
-        });
-        missions.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                missionsList.add(dataSnapshot.getValue(Mission.class));
-                LootApplication app = (LootApplication)getActivity().getApplication();
-                app.missions = missionsList;
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
+                    }
+                });
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue.add(syncRequest);
     }
 
     public void syncSharedPrefs(User user) {
-        SharedPreferences sharedPreferences=getActivity().getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putString("Uid",user.getUserId());
-        editor.putString("Username",user.getUsername());
-        editor.putInt("Score",user.getScore());
-        editor.putString("mActive",user.getActive());
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.putString("com.hackncs.userID", user.getUserID());
+//        editor.putString("com.hackncs.username", user.getUsername());
+//        editor.putString("com.hackncs.zealID", user.getZealID());
+//        editor.putString("com.hackncs.name", user.getName());
+//        editor.putString("com.hackncs.email", user.getEmail());
+//        editor.putInt("com.hackncs.avatarID", user.getAvatarID());
+//        editor.putInt("com.hackncs.score", user.getScore());
+//        editor.putInt("com.hackncs.stage", user.getStage());
+//        editor.putInt("com.hackncs.state", user.getState());
+//        editor.putInt("com.hackncs.dropCount", user.getDropCount());
+//        editor.putInt("com.hackncs.duelWon", user.getDuelWon());
+//        editor.putInt("com.hackncs.duelLost", user.getDuelLost());
+//        editor.putLong("com.hackncs.contactNumber", user.getContactNumber());
+//        editor.putStringSet("com.hackncs.dropped", new HashSet<>(user.getDropped()));
         editor.apply();
-        LootApplication app = (LootApplication)getActivity().getApplication();
-        app.user = user;
-        app.missions = missionsList;
 
-        Intent i = new Intent(getContext(), Main2Activity.class);
+//        LootApplication app = (LootApplication)getActivity().getApplication();
+//        app.user = user;
+//        app.missions = missionsList;
+        Intent i = new Intent(getContext(), MainActivity.class);
         i.putExtra("UID", fbuser.getUid());
         startActivity(i);
     }
@@ -202,12 +241,11 @@ public class Splash extends Fragment {
     }
 
     private  void backgroundTasks() {
-
         isConnected = isOnline();
         logged_in = mAuth.getCurrentUser() != null;
         fbuser = mAuth.getCurrentUser();
         if(logged_in) {
-            attach(fbuser.getUid());
+            syncUser(fbuser.getUid());
         }
     }
 
@@ -225,8 +263,7 @@ public class Splash extends Fragment {
         }
     }
 
-    private void changeView()
-    {
+    private void changeView() {
         ProgressBar loader = getView().findViewById(R.id.loader);
         RelativeLayout layout = getView().findViewById(R.id.rel_layout);
         loader.setVisibility(View.GONE);

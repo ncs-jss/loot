@@ -1,6 +1,5 @@
 package com.example.dell.loot;
 
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ public class Stats extends Fragment {
     public Stats() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

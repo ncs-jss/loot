@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/item_stats"
+        android:icon="@drawable/cast_ic_stop_circle_filled_white"
+        android:title="Stats" />
+
+    <item android:id="@+id/item_howTo"
+        android:icon="@drawable/cast_ic_stop_circle_filled_white"
+        android:title="How To" />
+
+    <item android:id="@+id/item_help"
+        android:icon="@drawable/cast_ic_stop_circle_filled_white"
+        android:title="Help" />
+
+    <item android:id="@+id/pop_logout"
+        android:icon="@drawable/cast_ic_stop_circle_filled_white"
+        android:title="Logout" />
+
+</menu>

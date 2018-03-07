@@ -210,7 +210,7 @@ public class Splash extends Fragment {
 //        LootApplication app = (LootApplication)getActivity().getApplication();
 //        app.user = user;
 //        app.missions = missionsList;
-        Intent i = new Intent(getContext(), MainActivity.class);
+        Intent i = new Intent(getContext(), DashboardLoot.class);
         i.putExtra("UID", fbuser.getUid());
         startActivity(i);
     }

@@ -84,8 +84,7 @@ public class Register extends Fragment {
                                                 @Override
                                                 public void onResponse(String response) {
                                                     Toast.makeText(getContext(),"You're registered successfully!",Toast.LENGTH_SHORT).show();
-                                                    Intent i = new Intent(getContext(),MainActivity.class);
-                                                    i.putExtra("UID", firebaseUser.getUid());
+                                                    Intent i=new Intent(getContext(),WelcomeSlider.class);
                                                     startActivity(i);
                                                 }
                                             },
@@ -162,6 +161,7 @@ public class Register extends Fragment {
 //    }
 
     public void login() {
+
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Login fragment = new Login();

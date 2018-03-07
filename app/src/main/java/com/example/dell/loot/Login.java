@@ -43,7 +43,7 @@ import java.util.HashSet;
 public class Login extends Fragment {
 
     private FirebaseAuth mAuth;
-//    private FirebaseDatabase database;
+    //    private FirebaseDatabase database;
 //    DatabaseReference users, missions;
 //    ArrayList<Mission> missionsList = new ArrayList<>();
     User user;
@@ -88,6 +88,7 @@ public class Login extends Fragment {
                                     syncUser(firebaseUser.getUid());
                                 }
                                 else {
+                                    dialog.dismiss();
                                     Toast.makeText(getContext(), "Authentication failed."+ task.getException().getMessage(),
                                             Toast.LENGTH_SHORT).show();
                                 }
@@ -143,7 +144,7 @@ public class Login extends Fragment {
 //        app.user = user;
 //        app.missions = missionsList;
         dialog.dismiss();
-        Intent i = new Intent(getContext(),MainActivity.class);
+        Intent i = new Intent(getContext(),DashboardLoot.class);
         //TODO: update below
         i.putExtra("UID", /*user.getUserID()*/ "x");
         startActivity(i);

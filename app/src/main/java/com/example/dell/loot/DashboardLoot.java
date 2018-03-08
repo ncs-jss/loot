@@ -2,6 +2,7 @@ package com.example.dell.loot;
 
 import android.content.Intent;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -19,10 +20,17 @@ import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.luseen.spacenavigation.SpaceItem;
 import com.luseen.spacenavigation.SpaceNavigationView;
 import com.luseen.spacenavigation.SpaceOnClickListener;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class DashboardLoot extends AppCompatActivity {
 
@@ -30,13 +38,14 @@ public class DashboardLoot extends AppCompatActivity {
     FloatingActionButton fab;
 
     FirebaseAuth mAuth;
+    FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_loot);
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar2);
         fab = findViewById(R.id.fab);
-
+        db= FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -121,6 +130,11 @@ public class DashboardLoot extends AppCompatActivity {
         spaceNavigationView.onSaveInstanceState(outState);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateFirebase(mAuth.getCurrentUser(),true);
+    }
 
     private void loadFragment(Fragment fragment, String tag) {
         // load fragment
@@ -180,8 +194,18 @@ public class DashboardLoot extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onStop() {
-//        finishAffinity();
         super.onStop();
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mAuth.getCurrentUser()!=null)
+            updateFirebase(mAuth.getCurrentUser(),false);
+        else
+            finishAffinity();
 
     }
 
@@ -205,6 +229,7 @@ public class DashboardLoot extends AppCompatActivity {
                 loadFragment(new Help(),"help");
                 break;
             case R.id.pop_logout:
+                updateFirebase(mAuth.getCurrentUser(),false);
                 mAuth.signOut();
                 Intent intent=new Intent(getApplicationContext(), Main3Activity.class);
                 startActivity(intent);
@@ -212,5 +237,28 @@ public class DashboardLoot extends AppCompatActivity {
             default:
         }
         return super.onOptionsItemSelected(menuItem);
+    }
+    public void updateFirebase(FirebaseUser firebaseUser,boolean state)
+    {
+        Map<String, Object> user = new HashMap<>();
+        user.put("userID", firebaseUser.getUid());
+        user.put("online", state);
+
+        db.collection("users").document(firebaseUser.getUid())
+                .set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+                if(task.isSuccessful())
+                {
+                    Log.i("Added Succesfully","");
+                }
+                else
+                {
+                    Log.i("Error",task.getException().getMessage());
+                }
+            }
+        });
+
     }
 }

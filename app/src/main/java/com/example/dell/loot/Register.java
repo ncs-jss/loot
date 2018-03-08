@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +26,16 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +48,7 @@ public class Register extends Fragment {
     View view;
     EditText name, email, contact, zeal, username, password;
     ProgressDialog dialog;
+    FirebaseFirestore db;
     public Register() {
         // Required empty public constructor
     }
@@ -59,6 +65,7 @@ public class Register extends Fragment {
         super.onActivityCreated(savedInstanceState);
         initializeViews();
         mAuth = FirebaseAuth.getInstance();
+        db=FirebaseFirestore.getInstance();
 //        database = FirebaseDatabase.getInstance();
 //        users = database.getReference("Users");
         Button register = getView().findViewById(R.id.register);
@@ -86,6 +93,7 @@ public class Register extends Fragment {
                                 if (task.isSuccessful()) {
                                     dialog.dismiss();
                                     final FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                                    updateFirebase(firebaseUser);
                                     Toast.makeText(getContext(),"You're registered successfully!",Toast.LENGTH_SHORT).show();
                                                     Intent i=new Intent(getContext(),WelcomeSlider.class);
                                                     startActivity(i);
@@ -179,5 +187,28 @@ public class Register extends Fragment {
         Login fragment = new Login();
         fragmentTransaction.replace(R.id.login_frame, fragment);
         fragmentTransaction.commit();
+    }
+    public void updateFirebase(FirebaseUser firebaseUser)
+    {
+        Map<String, Object> user = new HashMap<>();
+        user.put("userID", firebaseUser.getUid());
+        user.put("online", false);
+
+        db.collection("users").document(firebaseUser.getUid())
+                .set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+                if(task.isSuccessful())
+                {
+                    Log.i("Added Succesfully","");
+                }
+                else
+                {
+                    Log.i("Error",task.getException().getMessage());
+                }
+            }
+        });
+
     }
 }

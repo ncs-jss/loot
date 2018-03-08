@@ -1,5 +1,6 @@
 package com.example.dell.loot;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -41,7 +42,7 @@ public class Register extends Fragment {
 //    DatabaseReference users;
     View view;
     EditText name, email, contact, zeal, username, password;
-
+    ProgressDialog dialog;
     public Register() {
         // Required empty public constructor
     }
@@ -70,45 +71,55 @@ public class Register extends Fragment {
             }
         });
 
+        dialog.setTitle("Please Wait");
+        dialog.setCancelable(false);
+        dialog.setMessage("Signing in...");
+
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialog.show();
                 mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
                         .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
+                                    dialog.dismiss();
                                     final FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                                    StringRequest register = new StringRequest(Request.Method.POST, Endpoints.register,
-                                            new Response.Listener<String>() {
-                                                @Override
-                                                public void onResponse(String response) {
-                                                    Toast.makeText(getContext(),"You're registered successfully!",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(),"You're registered successfully!",Toast.LENGTH_SHORT).show();
                                                     Intent i=new Intent(getContext(),WelcomeSlider.class);
                                                     startActivity(i);
-                                                }
-                                            },
-                                            new Response.ErrorListener() {
-                                                @Override
-                                                public void onErrorResponse(VolleyError error) {
-
-                                                }
-                                            }){
-                                        @Override
-                                        protected Map<String, String> getParams() throws AuthFailureError {
-                                            Map<String, String> map = new HashMap();
-                                            map.put("", firebaseUser.getUid());
-                                            map.put("", email.getText().toString());
-                                            map.put("", name.getText().toString());
-                                            map.put("", username.getText().toString());
-                                            map.put("", zeal.getText().toString());
-                                            map.put("", contact.getText().toString());
-                                            return map;
-                                        }
-                                    };
-                                    RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-                                    requestQueue.add(register);
+//                                    StringRequest register = new StringRequest(Request.Method.POST, Endpoints.register,
+//                                            new Response.Listener<String>() {
+//                                                @Override
+//                                                public void onResponse(String response) {
+//                                                    Toast.makeText(getContext(),"You're registered successfully!",Toast.LENGTH_SHORT).show();
+//                                                    Intent i=new Intent(getContext(),WelcomeSlider.class);
+//                                                    startActivity(i);
+//                                                }
+//                                            },
+//                                            new Response.ErrorListener() {
+//                                                @Override
+//                                                public void onErrorResponse(VolleyError error) {
+//
+//                                                }
+//                                            }){
+//                                        @Override
+//                                        protected Map<String, String> getParams() throws AuthFailureError {
+//                                            Map<String, String> map = new HashMap();
+//                                            map.put("", firebaseUser.getUid());
+//                                            map.put("", email.getText().toString());
+//                                            map.put("", name.getText().toString());
+//                                            map.put("", username.getText().toString());
+//                                            map.put("", zeal.getText().toString());
+//                                            map.put("", contact.getText().toString());
+//                                            return map;
+//                                        }
+//                                    };
+//                                    RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+//                                    requestQueue.add(register);
                                 } else {
+                                    dialog.dismiss();
                                     Toast.makeText(getContext(), "Registration failed."+ task.getException().getMessage(),
                                             Toast.LENGTH_SHORT).show();
                                 }
@@ -125,6 +136,7 @@ public class Register extends Fragment {
         zeal = view.findViewById(R.id.zealId);
         username = view.findViewById(R.id.username);
         password = view.findViewById(R.id.password);
+        dialog=new ProgressDialog(getContext());
     }
 
     @Override

@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <item android:id="@+id/item_stats"
+        app:showAsAction="never"
         android:icon="@drawable/cast_ic_stop_circle_filled_white"
         android:title="Stats" />
 
     <item android:id="@+id/item_howTo"
+        app:showAsAction="never"
         android:icon="@drawable/cast_ic_stop_circle_filled_white"
         android:title="How To" />
 
     <item android:id="@+id/item_help"
+        app:showAsAction="never"
         android:icon="@drawable/cast_ic_stop_circle_filled_white"
         android:title="Help" />
 
     <item android:id="@+id/pop_logout"
+        app:showAsAction="never"
         android:icon="@drawable/cast_ic_stop_circle_filled_white"
         android:title="Logout" />
 

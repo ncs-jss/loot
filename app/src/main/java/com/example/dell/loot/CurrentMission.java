@@ -341,7 +341,15 @@ public class CurrentMission
             googleApiClient.disconnect();
         }
     }
-//    @Override
+
+    @Override
+    public void onStop() {
+        if (googleApiClient.isConnected()) {
+            googleApiClient.disconnect();
+        }
+        super.onStop();
+    }
+    //    @Override
 //    public void onDestroyView() {
 //        Log.i("Current Mission","Destroy View");
 //        if(progressDialog.isShowing()) {

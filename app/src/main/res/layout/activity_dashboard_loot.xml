@@ -57,7 +57,7 @@
     </RelativeLayout>
 
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/main_content"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -70,9 +70,20 @@
         <FrameLayout
             android:id="@+id/frame_container"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_above="@+id/space"
+            android:layout_margin="@dimen/fab_margin"
+            app:fabSize="auto"
+            android:src="@drawable/ic_group_collapse_00" />
 
 
         <com.luseen.spacenavigation.SpaceNavigationView
@@ -80,6 +91,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:layout_alignParentBottom="true"
             app:active_item_color="@android:color/black"
             app:centre_button_color="@android:color/white"
             app:inactive_item_color="@android:color/black"
@@ -89,14 +101,7 @@
             app:space_item_icon_only_size="40dp"
             app:space_item_text_size="20sp" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            app:fabSize="auto"
-            android:src="@drawable/ic_group_collapse_00" />
-    </LinearLayout>
+
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
@@ -74,37 +76,39 @@ public class DashboardLoot extends AppCompatActivity {
             }
         });
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PopupMenu popup = new PopupMenu(DashboardLoot.this, view);
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        switch (menuItem.getItemId()) {
-                            case R.id.item_stats:
-                                loadFragment(new Stats(),"stats");
-                                return true;
-                            case R.id.item_howTo:
-                                loadFragment(new HowTo(),"how_to");
-                                return true;
-                            case R.id.item_help:
-                                loadFragment(new Help(),"help");
-                                return true;
-                            case R.id.pop_logout:
-                                mAuth.signOut();
-                                Intent intent=new Intent(getApplicationContext(), Main3Activity.class);
-                                startActivity(intent);
-                                return true;
-                            default:
-                                return false;
-                        }
-                    }
-                });
-                popup.inflate(R.menu.popup_menu);
-                popup.show();
-            }
-        });
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                PopupMenu popup = new PopupMenu(DashboardLoot.this, view);
+//                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+//                    @Override
+//                    public boolean onMenuItemClick(MenuItem menuItem) {
+//                        switch (menuItem.getItemId()) {
+//                            case R.id.item_stats:
+//                                loadFragment(new Stats(),"stats");
+//                                return true;
+//                            case R.id.item_howTo:
+//                                loadFragment(new HowTo(),"how_to");
+//                                return true;
+//                            case R.id.item_help:
+//                                loadFragment(new Help(),"help");
+//                                return true;
+//                            case R.id.pop_logout:
+//                                mAuth.signOut();
+//                                Intent intent=new Intent(getApplicationContext(), Main3Activity.class);
+//                                startActivity(intent);
+//
+//                                return true;
+//                            default:
+//                                return false;
+//                        }
+//                    }
+//                });
+//                popup.inflate(R.menu.popup_menu);
+//                popup.show();
+//            }
+//        });
 
         Fragment fragment=new Missions();
         loadFragment(fragment,"missions");
@@ -171,5 +175,42 @@ public class DashboardLoot extends AppCompatActivity {
                 finish();
             }
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    @Override
+    protected void onStop() {
+//        finishAffinity();
+        super.onStop();
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.popup_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.item_stats:
+                loadFragment(new Stats(),"stats");
+                break;
+
+            case R.id.item_howTo:
+                loadFragment(new HowTo(),"how_to");
+                break;
+            case R.id.item_help:
+                loadFragment(new Help(),"help");
+                break;
+            case R.id.pop_logout:
+                mAuth.signOut();
+                Intent intent=new Intent(getApplicationContext(), Main3Activity.class);
+                startActivity(intent);
+                break;
+            default:
+        }
+        return super.onOptionsItemSelected(menuItem);
     }
 }

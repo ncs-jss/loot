@@ -158,34 +158,37 @@ public class Splash extends Fragment {
 //
 //            }
 //        });
-        StringRequest syncRequest = new StringRequest(Request.Method.GET, Endpoints.syncRequest+userID,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-//                        user.setUserID();
-//                        user.setUsername();
-//                        user.setZealID();
-//                        user.setName();
-//                        user.setEmail();
-//                        user.setAvatarID();
-//                        user.setScore();
-//                        user.setStage();
-//                        user.setState();
-//                        user.setDropCount();
-//                        user.setDuelWon();
-//                        user.setDuelLost();
-//                        user.setContactNumber();
-//                        user.setDropped();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
 
-                    }
-                });
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-        requestQueue.add(syncRequest);
+
+
+//        StringRequest syncRequest = new StringRequest(Request.Method.GET, Endpoints.syncRequest+userID,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+////                        user.setUserID();
+////                        user.setUsername();
+////                        user.setZealID();
+////                        user.setName();
+////                        user.setEmail();
+////                        user.setAvatarID();
+////                        user.setScore();
+////                        user.setStage();
+////                        user.setState();
+////                        user.setDropCount();
+////                        user.setDuelWon();
+////                        user.setDuelLost();
+////                        user.setContactNumber();
+////                        user.setDropped();
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//
+//                    }
+//                });
+//        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+//        requestQueue.add(syncRequest);
     }
 
     public void syncSharedPrefs(User user) {

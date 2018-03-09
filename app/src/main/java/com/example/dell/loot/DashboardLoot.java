@@ -52,8 +52,8 @@ public class DashboardLoot extends AppCompatActivity {
 
         spaceNavigationView = (SpaceNavigationView) findViewById(R.id.space);
         spaceNavigationView.initWithSaveInstanceState(savedInstanceState);
-        spaceNavigationView.addSpaceItem(new SpaceItem("Duel", R.drawable.ic_menu_slideshow));
         spaceNavigationView.addSpaceItem(new SpaceItem("LeaderBoard", R.drawable.ic_menu_camera));
+        spaceNavigationView.addSpaceItem(new SpaceItem("Duel", R.drawable.ic_menu_slideshow));
         spaceNavigationView.showIconOnly();
 //        spaceNavigationView.changeCenterButtonIcon(R.drawable.avatar1);
         spaceNavigationView.setSpaceOnClickListener(new SpaceOnClickListener() {
@@ -67,9 +67,10 @@ public class DashboardLoot extends AppCompatActivity {
             @Override
             public void onItemClick(int itemIndex, String itemName) {
                 Toast.makeText(DashboardLoot.this, itemIndex + " " + itemName, Toast.LENGTH_SHORT).show();
-                if(itemIndex==0)
+                if(itemIndex==1)
                 {
-                    Fragment fragment=new Stats();
+
+                    Fragment fragment=new Duel();
                     loadFragment(fragment,"duel");
                 }
                 else
@@ -160,6 +161,10 @@ public class DashboardLoot extends AppCompatActivity {
             android.support.v4.app.Fragment fragment=new Missions();
             loadFragment(fragment,"missions");
 
+        }
+        else if(fragmentTag.equals("online_users"))
+        {
+            loadFragment(new Duel(),"duel");
         }
         else if (fragmentTag.equals("missions"))
         {

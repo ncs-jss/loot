@@ -58,6 +58,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 intent.putExtra("user",from_user);
 
             }
+            else if(request_type.equals("won_message"))
+            {
+                String from_user = remoteMessage.getData().get("user");
+                intent.putExtra("user",from_user);
+
+            }
+            else if(request_type.equals("lost_message"))
+            {
+                String from_user = remoteMessage.getData().get("user");
+                intent.putExtra("user",from_user);
+
+            }
 //            sendNotification(from_user,stake);
 
             startActivity(intent);

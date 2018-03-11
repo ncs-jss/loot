@@ -33,9 +33,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".WelcomeSlider"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
+        <activity
+            android:name=".WelcomeSlider"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".DashboardLoot"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -57,8 +57,10 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".Duel_Alert_Transparent_Activity"
-            android:theme="@style/Transparent_Theme"></activity>
+        <activity
+            android:name=".Duel_Alert_Transparent_Activity"
+            android:theme="@style/Transparent_Theme" />
+        <activity android:name=".MiniGame"></activity>
     </application>
 
 </manifest>

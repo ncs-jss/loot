@@ -15,11 +15,13 @@ public class LeaderListAdapter extends BaseAdapter {
     ArrayList<String> usernames, coins;
     Context context;
     LayoutInflater layoutInflater;
+    ArrayList<Integer> avatarIDs;
 
-    public LeaderListAdapter(Context context, ArrayList<String> usernames, ArrayList<String> coins) {
+    public LeaderListAdapter(Context context, ArrayList<String> usernames, ArrayList<String> coins, ArrayList<Integer> avatarIDs) {
         this.context = context;
         this.usernames = usernames;
         this.coins = coins;
+        this.avatarIDs = avatarIDs;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -44,7 +46,8 @@ public class LeaderListAdapter extends BaseAdapter {
         ImageView icon = customView.findViewById(R.id.icon);
         TextView username = customView.findViewById(R.id.usernameLine);
         TextView coin = customView.findViewById(R.id.coinsLine);
-        icon.setImageResource(R.mipmap.ic_launcher_round);
+        //TODO: set avatars
+//        icon.setImageResource();
         username.setText(usernames.get(i));
         coin.setText(coins.get(i));
         customView.setBackgroundResource(R.drawable.list_shadow);

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class GridTap extends Fragment implements View.OnClickListener {
 
@@ -19,6 +20,7 @@ public class GridTap extends Fragment implements View.OnClickListener {
     Bundle savedInstanceState;
     ClockCountdown clockCountdown;
     TileCountdown tileCountdown;
+    DelayCountdown delayCountdown;
     TextView counterText, timerText;
     int buttonsID[][] = {
             {R.id.b00, R.id.b01, R.id.b02, R.id.b03, R.id.b04},
@@ -40,6 +42,7 @@ public class GridTap extends Fragment implements View.OnClickListener {
         b = new Button[5][5];
         clockCountdown = new ClockCountdown(seconds * 1000, 1000);
         tileCountdown = new TileCountdown(seconds * 1000, tileChangeInterval);
+        delayCountdown = new DelayCountdown(5000, 1000);
         x = (int)(Math.random() * 5);
         y = (int)(Math.random() * 5);
         redLocation = (x*10) + (y+1);
@@ -51,8 +54,6 @@ public class GridTap extends Fragment implements View.OnClickListener {
         view = inflater.inflate(R.layout.fragment_grid_tap, container, false);
         initializeViews();
         b[x][y].setBackgroundColor(Color.RED);
-        clockCountdown.start();
-        tileCountdown.start();
         return view;
     }
 
@@ -108,7 +109,7 @@ public class GridTap extends Fragment implements View.OnClickListener {
 
         @Override
         public void onFinish() {
-            //TODO: send counter value, update fragment
+            //TODO: send counter value, finish
         }
     }
 
@@ -126,6 +127,25 @@ public class GridTap extends Fragment implements View.OnClickListener {
         @Override
         public void onFinish() {
 
+        }
+    }
+
+    class DelayCountdown extends CountDownTimer {
+
+        public DelayCountdown(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long l) {
+            //TODO: update text below
+            Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onFinish() {
+            clockCountdown.start();
+            tileCountdown.start();
         }
     }
 }

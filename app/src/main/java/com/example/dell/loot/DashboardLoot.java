@@ -60,7 +60,7 @@ public class DashboardLoot extends AppCompatActivity {
             @Override
             public void onCentreButtonClick() {
                 Toast.makeText(DashboardLoot.this,"onCentreButtonClick", Toast.LENGTH_SHORT).show();
-                Fragment fragment=new Missions();
+                Fragment fragment=new CurrentMission();
                 loadFragment(fragment,"missions");
             }
 
@@ -120,7 +120,7 @@ public class DashboardLoot extends AppCompatActivity {
 //            }
 //        });
 
-        Fragment fragment=new Missions();
+        Fragment fragment=new CurrentMission();
         loadFragment(fragment,"missions");
         spaceNavigationView.setCentreButtonSelectable(true);
         spaceNavigationView.setCentreButtonSelected();
@@ -158,7 +158,7 @@ public class DashboardLoot extends AppCompatActivity {
         if(fragmentTag.equals("duel")||fragmentTag.equals("leaderboard")||fragmentTag.equals("current_mission")) {
 
             spaceNavigationView.setCentreButtonSelected();
-            android.support.v4.app.Fragment fragment=new Missions();
+            android.support.v4.app.Fragment fragment=new CurrentMission();
             loadFragment(fragment,"missions");
 
         }
@@ -173,7 +173,7 @@ public class DashboardLoot extends AppCompatActivity {
         else if(fragmentTag.equals("about")||fragmentTag.equals("how_to")||fragmentTag.equals("help")||fragmentTag.equals("contact_us"))
         {
 //                navigationView.getMenu().getItem(0).setChecked(true);
-            android.support.v4.app.Fragment fragment=new Missions();
+            android.support.v4.app.Fragment fragment=new CurrentMission();
             loadFragment(fragment,"missions");
         }
 

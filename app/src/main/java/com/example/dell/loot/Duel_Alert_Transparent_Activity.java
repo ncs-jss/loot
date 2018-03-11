@@ -35,8 +35,57 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
             String from_user = intent.getStringExtra("user");
             showDialogReject(from_user);
         }
+        else if(request_type.equals("won_message"))
+        {
+            String from_user = intent.getStringExtra("user");
+            showDialogWon(from_user);
+        }
+        else if(request_type.equals("lost_message"))
+        {
+            String from_user = intent.getStringExtra("user");
+            showDialogLost(from_user);
+        }
 
     }
+
+    private void showDialogLost(String from_user) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("You Lost")
+                .setMessage(from_user+" won!")
+                // Add action buttons
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        // sign in the user ...
+                        //TODO:finishActivity
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
+    private void showDialogWon(String from_user) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("You Won")
+                .setMessage(from_user+" lost!")
+                // Add action buttons
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        // sign in the user ...
+                        //TODO:finishActivity
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
     private void showDialogRequest(String user,String stake)
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -52,15 +101,15 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         // sign in the user ...
-                        //TODO:call duel activity
                         //TODO:send Duel Accept Request
+                        //TODO:call duel activity
                     }
                 })
                 .setNegativeButton("Reject", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
-                        //TODO:finishActivity
                         //TODO:send Duel Reject Request
+                        //TODO:finishActivity
 
                     }
                 });

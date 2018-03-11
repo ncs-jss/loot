@@ -31,6 +31,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -161,52 +164,59 @@ public class Splash extends Fragment {
 
 
 
-//        StringRequest syncRequest = new StringRequest(Request.Method.GET, Endpoints.syncRequest+userID,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-////                        user.setUserID();
-////                        user.setUsername();
-////                        user.setZealID();
-////                        user.setName();
-////                        user.setEmail();
-////                        user.setAvatarID();
-////                        user.setScore();
-////                        user.setStage();
-////                        user.setState();
-////                        user.setDropCount();
-////                        user.setDuelWon();
-////                        user.setDuelLost();
-////                        user.setContactNumber();
-////                        user.setDropped();
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//
-//                    }
-//                });
-//        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-//        requestQueue.add(syncRequest);
+        StringRequest syncRequest = new StringRequest(Request.Method.GET,
+                Endpoints.syncRequest+userID,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jsonObject;
+                        try {
+                            jsonObject = new JSONObject(response);
+                            user.setUserID(jsonObject.getString("reference_token"));
+                            user.setUsername(jsonObject.getString("username"));
+                            user.setZealID(jsonObject.getString("zeal_id"));
+                            user.setName(jsonObject.getString("name"));
+                            user.setEmail(jsonObject.getString("email"));
+                            user.setAvatarID(Integer.valueOf(jsonObject.getString("avatar_id")));
+                            user.setScore(Integer.valueOf(jsonObject.getString("score")));
+                            user.setStage(Integer.valueOf(jsonObject.getString("stage")));
+                            user.setState(Integer.valueOf(jsonObject.getString("mission_state")));
+                            user.setDropCount(Integer.valueOf(jsonObject.getString("drop_count")));
+                            user.setDuelWon(Integer.valueOf(jsonObject.getString("duel_won")));
+                            user.setDuelLost(Integer.valueOf(jsonObject.getString("duel_lost")));
+                            user.setContactNumber(Long.valueOf(jsonObject.getString("contact_number")));
+//                            user.setDropped();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue.add(syncRequest);
     }
 
     public void syncSharedPrefs(User user) {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putString("com.hackncs.userID", user.getUserID());
-//        editor.putString("com.hackncs.username", user.getUsername());
-//        editor.putString("com.hackncs.zealID", user.getZealID());
-//        editor.putString("com.hackncs.name", user.getName());
-//        editor.putString("com.hackncs.email", user.getEmail());
-//        editor.putInt("com.hackncs.avatarID", user.getAvatarID());
-//        editor.putInt("com.hackncs.score", user.getScore());
-//        editor.putInt("com.hackncs.stage", user.getStage());
-//        editor.putInt("com.hackncs.state", user.getState());
-//        editor.putInt("com.hackncs.dropCount", user.getDropCount());
-//        editor.putInt("com.hackncs.duelWon", user.getDuelWon());
-//        editor.putInt("com.hackncs.duelLost", user.getDuelLost());
-//        editor.putLong("com.hackncs.contactNumber", user.getContactNumber());
+        editor.putString("com.hackncs.userID", user.getUserID());
+        editor.putString("com.hackncs.username", user.getUsername());
+        editor.putString("com.hackncs.zealID", user.getZealID());
+        editor.putString("com.hackncs.name", user.getName());
+        editor.putString("com.hackncs.email", user.getEmail());
+        editor.putInt("com.hackncs.avatarID", user.getAvatarID());
+        editor.putInt("com.hackncs.score", user.getScore());
+        editor.putInt("com.hackncs.stage", user.getStage());
+        editor.putInt("com.hackncs.state", user.getState());
+        editor.putInt("com.hackncs.dropCount", user.getDropCount());
+        editor.putInt("com.hackncs.duelWon", user.getDuelWon());
+        editor.putInt("com.hackncs.duelLost", user.getDuelLost());
+        editor.putLong("com.hackncs.contactNumber", user.getContactNumber());
 //        editor.putStringSet("com.hackncs.dropped", new HashSet<>(user.getDropped()));
         editor.apply();
 

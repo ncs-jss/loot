@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -45,6 +46,12 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class CurrentMission
         extends
         Fragment
@@ -61,7 +68,8 @@ public class CurrentMission
     EditText answer;
     AlertDialog alertDialog;
     Mission mission;
-    int userStage, state;
+    int userStage, state, dropCount, score;
+    String userID;
     Vibrator vibrator;
     GoogleApiClient googleApiClient;
     LocationRequest locationRequest;
@@ -69,6 +77,8 @@ public class CurrentMission
     DatabaseReference users, missions;
     ProgressDialog progressDialog;
     LootApplication app;
+    RequestQueue requestQueue;
+    SharedPreferences sharedPreferences;
 
     public CurrentMission() {
         // Required empty public constructor
@@ -84,22 +94,33 @@ public class CurrentMission
         submit = view.findViewById(R.id.submit);
         drop_mission = view.findViewById(R.id.drop_mission);
         vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
-        userStage = sharedPreferences.getInt("com.hackncs.stage",0);
+        sharedPreferences = getActivity().getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
+        userStage = sharedPreferences.getInt("com.hackncs.stage",1);
         state = sharedPreferences.getInt("com.hackncs.state", 0);
+        dropCount = sharedPreferences.getInt("com.hackncs.dropCount", 0);
+        score = sharedPreferences.getInt("com.hackncs.score", 0);
+        userID = sharedPreferences.getString("com.hackncs.userID", null);
+        requestQueue = Volley.newRequestQueue(getContext());
         checkPermission();
         StringRequest fetchMission = new StringRequest(Request.Method.GET,
                 Endpoints.fetchMission + userStage,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-//                        mission.setMissionID();
-//                        mission.setMissionName();
-//                        mission.setStory();
-//                        mission.setDescription();
-//                        mission.setLat();
-//                        mission.setLng();
-//                        mission.setAnswer();
+                        JSONObject jsonObject;
+                        try {
+                            jsonObject = new JSONObject(response);
+                            mission.setMissionID(jsonObject.getInt("id"));
+                            mission.setMissionName(jsonObject.getString("mission_name"));
+                            mission.setStory(jsonObject.getString("story"));
+                            mission.setDescription(jsonObject.getString("description"));
+                            String g = jsonObject.getString("geocode");
+                            mission.setLat(Double.valueOf(g.substring(0, g.indexOf(" "))));
+                            mission.setLng(Double.valueOf(g.substring(g.indexOf(" "))));
+                            mission.setAnswer(jsonObject.getString("answer"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         progressDialog.dismiss();
                     }
                 },
@@ -110,7 +131,6 @@ public class CurrentMission
                         Toast.makeText(getContext(), "Error in fetching data!", Toast.LENGTH_SHORT).show();
                     }
                 });
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(fetchMission);
         return view;
     }
@@ -126,20 +146,69 @@ public class CurrentMission
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("Drop Mission");
-                builder.setMessage((((int)Math.pow(2, (userStage-1)))*10)+" coins will be deducted!");
-                builder.setPositiveButton("Drop", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // TODO: update stage, state and score in SharedPrefs and Backend
-                        getFragmentManager().beginTransaction().detach(CurrentMission.this).attach(CurrentMission.this).commit();
-                    }
-                });
-                builder.setNegativeButton("Stay", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        alertDialog.dismiss();
-                    }
-                });
+                if (score - (((int)Math.pow(2, dropCount))*10) >= 0) {
+                    builder.setMessage((((int) Math.pow(2, dropCount)) * 10) + " coins will be deducted!");
+                    builder.setPositiveButton("Drop", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            userStage += 1;
+                            state = 0;
+                            score -= ((int) Math.pow(2, dropCount)) * 10;
+                            dropCount += 1;
+                            StringRequest updateUser = new StringRequest(Request.Method.PATCH,
+                                    Endpoints.updateUser + userID,
+                                    new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+                                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                                            editor.putInt("com.hackncs.score", score);
+                                            editor.putInt("com.hackncs.stage", userStage);
+                                            editor.putInt("com.hackncs.state", state);
+                                            editor.putInt("com.hackncs.dropCount", dropCount);
+                                            editor.apply();
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+
+                                        }
+                                    }){
+                                @Override
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    Map map = new HashMap();
+                                    map.put("score", score);
+                                    map.put("stage", userStage);
+                                    map.put("mission_state", state);
+                                    map.put("drop_count", dropCount);
+                                    return super.getParams();
+                                }
+                            };
+                            requestQueue.add(updateUser);
+                            getFragmentManager().beginTransaction().detach(CurrentMission.this).attach(CurrentMission.this).commit();
+                        }
+                    });
+                    builder.setNegativeButton("Stay", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            alertDialog.dismiss();
+                        }
+                    });
+                } else {
+                    builder.setMessage("You can't drop this mission! Not enough coins!");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            alertDialog.dismiss();
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            alertDialog.dismiss();
+                        }
+                    });
+                }
                 alertDialog = builder.create();
             }
         });
@@ -154,8 +223,7 @@ public class CurrentMission
                 if (!googleApiClient.isConnected()) {
                     googleApiClient.connect();
                 }
-                //TODO: update below
-                question.setText(/*mission.getStory()*/"Story");
+                question.setText(mission.getStory());
                 answer.setEnabled(false);
                 submit.setEnabled(false);
                 break;
@@ -173,7 +241,37 @@ public class CurrentMission
                             answer.setText("");
                             Toast.makeText(getContext(), "You might wanna try another one!", Toast.LENGTH_SHORT).show();
                         } else {
-                            // TODO: update stage, state and score in SharedPrefs and Backend
+                            userStage += 1;
+                            state = 0;
+                            score += 100;
+                            StringRequest updateUser = new StringRequest(Request.Method.PATCH,
+                                    Endpoints.updateUser + userID,
+                                    new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+                                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                                            editor.putInt("com.hackncs.score", score);
+                                            editor.putInt("com.hackncs.stage", userStage);
+                                            editor.putInt("com.hackncs.state", state);
+                                            editor.apply();
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+
+                                        }
+                                    }){
+                                @Override
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    Map map = new HashMap();
+                                    map.put("score", score);
+                                    map.put("stage", userStage);
+                                    map.put("mission_state", state);
+                                    return super.getParams();
+                                }
+                            };
+                            requestQueue.add(updateUser);
                             getFragmentManager().beginTransaction().detach(CurrentMission.this).attach(CurrentMission.this).commit();
                         }
                     }
@@ -262,16 +360,39 @@ public class CurrentMission
     @Override
     public void onLocationChanged(Location location) {
         Location missionLocation = new Location("");
-        //TODO: update below
-        missionLocation.setLatitude(/*mission.getLat()*/0.0);
-        missionLocation.setLongitude(/*mission.getLng()*/0.0);
-        Toast.makeText(getContext(), location.distanceTo(missionLocation)+"", Toast.LENGTH_SHORT).show();
+        missionLocation.setLatitude(mission.getLat());
+        missionLocation.setLongitude(mission.getLng());
+//        Toast.makeText(getContext(), location.distanceTo(missionLocation)+"", Toast.LENGTH_SHORT).show();
         if (location.distanceTo(missionLocation) < 5) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 vibrator.vibrate(VibrationEffect.createWaveform(
                         new long[]{0, 250, 200, 250, 150, 150, 75, 150, 75, 150}, -1));
             }
-            // TODO: update state in SharedPrefs and Backend
+            state = 1;
+            StringRequest updateUser = new StringRequest(Request.Method.PATCH,
+                    Endpoints.updateUser + userID,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putInt("com.hackncs.state", state);
+                            editor.apply();
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    }){
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map map = new HashMap();
+                    map.put("mission_state", state);
+                    return super.getParams();
+                }
+            };
+            requestQueue.add(updateUser);
             getFragmentManager().beginTransaction().detach(this).attach(this).commit();
         }
     }

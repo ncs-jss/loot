@@ -41,16 +41,22 @@ public class CustomRecycleAdapter extends RecyclerView.Adapter<CustomRecycleAdap
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recycle_cards, parent, false);
-
         return new MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         User user = users.get(position);
-        holder.name.setText(user.getName());
+        holder.name.setText(user.getUsername());
         holder.coins.setText("Coins $"+user.getScore());
-        holder.avatar.setImageResource(R.drawable.avatar);
+        //TODO: set avatar
+//        holder.avatar.setImageResource();
+        holder.name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: send challenge
+            }
+        });
     }
 
     @Override

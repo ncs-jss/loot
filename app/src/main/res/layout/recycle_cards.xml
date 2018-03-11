@@ -25,7 +25,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/avatar"/>
+                android:src="@drawable/avatar_1"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"

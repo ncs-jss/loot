@@ -50,7 +50,7 @@ public class CustomRecycleAdapter extends RecyclerView.Adapter<CustomRecycleAdap
         User user = users.get(position);
         holder.name.setText(user.getName());
         holder.coins.setText("Coins $"+user.getScore());
-        holder.avatar.setImageResource(R.drawable.avatar);
+        holder.avatar.setImageResource(R.drawable.avatar_1);
     }
 
     @Override

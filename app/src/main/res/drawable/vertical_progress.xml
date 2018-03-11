@@ -3,24 +3,24 @@
 
     <item android:id="@android:id/background">
         <shape>
-            <corners android:radius="8dp"/>
-            <solid android:color="#808080" />
+            <corners android:radius="10dp"/>
+            <solid android:color="@color/space_transparent" />
+            <stroke android:color="@color/space_white" android:width="5dp" />
+
         </shape>
     </item>
 
     <item android:id="@android:id/progress">
         <layer-list>
             <item>
-                <clip
-                    android:clipOrientation="vertical"
-                    android:gravity="bottom">
+
+                <clip>
+                <scale android:scaleWidth="100%">
                     <shape>
-                        <corners android:radius="8dp"/>
-                        <gradient
-                            android:angle="90"
-                            android:endColor="#FF0000"
-                            android:startColor="#1341EA" />
+                        <corners android:radius="10dp"/>
+                        <solid android:color="@color/space_white"/>
                     </shape>
+                </scale>
                 </clip>
             </item>
         </layer-list>

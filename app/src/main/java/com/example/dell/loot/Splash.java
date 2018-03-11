@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -44,6 +45,7 @@ public class Splash extends Fragment {
     DatabaseReference users,missions;
     FirebaseUser fbuser;
     User user;
+    ProgressBar loader;
     ArrayList<Mission> missionsList = new ArrayList<>();
     boolean isConnected, logged_in, synced_user, synced_missions;
 
@@ -80,6 +82,22 @@ public class Splash extends Fragment {
         database = FirebaseDatabase.getInstance();
         users = database.getReference("Users");
         missions = database.getReference("Missions");
+        final ProgressBar loader = getView().findViewById(R.id.loader);
+
+        new CountDownTimer(5000,50)
+        {
+
+            @Override
+            public void onTick(long l) {
+                int progress=(int)((5000-l)/50);
+                loader.setProgress(progress);
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        }.start();
         new BackgroundTasks().execute();
         new Handler().postDelayed(new Runnable() {
             @Override

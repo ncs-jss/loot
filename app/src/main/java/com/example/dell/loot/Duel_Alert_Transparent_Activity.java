@@ -52,10 +52,15 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         // sign in the user ...
+                        //TODO:call duel activity
+                        //TODO:send Duel Accept Request
                     }
                 })
                 .setNegativeButton("Reject", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+
+                        //TODO:finishActivity
+                        //TODO:send Duel Reject Request
 
                     }
                 });
@@ -74,6 +79,7 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         // sign in the user ...
+                        //TODO:call duel activity
                     }
                 });
 
@@ -92,6 +98,7 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         // sign in the user ...
+                        //TODO:finishActivity
                     }
                 });
 

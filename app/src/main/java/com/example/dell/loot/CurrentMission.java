@@ -1,6 +1,7 @@
 package com.example.dell.loot;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -17,6 +18,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,12 +104,28 @@ public class CurrentMission
         userID = sharedPreferences.getString("com.hackncs.userID", null);
         requestQueue = Volley.newRequestQueue(getContext());
         checkPermission();
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
+        googleApiClient = new GoogleApiClient.Builder(getContext())
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+
         StringRequest fetchMission = new StringRequest(Request.Method.GET,
                 Endpoints.fetchMission + userStage,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         JSONObject jsonObject;
+                        mission = new Mission();
                         try {
                             jsonObject = new JSONObject(response);
                             mission.setMissionID(jsonObject.getInt("id"));
@@ -118,6 +136,7 @@ public class CurrentMission
                             mission.setLat(Double.valueOf(g.substring(0, g.indexOf(" "))));
                             mission.setLng(Double.valueOf(g.substring(g.indexOf(" "))));
                             mission.setAnswer(jsonObject.getString("answer"));
+                            displayMission();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -132,15 +151,6 @@ public class CurrentMission
                     }
                 });
         requestQueue.add(fetchMission);
-        return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Loading...");
-        progressDialog.show();
         drop_mission.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -155,11 +165,12 @@ public class CurrentMission
                             state = 0;
                             score -= ((int) Math.pow(2, dropCount)) * 10;
                             dropCount += 1;
-                            StringRequest updateUser = new StringRequest(Request.Method.PATCH,
-                                    Endpoints.updateUser + userID,
+                            StringRequest updateUser = new StringRequest(Request.Method.POST,
+                                    Endpoints.updateUser + userID +"/edit/",
                                     new Response.Listener<String>() {
                                         @Override
                                         public void onResponse(String response) {
+                                            Log.d("dropVolley", "response");
                                             SharedPreferences.Editor editor = sharedPreferences.edit();
                                             editor.putInt("com.hackncs.score", score);
                                             editor.putInt("com.hackncs.stage", userStage);
@@ -171,7 +182,7 @@ public class CurrentMission
                                     new Response.ErrorListener() {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
-
+                                            Log.d("dropVolley", "error");
                                         }
                                     }){
                                 @Override
@@ -179,7 +190,7 @@ public class CurrentMission
                                     Map map = new HashMap();
                                     map.put("score", score);
                                     map.put("stage", userStage);
-                                    map.put("mission_state", state);
+                                    map.put("mission_state", "false");
                                     map.put("drop_count", dropCount);
                                     return super.getParams();
                                 }
@@ -212,72 +223,6 @@ public class CurrentMission
                 alertDialog = builder.create();
             }
         });
-        switch (state) {
-            case STATE_LOCATE:
-                checkPermission();
-                googleApiClient = new GoogleApiClient.Builder(getContext())
-                        .addApi(LocationServices.API)
-                        .addConnectionCallbacks(this)
-                        .addOnConnectionFailedListener(this)
-                        .build();
-                if (!googleApiClient.isConnected()) {
-                    googleApiClient.connect();
-                }
-                question.setText(mission.getStory());
-                answer.setEnabled(false);
-                submit.setEnabled(false);
-                break;
-            case STATE_SOLVE:
-                if (googleApiClient.isConnected()) {
-                    googleApiClient.disconnect();
-                }
-                question.setText(mission.getDescription());
-                answer.setEnabled(true);
-                submit.setEnabled(true);
-                submit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (!answer.getText().toString().equals(mission.getAnswer())) {
-                            answer.setText("");
-                            Toast.makeText(getContext(), "You might wanna try another one!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            userStage += 1;
-                            state = 0;
-                            score += 100;
-                            StringRequest updateUser = new StringRequest(Request.Method.PATCH,
-                                    Endpoints.updateUser + userID,
-                                    new Response.Listener<String>() {
-                                        @Override
-                                        public void onResponse(String response) {
-                                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                                            editor.putInt("com.hackncs.score", score);
-                                            editor.putInt("com.hackncs.stage", userStage);
-                                            editor.putInt("com.hackncs.state", state);
-                                            editor.apply();
-                                        }
-                                    },
-                                    new Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-
-                                        }
-                                    }){
-                                @Override
-                                protected Map<String, String> getParams() throws AuthFailureError {
-                                    Map map = new HashMap();
-                                    map.put("score", score);
-                                    map.put("stage", userStage);
-                                    map.put("mission_state", state);
-                                    return super.getParams();
-                                }
-                            };
-                            requestQueue.add(updateUser);
-                            getFragmentManager().beginTransaction().detach(CurrentMission.this).attach(CurrentMission.this).commit();
-                        }
-                    }
-                });
-                break;
-        }
 //        database = FirebaseDatabase.getInstance();
 //        users = database.getReference("Users");
 //        missions = database.getReference("Missions");
@@ -327,6 +272,70 @@ public class CurrentMission
 //        }); {
     }
 
+    private void displayMission() {
+        switch (state) {
+            case STATE_LOCATE:
+                checkPermission();
+                if (!googleApiClient.isConnected()) {
+                    googleApiClient.connect();
+                }
+                question.setText(mission.getStory());
+                answer.setEnabled(false);
+                submit.setEnabled(false);
+                break;
+            case STATE_SOLVE:
+                question.setText(mission.getDescription());
+                answer.setEnabled(true);
+                submit.setEnabled(true);
+                submit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (!answer.getText().toString().equals(mission.getAnswer())) {
+                            answer.setText("");
+                            Toast.makeText(getContext(), "You might wanna try another one!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            answer.setText("");
+                            userStage += 1;
+                            state = 0;
+                            score += 100;
+                            StringRequest updateUser = new StringRequest(Request.Method.POST,
+                                    Endpoints.updateUser + userID +"/edit/",
+                                    new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+                                            Log.d("submitVolley", "response");
+                                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                                            editor.putInt("com.hackncs.score", score);
+                                            editor.putInt("com.hackncs.stage", userStage);
+                                            editor.putInt("com.hackncs.state", state);
+                                            editor.apply();
+                                            getFragmentManager().beginTransaction().detach(CurrentMission.this).attach(CurrentMission.this).commit();
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            Log.d("submitVolley", error.getMessage());
+                                        }
+                                    }) {
+                                @Override
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    Map map = new HashMap();
+                                    map.put("score", String.valueOf(score));
+                                    map.put("stage", String.valueOf(userStage));
+                                    map.put("mission_state", "false");
+                                    return map;
+                                }
+                            };
+                            requestQueue.add(updateUser);
+                        }
+                    }
+                });
+                break;
+        }
+    }
+
+    @SuppressLint("MissingPermission")
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         locationRequest = LocationRequest.create();
@@ -340,6 +349,7 @@ public class CurrentMission
         PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.
                 checkLocationSettings(googleApiClient, builder.build());
         result.setResultCallback(this);
+
 
         LocationServices.FusedLocationApi.
                 requestLocationUpdates(googleApiClient, locationRequest, this);
@@ -365,35 +375,40 @@ public class CurrentMission
 //        Toast.makeText(getContext(), location.distanceTo(missionLocation)+"", Toast.LENGTH_SHORT).show();
         if (location.distanceTo(missionLocation) < 5) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                vibrator.vibrate(VibrationEffect.createWaveform(
-                        new long[]{0, 250, 200, 250, 150, 150, 75, 150, 75, 150}, -1));
+                if (googleApiClient.isConnected()) {
+                    googleApiClient.disconnect();
+                }
+//                vibrator.vibrate(VibrationEffect.createWaveform(
+//                        new long[]{0, 250, 200, 250, 150, 150, 75, 150, 75, 150}, -1));
+                vibrator.vibrate(3000);
             }
             state = 1;
-            StringRequest updateUser = new StringRequest(Request.Method.PATCH,
-                    Endpoints.updateUser + userID,
+            StringRequest updateUser = new StringRequest(Request.Method.POST,
+                    Endpoints.updateUser + userID +"/edit/",
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
+                            Log.d("updateVolley", "response");
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putInt("com.hackncs.state", state);
                             editor.apply();
+                            getFragmentManager().beginTransaction().detach(CurrentMission.this).attach(CurrentMission.this).commit();
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
+                            Log.d("updateVolley", error.getMessage());
                         }
                     }){
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map map = new HashMap();
-                    map.put("mission_state", state);
-                    return super.getParams();
+                    map.put("mission_state", "true");
+                    return map;
                 }
             };
             requestQueue.add(updateUser);
-            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
         }
     }
 

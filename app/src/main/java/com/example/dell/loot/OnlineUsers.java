@@ -69,7 +69,7 @@ public class OnlineUsers extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        mAdapter = new CustomRecycleAdapter(getContext(), onlineUsers);
+        mAdapter = new CustomRecycleAdapter(getContext(), getActivity(), onlineUsers);
         mRecyclerView.setAdapter(mAdapter);
         db.collection("users")
                 .whereEqualTo("online", true)
@@ -109,7 +109,7 @@ public class OnlineUsers extends Fragment {
                             user.setAvatarID(Integer.valueOf(jsonObject.getString("avatar_id")));
                             user.setScore(Integer.valueOf(jsonObject.getString("score")));
                             user.setStage(Integer.valueOf(jsonObject.getString("stage")));
-                            user.setState(Integer.valueOf(jsonObject.getString("mission_state")));
+                            user.setState(jsonObject.getString("mission_state").equals("0")?0:1);
                             user.setDropCount(Integer.valueOf(jsonObject.getString("drop_count")));
                             user.setDuelWon(Integer.valueOf(jsonObject.getString("duel_won")));
                             user.setDuelLost(Integer.valueOf(jsonObject.getString("duel_lost")));

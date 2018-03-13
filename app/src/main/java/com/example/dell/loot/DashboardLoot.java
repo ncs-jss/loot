@@ -1,6 +1,7 @@
 package com.example.dell.loot;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -39,6 +40,7 @@ public class DashboardLoot extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     FirebaseFirestore db;
+    MediaPlayer mediaPlayer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +51,9 @@ public class DashboardLoot extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
+        mediaPlayer = MediaPlayer.create(this, R.raw.backgroundloop);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
         spaceNavigationView = (SpaceNavigationView) findViewById(R.id.space);
         spaceNavigationView.initWithSaveInstanceState(savedInstanceState);
         spaceNavigationView.addSpaceItem(new SpaceItem("LeaderBoard", R.drawable.ic_menu_camera));
@@ -134,6 +138,7 @@ public class DashboardLoot extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        mediaPlayer.start();
         updateFirebase(mAuth.getCurrentUser(),true);
     }
 
@@ -207,6 +212,7 @@ public class DashboardLoot extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        mediaPlayer.stop();
         if(mAuth.getCurrentUser()!=null)
             updateFirebase(mAuth.getCurrentUser(),false);
         else

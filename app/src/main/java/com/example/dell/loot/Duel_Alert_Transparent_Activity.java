@@ -53,12 +53,10 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
 
         builder.setTitle("You Lost")
                 .setMessage(from_user+" won!")
-                // Add action buttons
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        // sign in the user ...
-                        //TODO:finishActivity
+                        finish();
                     }
                 });
 
@@ -72,12 +70,10 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
 
         builder.setTitle("You Won")
                 .setMessage(from_user+" lost!")
-                // Add action buttons
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        // sign in the user ...
-                        //TODO:finishActivity
+                        finish();
                     }
                 });
 
@@ -96,21 +92,21 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
         from_user.setText(user);
         user_stake.setText(stake);
         builder.setView(view)
-                // Add action buttons
                 .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        // sign in the user ...
-                        //TODO:send Duel Accept Request
-                        //TODO:call duel activity
+                        //TODO: create Duel
+                        //TODO: "send" Duel Accepted and duel_id
+                        Intent i = new Intent(Duel_Alert_Transparent_Activity.this, MiniGame.class);
+//                        i.putExtra("duel_id", );
+                        i.putExtra("player_type", "opponent");
+                        startActivity(i);
                     }
                 })
                 .setNegativeButton("Reject", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
-                        //TODO:send Duel Reject Request
-                        //TODO:finishActivity
-
+                        //TODO: "send" Duel Rejected
+                        finish();
                     }
                 });
 
@@ -123,12 +119,13 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
 
         builder.setTitle("Accepted")
                 .setMessage(user+" has accepted your challenge for stake $"+stake)
-                // Add action buttons
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Fight", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        // sign in the user ...
-                        //TODO:call duel activity
+                        Intent i = new Intent(Duel_Alert_Transparent_Activity.this, MiniGame.class);
+//                        i.putExtra("duel_id", );
+                        i.putExtra("player_type", "challenger");
+                        startActivity(i);
                     }
                 });
 
@@ -140,19 +137,16 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setTitle("Accepted")
+        builder.setTitle("Rejected")
                 .setMessage(user+" has rejected your challenge")
-                // Add action buttons
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        // sign in the user ...
-                        //TODO:finishActivity
+                        finish();
                     }
                 });
 
         AlertDialog dialog = builder.create();
-
         dialog.show();
     }
 

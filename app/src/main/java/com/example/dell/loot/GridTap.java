@@ -1,6 +1,7 @@
 package com.example.dell.loot;
 
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,8 @@ import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.toolbox.StringRequest;
+
 public class GridTap extends Fragment implements View.OnClickListener {
 
     View view;
@@ -21,6 +24,7 @@ public class GridTap extends Fragment implements View.OnClickListener {
     ClockCountdown clockCountdown;
     TileCountdown tileCountdown;
     DelayCountdown delayCountdown;
+    MediaPlayer mediaPlayer;
     TextView counterText, timerText;
     int buttonsID[][] = {
             {R.id.b00, R.id.b01, R.id.b02, R.id.b03, R.id.b04},
@@ -53,6 +57,10 @@ public class GridTap extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_grid_tap, container, false);
         initializeViews();
+        delayCountdown.start();
+        mediaPlayer = MediaPlayer.create(getContext(), R.raw.minigame);
+        mediaPlayer.setLooping(false);
+        mediaPlayer.start();
         b[x][y].setBackgroundColor(Color.RED);
         return view;
     }
@@ -109,7 +117,8 @@ public class GridTap extends Fragment implements View.OnClickListener {
 
         @Override
         public void onFinish() {
-            //TODO: send counter value, finish
+            //TODO: send counter value: opponent/challenger
+            getActivity().finish();
         }
     }
 
@@ -126,7 +135,7 @@ public class GridTap extends Fragment implements View.OnClickListener {
 
         @Override
         public void onFinish() {
-
+            mediaPlayer.stop();
         }
     }
 

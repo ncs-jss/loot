@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -41,7 +42,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 public class Login extends Fragment {
 
@@ -52,7 +55,7 @@ public class Login extends Fragment {
     User user;
     ProgressDialog dialog;
     EditText email, password;
-    TextView register;
+//    TextView register;
     Button login;
 
     public Login() {
@@ -73,6 +76,7 @@ public class Login extends Fragment {
 //        database = FirebaseDatabase.getInstance();
 //        users = database.getReference("Users");
 //        missions = database.getReference("Missions");
+        user = new User();
         dialog = new ProgressDialog(getContext());
         dialog.setTitle("Please Wait");
         dialog.setCancelable(false);
@@ -99,12 +103,12 @@ public class Login extends Fragment {
                         });
             }
         });
-        register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                register();
-            }
-        });
+//        register.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                register();
+//            }
+//        });
 
     }
 
@@ -112,16 +116,16 @@ public class Login extends Fragment {
         email = getView().findViewById(R.id.email);
         password = getView().findViewById(R.id.password);
         login = getView().findViewById(R.id.login);
-        register = getView().findViewById(R.id.goto_register);
+//        register = getView().findViewById(R.id.goto_register);
     }
 
-    public void register() {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Register fragment = new Register();
-        fragmentTransaction.replace(R.id.login_frame, fragment);
-        fragmentTransaction.commit();
-    }
+//    public void register() {
+//        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        Register fragment = new Register();
+//        fragmentTransaction.replace(R.id.login_frame, fragment);
+//        fragmentTransaction.commit();
+//    }
 
     public void syncSharedPrefs(User user) {
         dialog.setMessage("Completing...");
@@ -212,7 +216,7 @@ public class Login extends Fragment {
                             user.setAvatarID(Integer.valueOf(jsonObject.getString("avatar_id")));
                             user.setScore(Integer.valueOf(jsonObject.getString("score")));
                             user.setStage(Integer.valueOf(jsonObject.getString("stage")));
-                            user.setState(Integer.valueOf(jsonObject.getString("mission_state")));
+                            user.setState(jsonObject.getString("mission_state").equals("false")?0:1);
                             user.setDropCount(Integer.valueOf(jsonObject.getString("drop_count")));
                             user.setDuelWon(Integer.valueOf(jsonObject.getString("duel_won")));
                             user.setDuelLost(Integer.valueOf(jsonObject.getString("duel_lost")));
@@ -233,5 +237,32 @@ public class Login extends Fragment {
                 });
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(syncRequest);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
+        final String fcmToken = sharedPreferences.getString("com.hackncs.FCMToken", "");
+        if (!fcmToken.equals("")) {
+            Log.d("FCMToken", fcmToken);
+            StringRequest syncFCMToken = new StringRequest(Request.Method.POST,
+                    Endpoints.updateUser + userID + "/edit/",
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("FCMVolley", "response");
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d("FCMVolley", error.getMessage());
+                        }
+                    }){
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map map = new HashMap();
+                    map.put("fcm_token", fcmToken);
+                    return map;
+                }
+            };
+            requestQueue.add(syncFCMToken);
+        }
     }
 }

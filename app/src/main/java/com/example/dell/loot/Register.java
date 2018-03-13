@@ -52,7 +52,6 @@ public class Register extends Fragment {
 //    private FirebaseDatabase database;
 //    DatabaseReference users;
     View view;
-    Spinner spinner;
     EditText name, email, contact, zeal, username, password;
     ImageView avatar;
     ProgressDialog dialog;
@@ -68,32 +67,13 @@ public class Register extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_register, container, false);
-        spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                avatarID = i;
-                //TODO: set avatar
-//                avatar.setImageResource();
-            }
-        });
-        ArrayList<String> avatars = new ArrayList<>();
-        avatars.add("Avatar 1");
-        avatars.add("Avatar 2");
-        avatars.add("Avatar 3");
-        avatars.add("Avatar 4");
-        avatars.add("Avatar 5");
-        avatars.add("Avatar 6");
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, avatars);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(arrayAdapter);
-        spinner.setSelection(avatarID);
+        initializeViews();
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initializeViews();
         mAuth = FirebaseAuth.getInstance();
         db=FirebaseFirestore.getInstance();
 //        database = FirebaseDatabase.getInstance();
@@ -129,7 +109,8 @@ public class Register extends Fragment {
                                             new Response.Listener<String>() {
                                                 @Override
                                                 public void onResponse(String response) {
-                                                    syncSharedPrefs(getUser());
+                                                    Log.d("volley request", "response");
+                                                    syncSharedPrefs();
                                                     Toast.makeText(getContext(),"You're registered successfully!",Toast.LENGTH_SHORT).show();
                                                     Intent i=new Intent(getContext(),WelcomeSlider.class);
                                                     startActivity(i);
@@ -138,7 +119,8 @@ public class Register extends Fragment {
                                             new Response.ErrorListener() {
                                                 @Override
                                                 public void onErrorResponse(VolleyError error) {
-
+                                                    Log.d("volley request", "error");
+                                                    Toast.makeText(getContext(), "Error Occurred!", Toast.LENGTH_SHORT).show();
                                                 }
                                             }){
                                         @Override
@@ -157,6 +139,11 @@ public class Register extends Fragment {
                                             map.put("duel_won","0");
                                             map.put("duel_lost","0");
                                             map.put("avatar_id", String.valueOf(avatarID));
+                                            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
+                                            final String fcmToken = sharedPreferences.getString("com.hackncs.FCMToken", "");
+                                            if (!fcmToken.equals("")) {
+                                                map.put("fcm_token", fcmToken);
+                                            }
                                             return map;
                                         }
                                     };
@@ -180,7 +167,6 @@ public class Register extends Fragment {
         zeal = view.findViewById(R.id.zealId);
         username = view.findViewById(R.id.username);
         password = view.findViewById(R.id.password);
-        spinner = view.findViewById(R.id.spinner);
         avatar = view.findViewById(R.id.avatar);
         dialog=new ProgressDialog(getContext());
     }
@@ -191,6 +177,7 @@ public class Register extends Fragment {
     }
 
     private User getUser() {
+        user = new User();
         user.setUserID(firebaseUser.getUid());
         user.setUsername(username.getText().toString());
         user.setZealID(zeal.getText().toString());
@@ -208,22 +195,22 @@ public class Register extends Fragment {
         return  user;
     }
 
-    public void syncSharedPrefs(User user) {
+    public void syncSharedPrefs() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("com.hackncs.userID", user.getUserID());
-        editor.putString("com.hackncs.username", user.getUsername());
-        editor.putString("com.hackncs.zealID", user.getZealID());
-        editor.putString("com.hackncs.name", user.getName());
-        editor.putString("com.hackncs.email", user.getEmail());
-        editor.putInt("com.hackncs.avatarID", user.getAvatarID());
-        editor.putInt("com.hackncs.score", user.getScore());
-        editor.putInt("com.hackncs.stage", user.getStage());
-        editor.putInt("com.hackncs.state", user.getState());
-        editor.putInt("com.hackncs.dropCount", user.getDropCount());
-        editor.putInt("com.hackncs.duelWon", user.getDuelWon());
-        editor.putInt("com.hackncs.duelLost", user.getDuelLost());
-        editor.putLong("com.hackncs.contactNumber", user.getContactNumber());
+        editor.putString("com.hackncs.userID", firebaseUser.getUid());
+        editor.putString("com.hackncs.username", username.getText().toString());
+        editor.putString("com.hackncs.zealID", zeal.getText().toString());
+        editor.putString("com.hackncs.name", name.getText().toString());
+        editor.putString("com.hackncs.email", email.getText().toString());
+        editor.putInt("com.hackncs.avatarID", avatarID);
+        editor.putInt("com.hackncs.score", 0);
+        editor.putInt("com.hackncs.stage", 1);
+        editor.putInt("com.hackncs.state", 0);
+        editor.putInt("com.hackncs.dropCount", 0);
+        editor.putInt("com.hackncs.duelWon", 0);
+        editor.putInt("com.hackncs.duelLost", 0);
+        editor.putLong("com.hackncs.contactNumber", Long.valueOf(contact.getText().toString()));
 //        editor.putStringSet("com.hackncs.dropped", new HashSet<>(user.getDropped()));
         editor.apply();
     }

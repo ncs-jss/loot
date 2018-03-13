@@ -3,6 +3,7 @@ package com.example.dell.loot;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,9 @@ public class LeaderBoard extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_leader_board, container, false);
         listView = view.findViewById(R.id.listView);
+        usernames = new ArrayList<>();
+        coins = new ArrayList<>();
+        avatarIDs = new ArrayList<>();
         StringRequest leaders = new StringRequest(Request.Method.GET, Endpoints.leaders,
                 new Response.Listener<String>() {
                     @Override
@@ -52,6 +56,7 @@ public class LeaderBoard extends Fragment {
                             jsonArray= new JSONArray(response);
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                Log.d("JSON"+i, jsonObject.toString());
                                 usernames.add(i, jsonObject.getString("username"));
                                 coins.add(i, jsonObject.getString("score"));
                                 avatarIDs.add(i, jsonObject.getInt("avatar_id"));

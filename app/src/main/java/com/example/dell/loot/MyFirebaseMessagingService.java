@@ -33,7 +33,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
         // Check if message contains a data payload.
-        if (remoteMessage.getData().size() > 0) {
+        if (remoteMessage.getData() != null) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
             String request_type = remoteMessage.getData().get("request_type");
             Intent intent=new Intent(this,Duel_Alert_Transparent_Activity.class);
@@ -42,12 +42,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             if(request_type.equals("duel_request")) {
                 String from_user = remoteMessage.getData().get("user");
                 String stake = remoteMessage.getData().get("stake");
+                String reference_token = remoteMessage.getData().get("reference_token");
                 intent.putExtra("user",from_user);
                 intent.putExtra("stake",stake);
+                intent.putExtra("reference_token", reference_token);
             }
             else if(request_type.equals("accept_request")) {
                 String from_user = remoteMessage.getData().get("user");
                 String stake = remoteMessage.getData().get("stake");
+                String duel_id = remoteMessage.getData().get("duel_id");
+                intent.putExtra("duel_id", duel_id);
                 intent.putExtra("user",from_user);
                 intent.putExtra("stake",stake);
             }

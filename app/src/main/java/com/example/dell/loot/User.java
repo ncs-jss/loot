@@ -142,4 +142,5 @@ public class User {
     public void setDropped(ArrayList<String> dropped) {
         this.dropped = dropped;
     }
+
 }

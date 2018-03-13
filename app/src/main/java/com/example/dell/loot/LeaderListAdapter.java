@@ -42,15 +42,18 @@ public class LeaderListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        View customView = layoutInflater.inflate(R.layout.leader_list, viewGroup);
-        ImageView icon = customView.findViewById(R.id.icon);
-        TextView username = customView.findViewById(R.id.usernameLine);
-        TextView coin = customView.findViewById(R.id.coinsLine);
-        //TODO: set avatars
+        if (view == null) {
+            View customView = layoutInflater.inflate(R.layout.leader_list, viewGroup, false);
+            ImageView icon = customView.findViewById(R.id.icon);
+            TextView username = customView.findViewById(R.id.usernameLine);
+            TextView coin = customView.findViewById(R.id.coinsLine);
+            //TODO: set avatars
 //        icon.setImageResource();
-        username.setText(usernames.get(i));
-        coin.setText(coins.get(i));
-        customView.setBackgroundResource(R.drawable.list_shadow);
-        return customView;
+            username.setText(usernames.get(i));
+            coin.setText(coins.get(i));
+            customView.setBackgroundResource(R.drawable.list_shadow);
+            return customView;
+        }
+        return view;
     }
 }

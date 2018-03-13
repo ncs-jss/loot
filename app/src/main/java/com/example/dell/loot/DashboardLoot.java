@@ -63,17 +63,14 @@ public class DashboardLoot extends AppCompatActivity {
         spaceNavigationView.setSpaceOnClickListener(new SpaceOnClickListener() {
             @Override
             public void onCentreButtonClick() {
-                Toast.makeText(DashboardLoot.this,"onCentreButtonClick", Toast.LENGTH_SHORT).show();
                 Fragment fragment=new CurrentMission();
                 loadFragment(fragment,"missions");
             }
 
             @Override
             public void onItemClick(int itemIndex, String itemName) {
-                Toast.makeText(DashboardLoot.this, itemIndex + " " + itemName, Toast.LENGTH_SHORT).show();
                 if(itemIndex==1)
                 {
-
                     Fragment fragment=new Duel();
                     loadFragment(fragment,"duel");
                 }

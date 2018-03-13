@@ -13,7 +13,16 @@ import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class GridTap extends Fragment implements View.OnClickListener {
 
@@ -117,8 +126,33 @@ public class GridTap extends Fragment implements View.OnClickListener {
 
         @Override
         public void onFinish() {
-            //TODO: send counter value: opponent/challenger
-            getActivity().finish();
+            StringRequest updateTapCount = new StringRequest(Request.Method.POST,
+                    Endpoints.duel + getActivity().getIntent().getStringExtra("duel_id") + "/edit/",
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            getActivity().finish();
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    }){
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map map = new HashMap();
+                    if (getActivity().getIntent().getStringExtra("player_type").equals("challenger")) {
+                        map.put("challenger_tap_count", String.valueOf(counter));
+                    } else {
+                        map.put("opponent_tap_count", String.valueOf(counter));
+                    }
+                    return map;
+                }
+            };
+            RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+            requestQueue.add(updateTapCount);
         }
     }
 

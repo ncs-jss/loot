@@ -31,11 +31,14 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="40dp"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/imageView3"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView4">
 
@@ -43,13 +46,13 @@
             android:id="@+id/login_button"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/card_background_yellow"
-            android:text="Login"
-            android:fontFamily="@font/gilroy_extrabold"
-            android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
-            android:textColor="#302e6b"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/card_background_yellow"
+            android:fontFamily="@font/gilroy_extrabold"
+            android:text="Login"
             android:textAllCaps="false"
+            android:textColor="#302e6b"
             android:textSize="24sp" />
 
         <Button
@@ -58,13 +61,13 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:fontFamily="@font/gilroy_extrabold"
             android:background="@drawable/card_background_yellow"
+            android:fontFamily="@font/gilroy_extrabold"
             android:text="Sign Up"
             android:textAllCaps="false"
             android:textColor="#302e6b"
             android:textSize="24sp" />
-<!--TODO:FONT FAMILY TO BE CHANGED-->
+        <!--TODO:FONT FAMILY TO BE CHANGED-->
 
     </RelativeLayout>
 
@@ -74,6 +77,7 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="48dp"
         android:layout_marginStart="48dp"
         android:layout_marginTop="8dp"

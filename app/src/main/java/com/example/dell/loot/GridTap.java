@@ -144,7 +144,7 @@ public class GridTap extends Fragment implements View.OnClickListener {
 
         @Override
         public void onFinish() {
-            mediaPlayer.stop();
+//            mediaPlayer.stop();
         }
     }
 

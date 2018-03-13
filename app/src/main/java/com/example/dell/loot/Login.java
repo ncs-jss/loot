@@ -49,7 +49,7 @@ public class Login extends Fragment {
     User user;
     ProgressDialog dialog;
     EditText email, password;
-    TextView register;
+//    TextView register;
     Button login;
 
     public Login() {
@@ -96,12 +96,12 @@ public class Login extends Fragment {
                         });
             }
         });
-        register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                register();
-            }
-        });
+//        register.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                register();
+//            }
+//        });
 
     }
 
@@ -109,7 +109,7 @@ public class Login extends Fragment {
         email = getView().findViewById(R.id.email);
         password = getView().findViewById(R.id.password);
         login = getView().findViewById(R.id.login);
-        register = getView().findViewById(R.id.goto_register);
+//        register = getView().findViewById(R.id.goto_register);
     }
 
     public void register() {

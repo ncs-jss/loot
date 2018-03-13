@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -60,7 +61,7 @@ public class OnlineUsers extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        mAdapter = new CustomRecycleAdapter(getContext(),onlineUsers);
+        mAdapter = new CustomRecycleAdapter(getContext(),getActivity(),onlineUsers);
         mRecyclerView.setAdapter(mAdapter);
 
         db.collection("users")
@@ -84,6 +85,8 @@ public class OnlineUsers extends Fragment {
                         }
                     }
                 });
+
+
 
 
     }

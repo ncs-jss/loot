@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#f9ca24</color>
+    <color name="colorPrimaryDark">#c43b67</color>
+    <color name="colorAccent">#c43b67</color>
+
+    <color name="text_color">#302e6b</color>
+
     <color name="bgBottomNavigation">#fe485a</color>
-    <color name="black_overlay">#66000000</color>
+    <color name="black_overlay">#535c68</color>
 
     <!-- Screens background color-->
     <color name="bg_screen1">#f64c73</color>
@@ -39,4 +42,6 @@
     </array>
     <color name="yellow500">#FFEB3B</color>
 
-</resources>
+
+
+    </resources>

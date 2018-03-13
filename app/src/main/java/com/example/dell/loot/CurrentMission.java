@@ -79,7 +79,6 @@ public class CurrentMission
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_current_mission, container, false);
         story = view.findViewById(R.id.story);
-        question = view.findViewById(R.id.question);
         answer = view.findViewById(R.id.answer);
         submit = view.findViewById(R.id.submit);
         drop_mission = view.findViewById(R.id.drop_mission);
@@ -155,7 +154,7 @@ public class CurrentMission
                     googleApiClient.connect();
                 }
                 //TODO: update below
-                question.setText(/*mission.getStory()*/"Story");
+//                question.setText(/*mission.getStory()*/"Story");
                 answer.setEnabled(false);
                 submit.setEnabled(false);
                 break;
@@ -163,7 +162,7 @@ public class CurrentMission
                 if (googleApiClient.isConnected()) {
                     googleApiClient.disconnect();
                 }
-                question.setText(mission.getDescription());
+//                question.setText(mission.getDescription());
                 answer.setEnabled(true);
                 submit.setEnabled(true);
                 submit.setOnClickListener(new View.OnClickListener() {

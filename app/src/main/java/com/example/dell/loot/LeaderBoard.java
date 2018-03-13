@@ -37,23 +37,23 @@ public class LeaderBoard extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_leader_board, container, false);
-        listView = view.findViewById(R.id.listView);
-        StringRequest leaders = new StringRequest(Request.Method.GET, Endpoints.leaders,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // TODO: parse response and inflate ArrayList objects
-                        listView.setAdapter(new LeaderListAdapter(getContext(), usernames, coins));
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                });
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        requestQueue.add(leaders);
+//        listView = view.findViewById(R.id.listView);
+//        StringRequest leaders = new StringRequest(Request.Method.GET, Endpoints.leaders,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        // TODO: parse response and inflate ArrayList objects
+//                        listView.setAdapter(new LeaderListAdapter(getContext(), usernames, coins));
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//
+//                    }
+//                });
+//        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+//        requestQueue.add(leaders);
         return view;
     }
 }

@@ -1,55 +1,105 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context="com.example.dell.loot.Splash">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="124dp"
-        android:text="LOOT"
-        android:textSize="50sp"
-        android:id="@+id/textView2" />
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/texture_overlay" />
+
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="0dp"
+        android:layout_height="92dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="32dp"
+        android:src="@drawable/loot_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView6" />
 
     <RelativeLayout
         android:id="@+id/rel_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:layout_marginTop="40dp"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
         android:layout_centerHorizontal="true"
-        android:visibility="gone">
+        android:layout_marginEnd="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="32dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView4">
 
         <Button
             android:id="@+id/login_button"
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-
-            android:text="Login" />
+            android:background="@drawable/card_background_yellow"
+            android:text="Login"
+            android:fontFamily="@font/gilroy_extrabold"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:textColor="#302e6b"
+            android:textAllCaps="false"
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/register_button"
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/login_button"
-            android:layout_alignStart="@+id/login_button"
-            android:layout_below="@+id/login_button"
-            android:layout_marginTop="25dp"
-            android:text="Register" />
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:fontFamily="@font/gilroy_extrabold"
+            android:background="@drawable/card_background_yellow"
+            android:text="Sign Up"
+            android:textAllCaps="false"
+            android:textColor="#302e6b"
+            android:textSize="24sp" />
+<!--TODO:FONT FAMILY TO BE CHANGED-->
 
     </RelativeLayout>
 
     <ProgressBar
         android:id="@+id/loader"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
+        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="59dp" />
+        android:layout_marginEnd="48dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="8dp"
+        android:max="100"
+        android:progress="0"
+        android:progressDrawable="@drawable/vertical_progress"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/imageView3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rel_layout"
+        app:layout_constraintVertical_bias="0.6" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:src="@drawable/dan_avatar_background"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
-</RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

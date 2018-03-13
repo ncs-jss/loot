@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 
 /**
@@ -33,7 +34,7 @@ public class Duel extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         View view=getView();
-        Button loot=view.findViewById(R.id.loot);
+        ImageButton loot=view.findViewById(R.id.loot);
         loot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

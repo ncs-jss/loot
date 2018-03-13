@@ -18,6 +18,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
@@ -25,6 +26,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
+            android:theme="@style/AppTheme.NoActionBar"
             android:name=".Main3Activity"
             android:label="@string/app_name">
             <intent-filter>
@@ -58,7 +60,11 @@
         </service>
 
         <activity android:name=".Duel_Alert_Transparent_Activity"
-            android:theme="@style/Transparent_Theme"></activity>
+            android:theme="@style/Transparent_Theme"/>
+
+        <activity android:name=".MiniGame"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

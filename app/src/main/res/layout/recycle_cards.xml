@@ -1,59 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v7.widget.CardView
-    android:id="@+id/card_view"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardBackgroundColor="@color/yellow500"
     card_view:cardCornerRadius="10dp"
     card_view:cardElevation="5dp"
-    card_view:cardUseCompatPadding="true"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    card_view:cardBackgroundColor="@color/space_transparent"
+    card_view:cardUseCompatPadding="true">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+    <LinearLayout
+        android:background="@drawable/card_background_red"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/avatar"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/avatar_1"
+            android:scaleType="fitXY"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:tag="image_tag" />
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingEnd="8dp"
+            android:paddingRight="8dp">
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:tag="image_tag"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/avatar"/>
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sharan Verma"
+                android:fontFamily="@font/gilroy_bold_family"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/space_white"
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_centerInParent="true"
-                >
+                android:layout_marginTop="8dp">
 
                 <TextView
-                    android:id="@+id/user_name"
+                    android:id="@+id/dollar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
-                    android:text="Name"
-                    android:textAppearance="?android:attr/textAppearanceLarge"/>
+                    android:text="$"
+                    android:fontFamily="@font/gilroy_bold_family"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/user_coins"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
-                    android:text="Coins $100"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
-
+                    android:text="1000"
+                    android:fontFamily="@font/gilroy_bold_family"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/space_white"
+                    android:textSize="20sp" />
             </LinearLayout>
-        </RelativeLayout>
+
+        </LinearLayout>
+    </LinearLayout>
 
 </android.support.v7.widget.CardView>
 

@@ -34,9 +34,8 @@ import java.util.Map;
 
 public class DashboardLoot extends AppCompatActivity {
 
-    SpaceNavigationView spaceNavigationView;
-    FloatingActionButton fab;
 
+    BottomNavigationView bottomNavigationView;
     FirebaseAuth mAuth;
     FirebaseFirestore db;
     @Override
@@ -44,97 +43,48 @@ public class DashboardLoot extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_loot);
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar2);
-        fab = findViewById(R.id.fab);
+
         db= FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-        spaceNavigationView = (SpaceNavigationView) findViewById(R.id.space);
-        spaceNavigationView.initWithSaveInstanceState(savedInstanceState);
-        spaceNavigationView.addSpaceItem(new SpaceItem("LeaderBoard", R.drawable.ic_menu_camera));
-        spaceNavigationView.addSpaceItem(new SpaceItem("Duel", R.drawable.ic_menu_slideshow));
-        spaceNavigationView.showIconOnly();
-//        spaceNavigationView.changeCenterButtonIcon(R.drawable.avatar1);
-        spaceNavigationView.setSpaceOnClickListener(new SpaceOnClickListener() {
+        bottomNavigationView=findViewById(R.id.bottom_nav);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onCentreButtonClick() {
-                Toast.makeText(DashboardLoot.this,"onCentreButtonClick", Toast.LENGTH_SHORT).show();
-                Fragment fragment=new Missions();
-                loadFragment(fragment,"missions");
-            }
-
-            @Override
-            public void onItemClick(int itemIndex, String itemName) {
-                Toast.makeText(DashboardLoot.this, itemIndex + " " + itemName, Toast.LENGTH_SHORT).show();
-                if(itemIndex==1)
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id=item.getItemId();
+                switch (id)
                 {
+                    case R.id.navigation_duel:
 
-                    Fragment fragment=new Duel();
-                    loadFragment(fragment,"duel");
-                }
-                else
-                {
-                    Fragment fragment=new LeaderBoard();
-                    loadFragment(fragment,"leaderboard");
-                }
-            }
+                        loadFragment(new Duel(),"duel");
+//
+                        break;
+                    case R.id.navigation_current_mission:
+                        Toast.makeText(DashboardLoot.this,"onCentreButtonClick", Toast.LENGTH_SHORT).show();
 
-            @Override
-            public void onItemReselected(int itemIndex, String itemName) {
-                Toast.makeText(DashboardLoot.this, itemIndex + " " + itemName, Toast.LENGTH_SHORT).show();
+                        loadFragment(new Missions(),"missions");
+                        break;
+                    case R.id.navigation_leaderboard:
+
+                        loadFragment(new LeaderBoard(),"leaderboard");
+                        break;
+                }
+                return true;
             }
         });
-
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                PopupMenu popup = new PopupMenu(DashboardLoot.this, view);
-//                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//                    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem menuItem) {
-//                        switch (menuItem.getItemId()) {
-//                            case R.id.item_stats:
-//                                loadFragment(new Stats(),"stats");
-//                                return true;
-//                            case R.id.item_howTo:
-//                                loadFragment(new HowTo(),"how_to");
-//                                return true;
-//                            case R.id.item_help:
-//                                loadFragment(new Help(),"help");
-//                                return true;
-//                            case R.id.pop_logout:
-//                                mAuth.signOut();
-//                                Intent intent=new Intent(getApplicationContext(), Main3Activity.class);
-//                                startActivity(intent);
-//
-//                                return true;
-//                            default:
-//                                return false;
-//                        }
-//                    }
-//                });
-//                popup.inflate(R.menu.popup_menu);
-//                popup.show();
-//            }
-//        });
-
-        Fragment fragment=new Missions();
-        loadFragment(fragment,"missions");
-        spaceNavigationView.setCentreButtonSelectable(true);
-        spaceNavigationView.setCentreButtonSelected();
-    }
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        spaceNavigationView.onSaveInstanceState(outState);
+//        bottomNavigationView.getMenu().getItem(1).setChecked(true);
+//        Fragment fragment=new Missions();
+//        loadFragment(fragment,"missions");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         updateFirebase(mAuth.getCurrentUser(),true);
+        bottomNavigationView.getMenu().getItem(1).setChecked(true);
+        Fragment fragment=new Missions();
+        loadFragment(fragment,"missions");
     }
 
     private void loadFragment(Fragment fragment, String tag) {
@@ -157,13 +107,14 @@ public class DashboardLoot extends AppCompatActivity {
 
         if(fragmentTag.equals("duel")||fragmentTag.equals("leaderboard")||fragmentTag.equals("current_mission")) {
 
-            spaceNavigationView.setCentreButtonSelected();
+            bottomNavigationView.getMenu().getItem(1).setChecked(true);
             android.support.v4.app.Fragment fragment=new Missions();
             loadFragment(fragment,"missions");
 
         }
         else if(fragmentTag.equals("online_users"))
         {
+            bottomNavigationView.getMenu().getItem(0).setChecked(true);
             loadFragment(new Duel(),"duel");
         }
         else if (fragmentTag.equals("missions"))
@@ -172,7 +123,7 @@ public class DashboardLoot extends AppCompatActivity {
         }
         else if(fragmentTag.equals("about")||fragmentTag.equals("how_to")||fragmentTag.equals("help")||fragmentTag.equals("contact_us"))
         {
-//                navigationView.getMenu().getItem(0).setChecked(true);
+            bottomNavigationView.getMenu().getItem(1).setChecked(true);
             android.support.v4.app.Fragment fragment=new Missions();
             loadFragment(fragment,"missions");
         }
@@ -206,11 +157,12 @@ public class DashboardLoot extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onPause() {
-        super.onPause();
+
         if(mAuth.getCurrentUser()!=null)
             updateFirebase(mAuth.getCurrentUser(),false);
         else
             finishAffinity();
+        super.onPause();
 
     }
 

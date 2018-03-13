@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -31,6 +32,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -44,6 +48,7 @@ public class Splash extends Fragment {
     DatabaseReference users,missions;
     FirebaseUser fbuser;
     User user;
+    ProgressBar loader;
     ArrayList<Mission> missionsList = new ArrayList<>();
     boolean isConnected, logged_in, synced_user, synced_missions;
 
@@ -80,6 +85,21 @@ public class Splash extends Fragment {
         database = FirebaseDatabase.getInstance();
         users = database.getReference("Users");
         missions = database.getReference("Missions");
+        loader=(ProgressBar)getView().findViewById(R.id.loader);
+        loader.setMax(5000);
+        new CountDownTimer(5100, 1) {
+            @Override
+            public void onTick(long l) {
+                int progress=(int)((5000-l)/50);
+                loader.setProgress(5000-(int)l);
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        }.start();
+
         new BackgroundTasks().execute();
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -161,24 +181,31 @@ public class Splash extends Fragment {
 
 
 
-//        StringRequest syncRequest = new StringRequest(Request.Method.GET, Endpoints.syncRequest+userID,
+//        StringRequest syncRequest = new StringRequest(Request.Method.GET,
+//                Endpoints.syncRequest+userID,
 //                new Response.Listener<String>() {
 //                    @Override
 //                    public void onResponse(String response) {
-////                        user.setUserID();
-////                        user.setUsername();
-////                        user.setZealID();
-////                        user.setName();
-////                        user.setEmail();
-////                        user.setAvatarID();
-////                        user.setScore();
-////                        user.setStage();
-////                        user.setState();
-////                        user.setDropCount();
-////                        user.setDuelWon();
-////                        user.setDuelLost();
-////                        user.setContactNumber();
-////                        user.setDropped();
+//                        JSONObject jsonObject;
+//                        try {
+//                            jsonObject = new JSONObject(response);
+//                            user.setUserID(jsonObject.getString("reference_token"));
+//                            user.setUsername(jsonObject.getString("username"));
+//                            user.setZealID(jsonObject.getString("zeal_id"));
+//                            user.setName(jsonObject.getString("name"));
+//                            user.setEmail(jsonObject.getString("email"));
+//                            user.setAvatarID(Integer.valueOf(jsonObject.getString("avatar_id")));
+//                            user.setScore(Integer.valueOf(jsonObject.getString("score")));
+//                            user.setStage(Integer.valueOf(jsonObject.getString("stage")));
+//                            user.setState(Integer.valueOf(jsonObject.getString("mission_state")));
+//                            user.setDropCount(Integer.valueOf(jsonObject.getString("drop_count")));
+//                            user.setDuelWon(Integer.valueOf(jsonObject.getString("duel_won")));
+//                            user.setDuelLost(Integer.valueOf(jsonObject.getString("duel_lost")));
+//                            user.setContactNumber(Long.valueOf(jsonObject.getString("contact_number")));
+////                            user.setDropped();
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
 //                    }
 //                },
 //                new Response.ErrorListener() {
@@ -192,8 +219,8 @@ public class Splash extends Fragment {
     }
 
     public void syncSharedPrefs(User user) {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
 //        editor.putString("com.hackncs.userID", user.getUserID());
 //        editor.putString("com.hackncs.username", user.getUsername());
 //        editor.putString("com.hackncs.zealID", user.getZealID());
@@ -207,8 +234,8 @@ public class Splash extends Fragment {
 //        editor.putInt("com.hackncs.duelWon", user.getDuelWon());
 //        editor.putInt("com.hackncs.duelLost", user.getDuelLost());
 //        editor.putLong("com.hackncs.contactNumber", user.getContactNumber());
-//        editor.putStringSet("com.hackncs.dropped", new HashSet<>(user.getDropped()));
-        editor.apply();
+////        editor.putStringSet("com.hackncs.dropped", new HashSet<>(user.getDropped()));
+//        editor.apply();
 
 //        LootApplication app = (LootApplication)getActivity().getApplication();
 //        app.user = user;
@@ -279,7 +306,7 @@ public class Splash extends Fragment {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Login fragment = new Login();
-                fragmentTransaction.replace(R.id.login_frame, fragment);
+                fragmentTransaction.replace(R.id.login_frame, fragment,"login");
                 fragmentTransaction.commit();
             }
         });
@@ -289,7 +316,7 @@ public class Splash extends Fragment {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Register fragment = new Register();
-                fragmentTransaction.replace(R.id.login_frame, fragment);
+                fragmentTransaction.replace(R.id.login_frame, fragment,"register");
                 fragmentTransaction.commit();
             }
         });

@@ -33,7 +33,7 @@ public class Missions extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        TextView mission_desc=(TextView)getView().findViewById(R.id.mission_desc);
+        TextView mission_desc=(TextView)getView().findViewById(R.id.dan_msg);
         mission_desc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

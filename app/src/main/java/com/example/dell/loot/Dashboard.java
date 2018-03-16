@@ -57,7 +57,7 @@
 //<<<<<<< HEAD
 ////        else {
 ////            navigation.getMenu().getItem(0).setChecked(true);
-////            Fragment fragment=new CurrentMission();
+////            Fragment fragment=new Missions();
 ////            loadFragment(fragment,"current_mission");
 ////        }
 ////    }
@@ -70,7 +70,7 @@
 ////            Fragment fragment;
 ////            switch (item.getItemId()) {
 ////                case R.id.navigation_current_mission:
-////                    fragment=new CurrentMission();
+////                    fragment=new Missions();
 ////                    loadFragment(fragment,"current_mission");
 ////                    return true;
 //=======

@@ -3,12 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_copy"
+    android:background="@drawable/background"
     tools:context="com.example.dell.loot.Splash">
+
+
     <ImageView
+        android:id="@+id/imageView6"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/vector_smart_object_copy_3"/>
+        android:background="@drawable/texture_overlay" />
 
 
     <ImageView
@@ -17,20 +20,25 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="25dp"
         android:layout_marginStart="25dp"
-        android:src="@drawable/loot_copy"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/loot_logo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
         android:id="@+id/rel_layout"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="40dp"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/imageView3"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView4">
 
@@ -38,12 +46,13 @@
             android:id="@+id/login_button"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/layer_9"
-            android:text="Login"
-            android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
-            android:textColor="#302e6b"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/card_background_yellow"
+            android:fontFamily="@font/gilroy_extrabold"
+            android:text="Login"
             android:textAllCaps="false"
+            android:textColor="#302e6b"
             android:textSize="24sp" />
 
         <Button
@@ -51,13 +60,13 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/layer_9"
+            android:background="@drawable/card_background_yellow"
+            android:fontFamily="@font/gilroy_extrabold"
             android:text="Sign Up"
             android:textAllCaps="false"
             android:textColor="#302e6b"
-            android:textSize="24sp" />
-<!--TODO:FONT FAMILY TO BE CHANGED-->
+            android:textSize="24sp"
+            android:layout_alignParentRight="true" />
 
     </RelativeLayout>
 
@@ -67,13 +76,15 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="48dp"
         android:layout_marginStart="48dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:max="100"
         android:progress="0"
-        android:visibility="visible"
         android:progressDrawable="@drawable/vertical_progress"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/imageView3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView4" />
@@ -82,14 +93,12 @@
         android:id="@+id/imageView3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="160dp"
-        android:src="@drawable/group_1"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/dan_avatar_background"
         android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/white_rectangle"
+    tools:layout_editor_absoluteX="16dp"
+    tools:layout_editor_absoluteY="81dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/gilroy_bold"
+        android:text="Challenge"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:layout_margin="16dp"
+        tools:layout_editor_absoluteX="77dp"
+        tools:layout_editor_absoluteY="30dp" />
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="296dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/gilroy_bold"
+        android:text="Message"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="24sp"
+        android:layout_margin="8dp"
+        tools:layout_editor_absoluteX="32dp"
+        tools:layout_editor_absoluteY="106dp" />
+
+    <EditText
+        android:id="@+id/stake"
+        android:layout_width="296dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_layout_red"
+        android:ems="10"
+        android:fontFamily="@font/gilroy_bold"
+        android:hint="Enter Stake"
+        android:layout_margin="8dp"
+        android:inputType="textPersonName"
+        android:padding="10dp"
+        android:textColor="@color/black_overlay"
+        android:textSize="24dp"
+        android:textStyle="normal"
+        tools:layout_editor_absoluteX="32dp"
+        tools:layout_editor_absoluteY="167dp" />
+
+    <LinearLayout
+        android:layout_margin="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/positive"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/card_background_yellow"
+        android:fontFamily="@font/gilroy_bold_family"
+        android:text="Button"
+        android:textColor="@color/text_color"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:layout_margin="16dp"
+        tools:layout_editor_absoluteX="44dp"
+        tools:layout_editor_absoluteY="239dp" />
+
+    <Button
+        android:id="@+id/negative"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/card_background_yellow"
+        android:fontFamily="@font/gilroy_bold_family"
+        android:text="Button"
+        android:textColor="@color/text_color"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:layout_margin="16dp"
+        tools:layout_editor_absoluteX="192dp"
+        tools:layout_editor_absoluteY="239dp" />
+    </LinearLayout>
+
+</LinearLayout>

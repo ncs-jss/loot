@@ -85,14 +85,15 @@ public class Splash extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         users = database.getReference("Users");
-        missions = database.getReference("Missions");
+        missions = database.getReference("Current_missions");
         loader=(ProgressBar)getView().findViewById(R.id.loader);
-        loader.setMax(100);
-        new CountDownTimer(5000, 50) {
+
+        loader.setMax(5000);
+        new CountDownTimer(5100, 1) {
             @Override
             public void onTick(long l) {
                 int progress=(int)((5000-l)/50);
-                loader.setProgress(progress);
+                loader.setProgress(5000-(int)l);
             }
 
             @Override
@@ -127,60 +128,6 @@ public class Splash extends Fragment {
     }
 
     private void syncUser(String userID) {
-//        users.child(userId).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                user = dataSnapshot.getValue(User.class);
-//                Log.i("User Email", "Value is: " + user.getEmail());
-//                synced_user = true;
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError error) {
-//                Log.i("Error", error.toException().getMessage());
-//            }
-//        });
-//        missions.addListenerForSingleValueEvent(new ValueEventListener() {
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//               synced_missions = true;
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//
-//        });
-//        missions.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                missionsList.add(dataSnapshot.getValue(Mission.class));
-//                LootApplication app = (LootApplication)getActivity().getApplication();
-//                app.missions = missionsList;
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-
-
 
         StringRequest syncRequest = new StringRequest(Request.Method.GET,
                 Endpoints.syncRequest+userID,
@@ -237,10 +184,6 @@ public class Splash extends Fragment {
         editor.putLong("com.hackncs.contactNumber", user.getContactNumber());
 //        editor.putStringSet("com.hackncs.dropped", new HashSet<>(user.getDropped()));
         editor.apply();
-
-//        LootApplication app = (LootApplication)getActivity().getApplication();
-//        app.user = user;
-//        app.missions = missionsList;
         Intent i = new Intent(getContext(), DashboardLoot.class);
         i.putExtra("UID", fbuser.getUid());
         startActivity(i);
@@ -307,7 +250,7 @@ public class Splash extends Fragment {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Login fragment = new Login();
-                fragmentTransaction.replace(R.id.login_frame, fragment);
+                fragmentTransaction.replace(R.id.login_frame, fragment,"login");
                 fragmentTransaction.commit();
             }
         });
@@ -317,7 +260,7 @@ public class Splash extends Fragment {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Register fragment = new Register();
-                fragmentTransaction.replace(R.id.login_frame, fragment);
+                fragmentTransaction.replace(R.id.login_frame, fragment,"register");
                 fragmentTransaction.commit();
             }
         });

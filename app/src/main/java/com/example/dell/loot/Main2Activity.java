@@ -63,7 +63,7 @@
 //        mAuth=FirebaseAuth.getInstance();
 //        database=FirebaseDatabase.getInstance();
 //        users=database.getReference("Users");
-//        missions=database.getReference("Missions");
+//        missions=database.getReference("Current_missions");
 //       // users.child(userId).child("online").setValue(true);
 //
 //        FragmentManager fragmentManager = getSupportFragmentManager();
@@ -225,7 +225,7 @@
 ////        mAuth = FirebaseAuth.getInstance();
 ////        database = FirebaseDatabase.getInstance();
 ////        users = database.getReference("Users");
-////        missions = database.getReference("Missions");
+////        missions = database.getReference("Current_missions");
 //////        users.child(userID).child("online").setValue(true);
 ////
 ////        FragmentManager fragmentManager = getSupportFragmentManager();
@@ -253,7 +253,7 @@
 ////                    fragmentTag.equals("leaderboard")) {
 ////                BottomNavigationView navigationView = findViewById(R.id.navigation);
 ////                navigationView.getMenu().getItem(0).setChecked(true);
-////                android.support.v4.app.Fragment fragment = new CurrentMission();
+////                android.support.v4.app.Fragment fragment = new Missions();
 ////                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 ////                transaction.replace(R.id.frame_container, fragment,"current_mission");
 ////                transaction.addToBackStack(null);
@@ -401,7 +401,7 @@
 ////        missions.addChildEventListener(new ChildEventListener() {
 ////            @Override
 ////            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-////                Log.i("Missions",dataSnapshot.getKey());
+////                Log.i("Current_missions",dataSnapshot.getKey());
 ////                missionsList.add(dataSnapshot.getValue(Mission.class));
 ////                LootApplication app = (LootApplication)getApplication();
 ////                app.missions = missionsList;
@@ -503,7 +503,7 @@
 //            @Override
 //            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 //
-//                Log.i("Missions",dataSnapshot.getKey());
+//                Log.i("Current_missions",dataSnapshot.getKey());
 //                missionsList.add(dataSnapshot.getValue(Mission.class));
 //                Loot_Application app=(Loot_Application)getApplication();
 //                app.missions=missionsList;

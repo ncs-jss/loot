@@ -17,6 +17,8 @@
     <string name="title_locator">Locator</string>
     <string name="title_stats">Stats</string>
     <string name="title_leaderBoard">LeaderBoard</string>
+    <string name="duel_mode">Duel Mode</string>
+    <string name="current_task">Current Task</string>
 
 
     <string name="title_activity_welcome">Home Screen</string>
@@ -38,6 +40,7 @@
 
     <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
     <string name="play_again">Play Again</string>
+
 
 
 </resources>

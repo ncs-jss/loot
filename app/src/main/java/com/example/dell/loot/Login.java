@@ -75,7 +75,7 @@ public class Login extends Fragment {
         mAuth = FirebaseAuth.getInstance();
 //        database = FirebaseDatabase.getInstance();
 //        users = database.getReference("Users");
-//        missions = database.getReference("Missions");
+//        missions = database.getReference("Current_missions");
         user = new User();
         dialog = new ProgressDialog(getContext());
         dialog.setTitle("Please Wait");
@@ -175,7 +175,7 @@ public class Login extends Fragment {
 //        missions.addChildEventListener(new ChildEventListener() {
 //            @Override
 //            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                Log.i("Missions",dataSnapshot.getKey());
+//                Log.i("Current_missions",dataSnapshot.getKey());
 //                missionsList.add(dataSnapshot.getValue(Mission.class));
 //                LootApplication app = (LootApplication)getActivity().getApplication();
 //                app.missions=missionsList;

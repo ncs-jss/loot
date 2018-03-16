@@ -338,7 +338,7 @@
 //
 //        BottomNavigationView navigationView = getActivity().findViewById(R.id.navigation);
 //        navigationView.getMenu().getItem(0).setChecked(true);
-//        Fragment fragment = new CurrentMission();
+//        Fragment fragment = new Missions();
 //        loadFragment(fragment);
 //    }
 //
@@ -465,7 +465,7 @@
 //           public void onClick(DialogInterface dialogInterface, int i) {
 //               BottomNavigationView navigationView = getActivity().findViewById(R.id.navigation);
 //               navigationView.getMenu().getItem(0).setChecked(true);
-//               android.support.v4.app.Fragment fragment = new CurrentMission();
+//               android.support.v4.app.Fragment fragment = new Missions();
 //               FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 //               transaction.replace(R.id.frame_container, fragment,"current_mission");
 //               transaction.addToBackStack(null);

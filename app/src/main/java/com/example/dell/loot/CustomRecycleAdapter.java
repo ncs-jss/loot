@@ -6,10 +6,13 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,29 +34,40 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+
 public class CustomRecycleAdapter extends RecyclerView.Adapter<CustomRecycleAdapter.MyViewHolder> {
 
     private Context mContext;
     private Activity mActivity;
     private ArrayList<User> users;
+    private String key;
+    Activity activity;
+    String fcm = "";
+    APIService fcmService;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView name, coins;
         public ImageView avatar;
+        public CardView cardView;
 
         public MyViewHolder(View view) {
             super(view);
             name = (TextView) view.findViewById(R.id.user_name);
             coins = (TextView) view.findViewById(R.id.user_coins);
-            avatar = (ImageView) view.findViewById(R.id.imageView);
+            avatar = (ImageView) view.findViewById(R.id.avatar);
+            cardView=view.findViewById(R.id.card_view);
         }
     }
 
 
-    public CustomRecycleAdapter(Context mContext, Activity mActivity, ArrayList<User> users) {
+    public CustomRecycleAdapter(Context mContext, Activity mActivity, ArrayList<User> users, String key) {
         this.mContext = mContext;
         this.mActivity = mActivity;
         this.users = users;
+        this.key=key;
+        fcmService=APIUtils.getAPIService();
     }
 
     @Override
@@ -65,103 +79,146 @@ public class CustomRecycleAdapter extends RecyclerView.Adapter<CustomRecycleAdap
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        final RequestQueue requestQueue = Volley.newRequestQueue(new DashboardLoot());
+        final RequestQueue requestQueue = Volley.newRequestQueue(mActivity);
         final User user = users.get(position);
+        Log.i("username",users.get(position).getUsername());
         holder.name.setText(user.getUsername());
-        holder.coins.setText("Coins $"+user.getScore());
+        holder.coins.setText(""+user.getScore());
+        holder.avatar.setImageResource(user.getAvatarID());
+        if(key.equalsIgnoreCase("online_users"))
+        {
+            holder.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+                    LayoutInflater layoutInflater = mActivity.getLayoutInflater();
+                    View dialogView=layoutInflater.inflate(R.layout.challenge_dialog,null);
 
-        //TODO: set avatar
-//        holder.avatar.setImageResource();
-        holder.avatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                LayoutInflater layoutInflater = mActivity.getLayoutInflater();
-                View dialogView = layoutInflater.inflate(R.layout.create_challenge,null);
-                TextView toUser = dialogView.findViewById(R.id.to_user);
-                final EditText stake = dialogView.findViewById(R.id.input_stake);
-                toUser.setText(user.getUsername());
-                final String[] fcm = new String[1];
-                SharedPreferences sharedPreferences = new DashboardLoot().getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
-                final String senderUsername = sharedPreferences.getString("com.hackncs.username", "");
-                final String senderUserID = sharedPreferences.getString("com.hackncs.userID", "");
-                builder.setView(dialogView)
-                        .setPositiveButton("Send", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                if (Integer.valueOf(stake.getText().toString()) > user.getScore()) {
-                                    Toast.makeText(mContext, "You cannot put more coins than you have on stake!", Toast.LENGTH_SHORT).show();
-                                    dialog.dismiss();
-                                }
-                                final StringRequest send = new StringRequest(Request.Method.POST,
-                                        Endpoints.send,
-                                        new Response.Listener<String>() {
-                                            @Override
-                                            public void onResponse(String response) {
+                    TextView message=dialogView.findViewById(R.id.message);
+                    final EditText my_stake=dialogView.findViewById(R.id.stake);
+                    String chlng_msg="Are you sure you want to challenge "+user.getUsername()+" for a duel";
+                    message.setText(chlng_msg);
+                    final Button accept=dialogView.findViewById(R.id.positive);
+                    Button reject=dialogView.findViewById(R.id.negative);
+                    accept.setText("Send");
+                    reject.setText("Cancel");
+                    builder.setView(dialogView);
+                    final AlertDialog dialog = builder.create();
+                    SharedPreferences sharedPreferences = mActivity.getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
+                    final String senderUsername = sharedPreferences.getString("com.hackncs.username", "");
+                    final String senderUserID = sharedPreferences.getString("com.hackncs.userID", "");
+                    final int myScore = sharedPreferences.getInt("com.hackncs.score", 0);
 
-                                            }
-                                        },
-                                        new Response.ErrorListener() {
-                                            @Override
-                                            public void onErrorResponse(VolleyError error) {
 
-                                            }
-                                        }) {
-                                    @Override
-                                    protected Map<String, String> getParams() throws AuthFailureError {
-                                        Map map = new HashMap();
-                                        map.put("registration_id", fcm);
-                                        map.put("message_title", "");
-                                        map.put("message_body", "");
-                                        JSONObject data = new JSONObject();
-                                        try {
-                                            data.put("request_type", "duel_request");
-                                            data.put("user", senderUsername);
-                                            data.put("stake", stake.getText().toString());
-                                            data.put("reference_token", senderUserID);
-                                            map.put("data_message", data);
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                        return map;
+                    accept.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if(my_stake.getText()==null||my_stake.getText().length()==0)
+                            {
+                                Toast.makeText(mActivity,"Enter your stake",Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+
+                                try
+                                {
+                                    final int stake=Integer.valueOf(my_stake.getText().toString());
+
+                                    if (stake <= 0) {
+                                        Toast.makeText(mContext, "You entered an invalid value!", Toast.LENGTH_SHORT).show();
+
                                     }
-                                };
-                                StringRequest getFCM = new StringRequest(Request.Method.GET,
-                                        Endpoints.syncRequest + user.getUserID(),
-                                        new Response.Listener<String>() {
-                                            @Override
-                                            public void onResponse(String response) {
-                                                try {
-                                                    JSONObject jsonObject = new JSONObject(response);
-                                                    fcm[0] = jsonObject.getString("fcm_token");
-                                                    requestQueue.add(send);
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        },
-                                        new Response.ErrorListener() {
-                                            @Override
-                                            public void onErrorResponse(VolleyError error) {
+                                    else if (stake > myScore) {
+                                        Toast.makeText(mContext, "You cannot put more coins than you have on stake!", Toast.LENGTH_SHORT).show();
 
-                                            }
-                                        });
-                                requestQueue.add(getFCM);
-                            }
-                        })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.dismiss();
-                            }
-                        });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            }
-        });
+                                    }
+                                    else {
+                                        StringRequest getFCM = new StringRequest(Request.Method.GET,
+                                                Endpoints.syncRequest + user.getUserID(),
+                                                new Response.Listener<String>() {
+                                                    @Override
+                                                    public void onResponse(String response) {
+                                                        try {
+                                                            JSONObject jsonObject = new JSONObject(response);
+                                                            fcm = jsonObject.getString("fcm_token");
+                                                            //requestQueue.add(send);
+                                                            Log.i("senders fcm", fcm);
+                                                            Data_Message message = new Data_Message();
+                                                            message.setRequest_type("duel_request");
+                                                            message.setUser(senderUsername);
+                                                            message.setStake(stake + "");
+                                                            message.setReference_token(senderUserID);
+                                                            FCMData fcmData = new FCMData();
+                                                            fcmData.setData_message(message);
+                                                            fcmData.setMessage_body("");
+                                                            fcmData.setMessage_title("");
+                                                            fcmData.setRegistration_id(fcm);
+                                                            dialog.dismiss();
+                                                            sendFCM(fcmData);
+                                                        } catch (JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
+                                                },
+                                                new Response.ErrorListener() {
+                                                    @Override
+                                                    public void onErrorResponse(VolleyError error) {
+
+                                                    }
+                                                });
+                                        requestQueue.add(getFCM);
+                                    }
+
+
+                                }catch (Exception e)
+                                {
+                                    Toast.makeText(mActivity, "You entered an invalid value!", Toast.LENGTH_SHORT).show();
+                                }
+
+                        }
+                    }});
+                    reject.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
+                }
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
         return users.size();
     }
+
+
+    public void sendFCM(final FCMData fcmData) {
+        fcmService.sendFCM(fcmData).enqueue(new Callback<JSONObject>() {
+
+            @Override
+            public void onResponse(Call<JSONObject> call, retrofit2.Response<JSONObject> response) {
+
+                if(response.isSuccessful())
+                {
+                    JSONObject object=response.body();
+                    if(fcmData.getData_message().getRequest_type().equals("duel_request")) {
+                        Toast.makeText(mActivity, "Challenge Sent", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+                else
+                {
+                    Toast.makeText(mActivity,"Response Failure",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JSONObject> call, Throwable t) {
+                Log.e("Error", "Unable to submit post to API."+ t.getMessage());
+            }
+        });
+    }
+
 }

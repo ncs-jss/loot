@@ -1,6 +1,8 @@
 package com.example.dell.loot;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -68,8 +72,10 @@ public class OnlineUsers extends Fragment {
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        // specify an adapter (see also next example)
-        mAdapter = new CustomRecycleAdapter(getContext(), getActivity(), onlineUsers);
+
+        mAdapter = new CustomRecycleAdapter(getContext(), getActivity(), onlineUsers,"online_users");
+        SharedPreferences sharedPreferences =getActivity().getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
+        final String userId = sharedPreferences.getString("com.hackncs.userID","");
         mRecyclerView.setAdapter(mAdapter);
         db.collection("users")
                 .whereEqualTo("online", true)
@@ -80,9 +86,8 @@ public class OnlineUsers extends Fragment {
                         if (task.isSuccessful()) {
                             for (DocumentSnapshot document : task.getResult()) {
                                 Map<String, Object> map = document.getData();
-                                User user = getUser(map.get("userID").toString());
-                                onlineUsers.add(user);
-                                mAdapter.notifyDataSetChanged();
+                                if(!map.get("userID").toString().equals(userId))
+                                getUser(map.get("userID").toString());
                             }
                         } else {
                             Log.i("Error getting documents", task.getException().getMessage());
@@ -91,7 +96,8 @@ public class OnlineUsers extends Fragment {
                 });
     }
 
-    private User getUser(String userID) {
+
+    private void getUser(String userID) {
         final User user = new User();
         StringRequest syncRequest = new StringRequest(Request.Method.GET,
                 Endpoints.syncRequest + userID,
@@ -101,6 +107,7 @@ public class OnlineUsers extends Fragment {
                         JSONObject jsonObject;
                         try {
                             jsonObject = new JSONObject(response);
+                            Log.i("response",response);
                             user.setUserID(jsonObject.getString("reference_token"));
                             user.setUsername(jsonObject.getString("username"));
                             user.setZealID(jsonObject.getString("zeal_id"));
@@ -115,19 +122,22 @@ public class OnlineUsers extends Fragment {
                             user.setDuelLost(Integer.valueOf(jsonObject.getString("duel_lost")));
                             user.setContactNumber(Long.valueOf(jsonObject.getString("contact_number")));
 //                            user.setDropped();
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        onlineUsers.add(user);
+                        mAdapter.notifyDataSetChanged();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        Log.i("Error",error.getMessage());
                     }
                 });
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(syncRequest);
-        return user;
     }
+
 }

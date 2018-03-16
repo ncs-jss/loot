@@ -46,18 +46,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Register extends Fragment {
+public class Register extends Fragment implements View.OnClickListener{
 
     private FirebaseAuth mAuth;
-//    private FirebaseDatabase database;
-//    DatabaseReference users;
     View view;
     EditText name, email, contact, zeal, username, password;
-    ImageView avatar;
+    ImageView avatars[]=new ImageView[5];
+    ImageView tick[]=new ImageView[5];
+    int avatarIds[]=new int[5];
     ProgressDialog dialog;
     FirebaseFirestore db;
+    int selectedAvatar;
     FirebaseUser firebaseUser;
-    int avatarID = 0;
     User user;
     public Register() {
         // Required empty public constructor
@@ -75,18 +75,8 @@ public class Register extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
-        db=FirebaseFirestore.getInstance();
-//        database = FirebaseDatabase.getInstance();
-//        users = database.getReference("Users");
-        Button register = getView().findViewById(R.id.register);
-        TextView login = getView().findViewById(R.id.goto_login);
-
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                login();
-            }
-        });
+        db = FirebaseFirestore.getInstance();
+        Button register = getView().findViewById(R.id.submit);
 
         dialog.setTitle("Please Wait");
         dialog.setCancelable(false);
@@ -95,67 +85,73 @@ public class Register extends Fragment {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.show();
-                mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
-                        .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    dialog.dismiss();
-                                    firebaseUser = mAuth.getCurrentUser();
-                                    updateFirebase(firebaseUser);
-                                    StringRequest register = new StringRequest(Request.Method.POST,
-                                            Endpoints.register,
-                                            new Response.Listener<String>() {
-                                                @Override
-                                                public void onResponse(String response) {
-                                                    Log.d("volley request", "response");
-                                                    syncSharedPrefs();
-                                                    Toast.makeText(getContext(),"You're registered successfully!",Toast.LENGTH_SHORT).show();
-                                                    Intent i=new Intent(getContext(),WelcomeSlider.class);
-                                                    startActivity(i);
+                if (!validation()) {
+                    Toast.makeText(getActivity(), "Please fill in all the field", Toast.LENGTH_SHORT).show();
+                } else {
+                    dialog.show();
+                    mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+                            .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        dialog.dismiss();
+                                        firebaseUser = mAuth.getCurrentUser();
+                                        updateFirebase(firebaseUser);
+                                        StringRequest register = new StringRequest(Request.Method.POST,
+                                                Endpoints.register,
+                                                new Response.Listener<String>() {
+                                                    @Override
+                                                    public void onResponse(String response) {
+                                                        Log.d("volley request", "response");
+                                                        syncSharedPrefs();
+                                                        Toast.makeText(getContext(), "You're registered successfully!", Toast.LENGTH_SHORT).show();
+                                                        Intent i = new Intent(getContext(), WelcomeSlider.class);
+                                                        startActivity(i);
+                                                    }
+                                                },
+                                                new Response.ErrorListener() {
+                                                    @Override
+                                                    public void onErrorResponse(VolleyError error) {
+                                                        Log.d("volley request", "error");
+                                                        Toast.makeText(getContext(), "Error Occurred!", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }) {
+                                            @Override
+                                            protected Map<String, String> getParams() throws AuthFailureError {
+                                                Map<String, String> map = new HashMap();
+                                                map.put("reference_token", firebaseUser.getUid());
+                                                map.put("email", email.getText().toString());
+                                                map.put("name", name.getText().toString());
+                                                map.put("username", username.getText().toString());
+                                                map.put("zeal_id", zeal.getText().toString());
+                                                map.put("contact_number", contact.getText().toString());
+                                                map.put("score", "0");
+                                                map.put("stage", "1");
+                                                map.put("mission_state", "0");
+                                                map.put("drop_count", "0");
+                                                map.put("duel_won", "0");
+                                                map.put("duel_lost", "0");
+                                                map.put("avatar_id", String.valueOf(avatarIds[selectedAvatar]));
+                                                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
+                                                final String fcmToken = sharedPreferences.getString("com.hackncs.FCMToken", "");
+                                                if (!fcmToken.equals("")) {
+                                                    map.put("fcm_token", fcmToken);
                                                 }
-                                            },
-                                            new Response.ErrorListener() {
-                                                @Override
-                                                public void onErrorResponse(VolleyError error) {
-                                                    Log.d("volley request", "error");
-                                                    Toast.makeText(getContext(), "Error Occurred!", Toast.LENGTH_SHORT).show();
-                                                }
-                                            }){
-                                        @Override
-                                        protected Map<String, String> getParams() throws AuthFailureError {
-                                            Map<String, String> map = new HashMap();
-                                            map.put("reference_token", firebaseUser.getUid());
-                                            map.put("email", email.getText().toString());
-                                            map.put("name", name.getText().toString());
-                                            map.put("username", username.getText().toString());
-                                            map.put("zeal_id", zeal.getText().toString());
-                                            map.put("contact_number", contact.getText().toString());
-                                            map.put("score","0");
-                                            map.put("stage","1");
-                                            map.put("mission_state","0");
-                                            map.put("drop_count","0");
-                                            map.put("duel_won","0");
-                                            map.put("duel_lost","0");
-                                            map.put("avatar_id", String.valueOf(avatarID));
-                                            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
-                                            final String fcmToken = sharedPreferences.getString("com.hackncs.FCMToken", "");
-                                            if (!fcmToken.equals("")) {
-                                                map.put("fcm_token", fcmToken);
+                                                return map;
                                             }
-                                            return map;
-                                        }
-                                    };
-                                    RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-                                    requestQueue.add(register);
-                                } else {
-                                    dialog.dismiss();
-                                    Toast.makeText(getContext(), "Registration failed."+ task.getException().getMessage(),
-                                            Toast.LENGTH_SHORT).show();
+                                        };
+                                        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+                                        requestQueue.add(register);
+                                    } else {
+                                        dialog.dismiss();
+                                        Toast.makeText(getContext(), "Registration failed." + task.getException().getMessage(),
+                                                Toast.LENGTH_SHORT).show();
+
+                                    }
                                 }
-                            }
-                        });
+                            });
+
+                }
             }
         });
     }
@@ -167,7 +163,31 @@ public class Register extends Fragment {
         zeal = view.findViewById(R.id.zealId);
         username = view.findViewById(R.id.username);
         password = view.findViewById(R.id.password);
-        avatar = view.findViewById(R.id.avatar);
+        avatars[0]=view.findViewById(R.id.avatar_1);
+        avatars[1]=view.findViewById(R.id.avatar_2);
+        avatars[2]=view.findViewById(R.id.avatar_3);
+        avatars[3]=view.findViewById(R.id.avatar_4);
+        avatars[4]=view.findViewById(R.id.avatar_5);
+
+
+        for (int x=0;x<5;x++)
+        {
+            avatars[x].setOnClickListener(this);
+        }
+
+        tick[0]=view.findViewById(R.id.tick_1);
+        tick[1]=view.findViewById(R.id.tick_2);
+        tick[2]=view.findViewById(R.id.tick_3);
+        tick[3]=view.findViewById(R.id.tick_4);
+        tick[4]=view.findViewById(R.id.tick_5);
+
+
+        avatarIds[0]=R.drawable.avatar_1;
+        avatarIds[1]=R.drawable.avatar_2;
+        avatarIds[2]=R.drawable.avatar_3;
+        avatarIds[3]=R.drawable.avatar_4;
+        avatarIds[4]=R.drawable.avatar_5;
+
         dialog=new ProgressDialog(getContext());
     }
 
@@ -183,7 +203,7 @@ public class Register extends Fragment {
         user.setZealID(zeal.getText().toString());
         user.setName(name.getText().toString());
         user.setEmail(email.getText().toString());
-        user.setAvatarID(avatarID);
+        user.setAvatarID(avatarIds[selectedAvatar]);
         user.setScore(0);
         user.setStage(1);
         user.setState(0);
@@ -191,7 +211,6 @@ public class Register extends Fragment {
         user.setDuelWon(0);
         user.setDuelLost(0);
         user.setContactNumber(Long.valueOf(contact.getText().toString()));
-//        user.setDropped();
         return  user;
     }
 
@@ -203,7 +222,7 @@ public class Register extends Fragment {
         editor.putString("com.hackncs.zealID", zeal.getText().toString());
         editor.putString("com.hackncs.name", name.getText().toString());
         editor.putString("com.hackncs.email", email.getText().toString());
-        editor.putInt("com.hackncs.avatarID", avatarID);
+        editor.putInt("com.hackncs.avatarID", avatarIds[selectedAvatar]);
         editor.putInt("com.hackncs.score", 0);
         editor.putInt("com.hackncs.stage", 1);
         editor.putInt("com.hackncs.state", 0);
@@ -211,27 +230,9 @@ public class Register extends Fragment {
         editor.putInt("com.hackncs.duelWon", 0);
         editor.putInt("com.hackncs.duelLost", 0);
         editor.putLong("com.hackncs.contactNumber", Long.valueOf(contact.getText().toString()));
-//        editor.putStringSet("com.hackncs.dropped", new HashSet<>(user.getDropped()));
         editor.apply();
     }
 
-
-//
-//    private void updateDB(User user) {
-//        users.child(user.getUserID()).setValue(user);
-//        Intent i=new Intent(getContext(),Main2Activity.class);
-//        i.putExtra("UID",user.getUserID());
-//        startActivity(i);
-//    }
-
-    public void login() {
-
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Login fragment = new Login();
-        fragmentTransaction.replace(R.id.login_frame, fragment);
-        fragmentTransaction.commit();
-    }
     public void updateFirebase(FirebaseUser firebaseUser)
     {
         Map<String, Object> user = new HashMap<>();
@@ -253,6 +254,57 @@ public class Register extends Fragment {
                 }
             }
         });
+
+    }
+
+    @Override
+    public void onClick(View view) {
+
+
+        int id=view.getId();
+        Log.i("Clicked",id+"");
+        for(int i=0;i<5;i++)
+        {
+            if(avatars[i].getId()==id)
+            {
+                tick[selectedAvatar].setVisibility(View.GONE);
+                tick[i].setVisibility(View.VISIBLE);
+                //TODO:Update avatarId
+                selectedAvatar=i;
+                Log.i("Selected",selectedAvatar+"");
+            }
+        }
+
+    }
+
+    private boolean validation()
+    {
+        boolean validate=true;
+        if(name.getText()==null||name.getText().toString().trim().length()==0)
+        {
+            validate=false;
+        }
+        else if(email.getText()==null||email.getText().toString().trim().length()==0)
+        {
+            validate=false;
+        }
+        else if(zeal.getText()==null||zeal.getText().toString().trim().length()==0)
+        {
+            validate=false;
+        }
+        else if(contact.getText()==null||contact.getText().toString().trim().length()==0)
+        {
+            validate=false;
+        }
+        else if(password.getText()==null||password.getText().toString().trim().length()==0)
+        {
+            validate=false;
+        }
+        else if(username.getText()==null||username.getText().toString().trim().length()==0)
+        {
+            validate=false;
+        }
+        return validate;
 
     }
 }

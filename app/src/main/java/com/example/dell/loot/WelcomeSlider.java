@@ -18,6 +18,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class WelcomeSlider extends AppCompatActivity {
 
     private ViewPager viewPager;
@@ -51,8 +53,7 @@ public class WelcomeSlider extends AppCompatActivity {
         layouts = new int[]{
                 R.layout.welcome_slide1,
                 R.layout.welcome_slide2,
-                R.layout.welcome_slide3,
-                R.layout.welcome_slide4};
+                R.layout.welcome_slide3};
 
         // adding bottom dots
         addBottomDots(0);
@@ -112,9 +113,9 @@ public class WelcomeSlider extends AppCompatActivity {
 
     private void launchHomeScreen() {
 
-        Intent i=new Intent(this, Main2Activity.class);
-        Loot_Application app=(Loot_Application)getApplication();
-        i.putExtra("UID",app.user.getUserId());
+        Intent i=new Intent(this,DashboardLoot.class);
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        i.putExtra("UID", uid);
         startActivity(i);
         finish();
     }

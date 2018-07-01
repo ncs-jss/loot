@@ -1,9 +1,17 @@
 package com.example.dell.loot;
 
-import android.app.Service;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.IBinder;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -25,8 +33,49 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
         // Check if message contains a data payload.
-        if (remoteMessage.getData().size() > 0) {
+        if (remoteMessage.getData() != null) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+            String request_type = remoteMessage.getData().get("request_type");
+            Intent intent = new Intent(this, Duel_Alert_Transparent_Activity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("request_type", request_type);
+            if (request_type.equals("duel_request")) {
+                String from_user = remoteMessage.getData().get("user");
+                String stake = remoteMessage.getData().get("stake");
+                String reference_token = remoteMessage.getData().get("reference_token");
+                intent.putExtra("user", from_user);
+                intent.putExtra("stake", stake);
+                intent.putExtra("reference_token", reference_token);
+            } else if (request_type.equals("accept_request")) {
+                String from_user = remoteMessage.getData().get("user");
+                String stake = remoteMessage.getData().get("stake");
+                String duel_id = remoteMessage.getData().get("id");
+                intent.putExtra("duel_id", duel_id);
+                intent.putExtra("user", from_user);
+                intent.putExtra("stake", stake);
+            } else if (request_type.equals("reject_request")) {
+                String from_user = remoteMessage.getData().get("user");
+                intent.putExtra("user", from_user);
+
+            } else if (request_type.equals("won_message")) {
+                String from_user = remoteMessage.getData().get("user");
+//                String stake = remoteMessage.getData().get("stake");
+                intent.putExtra("user", from_user);
+//                intent.putExtra("stake", stake);
+            } else if (request_type.equals("lost_message")) {
+                String from_user = remoteMessage.getData().get("user");
+//                String stake = remoteMessage.getData().get("stake");
+                intent.putExtra("user", from_user);
+//                intent.putExtra("stake", stake);
+            } else if (request_type.equals("tie_message")) {
+                String from_user = remoteMessage.getData().get("user");
+//                String stake = remoteMessage.getData().get("stake");
+                intent.putExtra("user", from_user);
+//                intent.putExtra("stake", stake);
+            }
+//            sendNotification(from_user,stake);
+
+            startActivity(intent);
         }
 
         // Check if message contains a notification payload.
@@ -45,57 +94,5 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //        //To get a Bitmap image from the URL received
 
 
-
-
     }
-
-
-    /**
-     * Create and show a simple notification containing the received FCM message.
-     */
-
-//    private void sendNotification(String messageBody, Bitmap image, String TrueOrFalse) {
-//        Intent intent = new Intent(this, MainActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        intent.putExtra("AnotherActivity", TrueOrFalse);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-//                PendingIntent.FLAG_ONE_SHOT);
-//
-//        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-//                .setLargeIcon(image)/*Notification icon image*/
-//                .setSmallIcon(R.drawable.firebase_icon)
-//                .setContentTitle(messageBody)
-//                .setStyle(new NotificationCompat.BigPictureStyle()
-//                        .bigPicture(image))/*Notification with Image*/
-//                .setAutoCancel(true)
-//                .setSound(defaultSoundUri)
-//                .setContentIntent(pendingIntent);
-//
-//        NotificationManager notificationManager =
-//                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//
-//        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
-//    }
-//
-//    /*
-//    *To get a Bitmap image from the URL received
-//    * */
-//    public Bitmap getBitmapfromUrl(String imageUrl) {
-//        try {
-//            URL url = new URL(imageUrl);
-//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//            connection.setDoInput(true);
-//            connection.connect();
-//            InputStream input = connection.getInputStream();
-//            Bitmap bitmap = BitmapFactory.decodeStream(input);
-//            return bitmap;
-//
-//        } catch (Exception e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//            return null;
-//
-//        }
-//    }
 }

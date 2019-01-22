@@ -133,7 +133,7 @@ public class Login extends Fragment {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("com.hackncs.userID", user.getUserID());
         editor.putString("com.hackncs.username", user.getUsername());
-        editor.putString("com.hackncs.zealID", user.getZealID());
+        editor.putString("com.hackncs.admissionNo", user.getAdmissionNo());
         editor.putString("com.hackncs.name", user.getName());
         editor.putString("com.hackncs.email", user.getEmail());
         editor.putInt("com.hackncs.avatarID", user.getAvatarID());
@@ -210,7 +210,7 @@ public class Login extends Fragment {
                             jsonObject = new JSONObject(response);
                             user.setUserID(jsonObject.getString("reference_token"));
                             user.setUsername(jsonObject.getString("username"));
-                            user.setZealID(jsonObject.getString("zeal_id"));
+                            user.setAdmissionNo(jsonObject.getString("admission_no"));
                             user.setName(jsonObject.getString("name"));
                             user.setEmail(jsonObject.getString("email"));
                             user.setAvatarID(Integer.valueOf(jsonObject.getString("avatar_id")));

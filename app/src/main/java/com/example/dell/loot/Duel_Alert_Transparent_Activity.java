@@ -203,7 +203,7 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
                 final String[] duelID = new String[1];
                 final String[] fcm = new String[1];
                 int stakeEntered = 0;
-
+                dialog.dismiss();
                 try {
 
                     stakeEntered = Integer.valueOf(my_stake.getText().toString());
@@ -235,7 +235,7 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
                                             fcmData.setMessage_body("");
                                             fcmData.setMessage_title("");
                                             fcmData.setRegistration_id(fcm[0]);
-                                            dialog.dismiss();
+
                                             sendFCM(fcmData);
 
                                         } catch (JSONException e) {
@@ -297,6 +297,7 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
         reject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dialog.dismiss();
                 final String fcm[] = new String[1];
                 final StringRequest getFCM = new StringRequest(Request.Method.GET,
                         Endpoints.syncRequest + reference_token,
@@ -314,7 +315,7 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
                                     fcmData.setMessage_body("");
                                     fcmData.setMessage_title("");
                                     fcmData.setRegistration_id(fcm[0]);
-                                    dialog.dismiss();
+
                                     sendFCM(fcmData);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -328,7 +329,7 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
                             }
                         });
                 requestQueue.add(getFCM);
-                finish();
+
 
             }
         });
@@ -401,7 +402,8 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
             @Override
             public void onResponse(Call<JSONObject> call, retrofit2.Response<JSONObject> response) {
 
-                Log.i("Response",response.toString());
+                Log.i("Response",call.toString() );
+
                 if(response.isSuccessful())
                 {
                     JSONObject object=response.body();

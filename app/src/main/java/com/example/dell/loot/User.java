@@ -6,14 +6,14 @@ public class User {
 
     int avatarID, score, stage, state, dropCount, duelWon, duelLost;
     long contactNumber;
-    String userID, username, zealID, name, email;
+    String userID, username, admissionNo, name, email;
     ArrayList<String> dropped;
 
     public User() {
     }
 
     public User(int avatarID, int score, int stage, int state, int dropCount, int duelWon,
-                int duelLost, long contactNumber, String userID, String username, String zealID,
+                int duelLost, long contactNumber, String userID, String username, String admissionNo,
                 String name, String email, ArrayList<String> dropped) {
         this.avatarID = avatarID;
         this.score = score;
@@ -25,7 +25,7 @@ public class User {
         this.contactNumber = contactNumber;
         this.userID = userID;
         this.username = username;
-        this.zealID = zealID;
+        this.admissionNo = admissionNo;
         this.name = name;
         this.email = email;
         this.dropped = dropped;
@@ -111,12 +111,12 @@ public class User {
         this.username = username;
     }
 
-    public String getZealID() {
-        return zealID;
+    public String getAdmissionNo() {
+        return admissionNo;
     }
 
-    public void setZealID(String zealID) {
-        this.zealID = zealID;
+    public void setAdmissionNo(String admissionNo) {
+        this.admissionNo = admissionNo;
     }
 
     public String getName() {

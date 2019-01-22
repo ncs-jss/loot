@@ -9,6 +9,6 @@ import retrofit2.http.POST;
 
 public interface APIService {
 
-    @POST("/send/")
+    @POST("/api/fcm/send/")
     Call<JSONObject> sendFCM(@Body FCMData data);
 }

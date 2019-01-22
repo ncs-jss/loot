@@ -110,7 +110,7 @@ public class OnlineUsers extends Fragment {
                             Log.i("response",response);
                             user.setUserID(jsonObject.getString("reference_token"));
                             user.setUsername(jsonObject.getString("username"));
-                            user.setZealID(jsonObject.getString("zeal_id"));
+                            user.setAdmissionNo(jsonObject.getString("admission_no"));
                             user.setName(jsonObject.getString("name"));
                             user.setEmail(jsonObject.getString("email"));
                             user.setAvatarID(Integer.valueOf(jsonObject.getString("avatar_id")));

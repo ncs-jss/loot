@@ -123,7 +123,7 @@ public class Register extends Fragment implements View.OnClickListener{
                                                 map.put("email", email.getText().toString());
                                                 map.put("name", name.getText().toString());
                                                 map.put("username", username.getText().toString());
-                                                map.put("zeal_id", zeal.getText().toString());
+                                                map.put("admission_no", zeal.getText().toString());
                                                 map.put("contact_number", contact.getText().toString());
                                                 map.put("score", "0");
                                                 map.put("stage", "1");
@@ -200,7 +200,7 @@ public class Register extends Fragment implements View.OnClickListener{
         user = new User();
         user.setUserID(firebaseUser.getUid());
         user.setUsername(username.getText().toString());
-        user.setZealID(zeal.getText().toString());
+        user.setAdmissionNo(zeal.getText().toString());
         user.setName(name.getText().toString());
         user.setEmail(email.getText().toString());
         user.setAvatarID(avatarIds[selectedAvatar]);
@@ -219,7 +219,7 @@ public class Register extends Fragment implements View.OnClickListener{
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("com.hackncs.userID", firebaseUser.getUid());
         editor.putString("com.hackncs.username", username.getText().toString());
-        editor.putString("com.hackncs.zealID", zeal.getText().toString());
+        editor.putString("com.hackncs.admissionNo", zeal.getText().toString());
         editor.putString("com.hackncs.name", name.getText().toString());
         editor.putString("com.hackncs.email", email.getText().toString());
         editor.putInt("com.hackncs.avatarID", avatarIds[selectedAvatar]);

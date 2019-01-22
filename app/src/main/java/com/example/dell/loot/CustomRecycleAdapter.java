@@ -38,7 +38,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 public class CustomRecycleAdapter extends RecyclerView.Adapter<CustomRecycleAdapter.MyViewHolder> {
-
     private Context mContext;
     private Activity mActivity;
     private ArrayList<User> users;

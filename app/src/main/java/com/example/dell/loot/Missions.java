@@ -249,7 +249,7 @@ public class Missions
 //        }
     }
     private void getMissions()
-    {
+    {   Log.i("Stage",String.valueOf(userStage));
         StringRequest fetchMission = new StringRequest(Request.Method.GET,
                 Endpoints.fetchMission + userStage,
                 new Response.Listener<String>() {
@@ -425,6 +425,8 @@ public class Missions
         Location missionLocation = new Location("");
         missionLocation.setLatitude(mission.getLat());
         missionLocation.setLongitude(mission.getLng());
+        Log.i("Lat",String.valueOf(location.getLatitude()));
+        Log.i("Lon",String.valueOf(location.getLongitude()));
 //        Toast.makeText(getContext(), location.distanceTo(missionLocation)+"", Toast.LENGTH_SHORT).show();
         if (location.distanceTo(missionLocation) < 5) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

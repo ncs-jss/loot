@@ -291,7 +291,14 @@ public class Missions
                             getActivity().finishAffinity();
                         }
                     }
-                });
+                }){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("x-auth",Endpoints.apikey);
+                    return params;
+                }
+        };
         requestQueue.add(fetchMission);
 
 
@@ -467,6 +474,12 @@ public class Missions
                     Map map = new HashMap();
                     map.put("mission_state", "true");
                     return map;
+                }
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("x-auth",Endpoints.apikey);
+                    return params;
                 }
             };
             requestQueue.add(updateUser);

@@ -135,7 +135,14 @@ public class OnlineUsers extends Fragment {
                     public void onErrorResponse(VolleyError error) {
                         Log.i("Error",error.getMessage());
                     }
-                });
+                }){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("x-auth",Endpoints.apikey);
+                    return params;
+                }
+        };
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(syncRequest);
     }

@@ -139,6 +139,12 @@ public class Register extends Fragment implements View.OnClickListener{
                                                 }
                                                 return map;
                                             }
+                                            @Override
+                                            public Map<String, String> getHeaders() throws AuthFailureError {
+                                                Map<String, String> params = new HashMap<>();
+                                                params.put("x-auth",Endpoints.apikey);
+                                                return params;
+                                            }
                                         };
                                         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
                                         requestQueue.add(register);

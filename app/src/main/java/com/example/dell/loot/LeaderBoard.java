@@ -95,7 +95,14 @@ public class LeaderBoard extends Fragment {
                     public void onErrorResponse(VolleyError error) {
 
                     }
-                });
+                }){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("x-auth",Endpoints.apikey);
+                    return params;
+                }
+        };
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(leaders);
         return view;

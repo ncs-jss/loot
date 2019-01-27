@@ -249,7 +249,14 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
 
                                         Log.i("Error", error.getMessage());
                                     }
-                                });
+                                }){
+                                @Override
+                                public Map<String, String> getHeaders() throws AuthFailureError {
+                                    Map<String, String> params = new HashMap<>();
+                                    params.put("x-auth",Endpoints.apikey);
+                                    return params;
+                                }
+                        };
 
 
                         StringRequest createDuel = new StringRequest(Request.Method.POST,
@@ -283,6 +290,12 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
                                 map.put("stake", String.valueOf(finalStake));
                                 Log.i("stake", finalStake);
                                 return map;
+                            }
+                            @Override
+                            public Map<String, String> getHeaders() throws AuthFailureError {
+                                Map<String, String> params = new HashMap<>();
+                                params.put("x-auth",Endpoints.apikey);
+                                return params;
                             }
                         };
                         requestQueue.add(createDuel);
@@ -327,7 +340,14 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
                             public void onErrorResponse(VolleyError error) {
 
                             }
-                        });
+                        }){
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<>();
+                            params.put("x-auth",Endpoints.apikey);
+                            return params;
+                        }
+                };
                 requestQueue.add(getFCM);
 
 

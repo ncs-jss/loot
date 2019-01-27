@@ -161,6 +161,13 @@ public class Current_missions extends Fragment {
                                     return map;
                                     //TODO:Confirm
                                 }
+                                @Override
+                                public Map<String, String> getHeaders() throws AuthFailureError {
+                                    Map<String, String> params = new HashMap<>();
+                                    params.put("x-auth",Endpoints.apikey);
+                                    return params;
+                                }
+
                             };
                             requestQueue.add(updateUser);
 
@@ -237,6 +244,12 @@ public class Current_missions extends Fragment {
                             map.put("stage", String.valueOf(userStage));
                             map.put("mission_state", "false");
                             return map;
+                        }
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<>();
+                            params.put("x-auth",Endpoints.apikey);
+                            return params;
                         }
                     };
                     requestQueue.add(updateUser);

@@ -234,7 +234,14 @@ public class Login extends Fragment {
                         dialog.dismiss();
                         Toast.makeText(getContext(), "Error while syncing data!", Toast.LENGTH_SHORT).show();
                     }
-                });
+                }){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("x-auth",Endpoints.apikey);
+                    return params;
+                }
+        };
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(syncRequest);
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
@@ -260,6 +267,12 @@ public class Login extends Fragment {
                     Map map = new HashMap();
                     map.put("fcm_token", fcmToken);
                     return map;
+                }
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("x-auth",Endpoints.apikey);
+                    return params;
                 }
             };
             requestQueue.add(syncFCMToken);

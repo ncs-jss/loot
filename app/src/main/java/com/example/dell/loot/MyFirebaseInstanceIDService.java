@@ -54,6 +54,12 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
                     map.put("fcm_token", token);
                     return map;
                 }
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("x-auth",Endpoints.apikey);
+                    return params;
+                }
             };
             RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
             requestQueue.add(updateFCMToken);

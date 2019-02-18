@@ -65,15 +65,15 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
         else if(request_type.equals("won_message"))
         {
             String from_user = intent.getStringExtra("user");
-//            String stake=intent.getStringExtra("stake");
-            showDialogWon(from_user);
+            String score=intent.getStringExtra("score");
+            showDialogWon(from_user,score);
 
         }
         else if(request_type.equals("lost_message"))
         {
             String from_user = intent.getStringExtra("user");
-//            String stake=intent.getStringExtra("stake");
-            showDialogLost(from_user);
+            String score=intent.getStringExtra("score");
+            showDialogLost(from_user,score);
         }
         else if(request_type.equals("tie_message"))
         {
@@ -110,7 +110,7 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void showDialogLost(String from_user) {
+    private void showDialogLost(String from_user,String score) {
 
         LayoutInflater layoutInflater = getLayoutInflater();
         View view=layoutInflater.inflate(R.layout.duel_alert,null);
@@ -127,6 +127,7 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         int wonCount=sharedPreferences.getInt("com.hackncs.duelLost",0)+1;
         editor.putInt("com.hackncs.duelLost", wonCount);
+        editor.putInt("com.hackncs.score", Integer.parseInt(score));
         editor.apply();
 
 
@@ -143,7 +144,7 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void showDialogWon(String from_user) {
+    private void showDialogWon(String from_user, String score) {
         LayoutInflater layoutInflater = getLayoutInflater();
         View view=layoutInflater.inflate(R.layout.duel_alert,null);
 
@@ -162,6 +163,7 @@ public class Duel_Alert_Transparent_Activity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         int wonCount=sharedPreferences.getInt("com.hackncs.duelWon",0)+1;
         editor.putInt("com.hackncs.duelWon", wonCount);
+        editor.putInt("com.hackncs.score", Integer.parseInt(score));
         editor.apply();
 
         ok.setOnClickListener(new View.OnClickListener() {

@@ -59,14 +59,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             } else if (request_type.equals("won_message")) {
                 String from_user = remoteMessage.getData().get("user");
-//                String stake = remoteMessage.getData().get("stake");
+                String score = remoteMessage.getData().get("score");
                 intent.putExtra("user", from_user);
-//                intent.putExtra("stake", stake);
+                intent.putExtra("score", score);
             } else if (request_type.equals("lost_message")) {
                 String from_user = remoteMessage.getData().get("user");
-//                String stake = remoteMessage.getData().get("stake");
+                String score = remoteMessage.getData().get("score");
                 intent.putExtra("user", from_user);
-//                intent.putExtra("stake", stake);
+                intent.putExtra("stake", score);
             } else if (request_type.equals("tie_message")) {
                 String from_user = remoteMessage.getData().get("user");
 //                String stake = remoteMessage.getData().get("stake");

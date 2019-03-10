@@ -3,9 +3,9 @@
 
     <item android:id="@android:id/background">
         <shape>
-            <corners android:radius="8dp"/>
-            <solid android:color="@color/space_transparent" />
-            <stroke android:color="@color/space_white" android:width="8dp"/>
+            <corners android:radius="180dp"/>
+            <solid android:color="#654E09" />
+            <stroke android:color="#654E09" android:width="0dp"/>
         </shape>
     </item>
 
@@ -15,9 +15,9 @@
                 <clip
                    >
                     <shape>
-                        <corners android:radius="8dp"/>
-                        <solid android:color="@color/space_white" />
-                        <stroke android:color="@color/space_transparent" android:width="8dp"/>
+                        <corners android:radius="180dp"/>
+                        <solid android:color="#FEC009" />
+                        <stroke android:color="@color/space_transparent" android:width="0dp"/>
                     </shape>
                 </clip>
             </item>

@@ -1,276 +1,303 @@
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
-    tools:context="com.example.dell.loot.Login">
+    android:background="@color/black"
+    tools:context="com.hackncs.zealicon.loot.Login">
 
-    <ImageView
-        android:id="@+id/imageView"
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/imageFilterView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/texture_overlay" />
-
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="360dp"
-        android:layout_height="wrap_content"
-        android:scaleType="fitXY"
-        android:src="@drawable/dan_avatar_shadow"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:scaleType="center"
+        android:src="@drawable/bg_1"/>
 
     <ScrollView
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="24dp"
-        android:layout_marginEnd="32dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="visible"
-        android:background="@drawable/white15_rectangle"
-        android:padding="10dp">
-
-    <EditText
-        android:id="@+id/name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/edittext_layout_white"
-        android:ems="10"
-        android:hint="Name:"
-        android:inputType="text"
-        android:padding="10dp"
-        android:fontFamily="@font/gilroy_bold"
-        android:textColor="@android:color/white"
-        android:textColorHint="@color/white30"
-        android:textSize="24sp"/>
-
-    <EditText
-        android:id="@+id/email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/edittext_layout_white"
-        android:ems="10"
-        android:hint="Email:"
-        android:inputType="textEmailAddress"
-        android:padding="10dp"
-        android:fontFamily="@font/gilroy_bold"
-        android:textColor="@android:color/white"
-        android:textColorHint="@color/white30"
-        android:textSize="24sp"/>
-
-        <EditText
-            android:id="@+id/zealId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/edittext_layout_white"
-            android:ems="10"
-            android:hint="Zeal_ID"
-            android:inputType="text"
-            android:padding="10dp"
-            android:fontFamily="@font/gilroy_bold"
-            android:textColor="@android:color/white"
-            android:textColorHint="@color/white30"
-            android:textSize="24sp" />
-
-        <EditText
-            android:id="@+id/contactNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/edittext_layout_white"
-            android:ems="10"
-            android:fontFamily="@font/gilroy_bold"
-            android:hint="Contact:"
-            android:inputType="phone"
-            android:padding="10dp"
-            android:textColor="@android:color/white"
-            android:textColorHint="@color/white30"
-            android:textSize="24sp"/>
-
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/edittext_layout_white"
-            android:ems="10"
-            android:fontFamily="@font/gilroy_bold"
-            android:hint="Password:"
-            android:inputType="textPassword"
-            android:padding="10dp"
-            android:textColor="@android:color/white"
-            android:textColorHint="@color/white30"
-            android:textSize="24sp"/>
-        <EditText
-            android:id="@+id/username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/edittext_layout_white"
-            android:ems="10"
-            android:fontFamily="@font/gilroy_bold"
-            android:hint="Gangsta Name:"
-            android:inputType="text"
-            android:padding="10dp"
-            android:textColor="@android:color/white"
-            android:textColorHint="@color/white30"
-            android:textSize="24sp"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:gravity="center">
+            android:background="@drawable/white15_rectangle"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:visibility="visible">
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/avatar_1"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:src="@drawable/avatar_1"/>
-                <ImageView
-                    android:id="@+id/tick_1"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/shape_1"/>
-            </RelativeLayout>
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/edittext_layout_black"
+                android:ems="10"
+                android:fontFamily="@font/avenir_next_lt_pro_demi"
+                android:hint="Name:"
+                android:inputType="text"
+                android:paddingBottom="5dp"
+                android:textColor="@color/darkGrey"
+                android:textColorHint="@color/darkGrey70"
+                android:textSize="20sp" />
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/avatar_2"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:src="@drawable/avatar_2"/>
-                <ImageView
-                    android:id="@+id/tick_2"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:visibility="gone"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/shape_1"/>
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/avatar_3"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:src="@drawable/avatar_3"/>
-                <ImageView
-                    android:id="@+id/tick_3"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:visibility="gone"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/shape_1"/>
-            </RelativeLayout>
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/edittext_layout_black"
+                android:ems="10"
+                android:fontFamily="@font/avenir_next_lt_pro_demi"
+                android:hint="Email:"
+                android:inputType="textEmailAddress"
+                android:paddingBottom="5dp"
+                android:textColor="@color/darkGrey"
+                android:textColorHint="@color/darkGrey70"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/zealId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/edittext_layout_black"
+                android:ems="10"
+                android:fontFamily="@font/avenir_next_lt_pro_demi"
+                android:hint="Admission No."
+                android:inputType="text"
+                android:paddingBottom="5dp"
+                android:textColor="@color/darkGrey"
+                android:textColorHint="@color/darkGrey70"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/contactNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/edittext_layout_black"
+                android:ems="10"
+                android:fontFamily="@font/avenir_next_lt_pro_demi"
+                android:hint="Contact:"
+                android:inputType="phone"
+                android:paddingBottom="5dp"
+                android:textColor="@color/darkGrey"
+                android:textColorHint="@color/darkGrey70"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/edittext_layout_black"
+                android:ems="10"
+                android:fontFamily="@font/avenir_next_lt_pro_demi"
+                android:hint="Password:"
+                android:inputType="textPassword"
+                android:paddingBottom="5dp"
+                android:textColor="@color/darkGrey"
+                android:textColorHint="@color/darkGrey70"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/edittext_layout_black"
+                android:ems="10"
+                android:fontFamily="@font/avenir_next_lt_pro_demi"
+                android:hint="Gangsta Name:"
+                android:inputType="text"
+                android:paddingBottom="5dp"
+                android:textColor="@color/darkGrey"
+                android:textColorHint="@color/darkGrey70"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp">
+
+                    <ImageView
+                        android:id="@+id/avatar_1"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/avatar_1" />
+
+                    <ImageView
+                        android:id="@+id/tick_1"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/shape_1" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp">
+
+                    <ImageView
+                        android:id="@+id/avatar_2"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/avatar_2" />
+
+                    <ImageView
+                        android:id="@+id/tick_2"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/shape_1"
+                        android:visibility="gone" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp">
+
+                    <ImageView
+                        android:id="@+id/avatar_3"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/avatar_3" />
+
+                    <ImageView
+                        android:id="@+id/tick_3"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/shape_1"
+                        android:visibility="gone" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp">
+
+                    <ImageView
+                        android:id="@+id/avatar_4"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/avatar_4" />
+
+                    <ImageView
+                        android:id="@+id/tick_4"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/shape_1"
+                        android:visibility="gone" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp">
+
+                    <ImageView
+                        android:id="@+id/avatar_5"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/avatar_5" />
+
+                    <ImageView
+                        android:id="@+id/tick_5"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/shape_1"
+                        android:visibility="gone" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp">
+
+                    <ImageView
+                        android:id="@+id/avatar_6"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/avatar_6" />
+
+                    <ImageView
+                        android:id="@+id/tick_6"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/shape_1"
+                        android:visibility="gone" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/submit"
+                android:layout_width="106dp"
+                android:layout_height="42dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/card_background_yellow"
+                android:fontFamily="@font/avenir_next_lt_pro_bold"
+                android:text="Submit"
+                android:textAllCaps="false"
+                android:textColor="@color/darkGrey"
+                android:textSize="18sp" />
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:gravity="center">
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/avatar_4"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:src="@drawable/avatar_4" />
-                <ImageView
-                    android:id="@+id/tick_4"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:visibility="gone"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/shape_1"/>
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/avatar_5"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:src="@drawable/avatar_5"/>
-                <ImageView
-                    android:id="@+id/tick_5"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:visibility="gone"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/shape_1"/>
-            </RelativeLayout>
-           </LinearLayout>
-
-        <Button
-            android:id="@+id/submit"
-            android:layout_width="120dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/card_background_yellow"
-            android:fontFamily="@font/gilroy_extrabold"
-            android:text="Submit"
-            android:textColor="@color/text_color"
-            android:textStyle="bold" />
-    </LinearLayout>
     </ScrollView>
 
 
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

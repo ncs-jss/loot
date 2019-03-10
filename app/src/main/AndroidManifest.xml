@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.dell.loot">
+    package="com.hackncs.zealicon.loot">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-feature android:name="android.hardware.camera" />
 
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:name=".LootApplication"
+        android:name="com.hackncs.zealicon.loot.LootApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/square_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:usesCleartextTraffic="true"
+        android:roundIcon="@mipmap/circle_icon"
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -27,44 +28,50 @@
 
         <activity
             android:theme="@style/AppTheme.NoActionBar"
-            android:name=".Main3Activity"
-
+            android:name="com.hackncs.zealicon.loot.Main3Activity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".WelcomeSlider"
+            android:name="com.hackncs.zealicon.loot.WelcomeSlider"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".DashboardLoot"
+            android:name="com.hackncs.zealicon.loot.DashboardLoot"
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service
-            android:name=".MyFirebaseMessagingService"
-            android:enabled="true"
-            android:exported="true">
+            android:name="com.hackncs.zealicon.loot.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service
-            android:name=".MyFirebaseInstanceIDService"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
+        <!--<service-->
+            <!--android:name=".MyFirebaseInstanceIDService"-->
+            <!--android:enabled="true"-->
+            <!--android:exported="true">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.google.firebase.INSTANCE_ID_EVENT" />-->
+            <!--</intent-filter>-->
+        <!--</service>-->
 
 
-        <activity android:name=".Duel_Alert_Transparent_Activity"
+        <activity android:name="com.hackncs.zealicon.loot.Duel_Alert_Transparent_Activity"
+            android:screenOrientation="portrait"
             android:theme="@style/Transparent_Theme"/>
 
-        <activity android:name=".MiniGame"
+        <activity android:name="com.hackncs.zealicon.loot.MiniGame"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>

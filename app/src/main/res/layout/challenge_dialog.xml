@@ -1,89 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@drawable/white_rectangle"
-    tools:layout_editor_absoluteX="16dp"
-    tools:layout_editor_absoluteY="81dp">
+    android:layout_margin="16dp"
+    android:padding="33dp"
+    android:background="@drawable/white_rectangle">
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/gilroy_bold"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/avenir_next_lt_pro_bold"
         android:text="Challenge"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="36sp"
-        android:textStyle="bold"
-        android:layout_margin="16dp"
-        tools:layout_editor_absoluteX="77dp"
-        tools:layout_editor_absoluteY="30dp" />
+        android:textColor="@color/darkGrey"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/message"
-        android:layout_width="296dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/gilroy_bold"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/avenir_next_lt_pro_bold"
         android:text="Message"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="24sp"
-        android:layout_margin="8dp"
-        tools:layout_editor_absoluteX="32dp"
-        tools:layout_editor_absoluteY="106dp" />
+        android:textColor="@color/darkGrey"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <EditText
         android:id="@+id/stake"
-        android:layout_width="296dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/edittext_layout_red"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/edittext_layout_black"
         android:ems="10"
-        android:fontFamily="@font/gilroy_bold"
+        android:fontFamily="@font/avenir_next_lt_pro_bold"
         android:hint="Enter Stake"
-        android:layout_margin="8dp"
         android:inputType="textPersonName"
-        android:padding="10dp"
-        android:textColor="@color/black_overlay"
-        android:textSize="24dp"
-        android:textStyle="normal"
-        tools:layout_editor_absoluteX="32dp"
-        tools:layout_editor_absoluteY="167dp" />
+        android:paddingBottom="10dp"
+        android:textColor="@color/darkGrey"
+        android:textColorHint="@color/darkGrey70"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/message" />
 
-    <LinearLayout
-        android:layout_margin="8dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
 
     <Button
         android:id="@+id/positive"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
+        android:layout_width="106dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="42dp"
         android:background="@drawable/card_background_yellow"
-        android:fontFamily="@font/gilroy_bold_family"
+        android:fontFamily="@font/avenir_next_lt_pro_bold"
         android:text="Button"
-        android:textColor="@color/text_color"
-        android:textSize="16dp"
+        android:textColor="@color/darkGrey"
+        android:textSize="18sp"
         android:textStyle="bold"
-        android:layout_margin="16dp"
-        tools:layout_editor_absoluteX="44dp"
-        tools:layout_editor_absoluteY="239dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stake" />
 
     <Button
         android:id="@+id/negative"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/card_background_yellow"
-        android:fontFamily="@font/gilroy_bold_family"
+        android:layout_width="106dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="42dp"
+        android:background="@drawable/card_background_red"
+        android:fontFamily="@font/avenir_next_lt_pro_bold"
         android:text="Button"
-        android:textColor="@color/text_color"
-        android:textSize="16dp"
+        android:textColor="@color/white"
+        android:textSize="18sp"
         android:textStyle="bold"
-        android:layout_margin="16dp"
-        tools:layout_editor_absoluteX="192dp"
-        tools:layout_editor_absoluteY="239dp" />
-    </LinearLayout>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stake" />
 
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

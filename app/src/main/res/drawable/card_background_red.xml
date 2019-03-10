@@ -3,8 +3,8 @@
     <item android:id="@android:id/background">
 
         <shape>
-            <corners android:radius="8dp"/>
-            <solid android:color="@color/colorPrimaryDark"/>
+            <corners android:radius="7dp"/>
+            <solid android:color="@color/redCard"/>
         </shape>
     </item>
 </layer-list>

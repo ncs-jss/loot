@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
@@ -11,23 +11,23 @@
     card_view:cardUseCompatPadding="true">
 
     <LinearLayout
-        android:background="@drawable/card_background_red"
+        android:background="@drawable/card_background_white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="74dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/avatar"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_gravity="center_vertical"
             android:src="@drawable/avatar_1"
             android:scaleType="fitXY"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:tag="image_tag" />
+            android:layout_marginLeft="22dp"
+            android:layout_marginStart="22dp"
+            android:tag="image_tag"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -44,40 +44,37 @@
                 android:id="@+id/user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sharan Verma"
-                android:fontFamily="@font/gilroy_bold_family"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/space_white"
-                android:textSize="20sp" />
+                android:text="Misaki"
+                android:fontFamily="@font/avenir_next_lt_pro_bold"
+                android:textColor="@color/actionBarText"
+                android:textSize="18sp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="4dp">
 
                 <TextView
                     android:id="@+id/dollar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="$"
-                    android:fontFamily="@font/gilroy_bold_family"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="20sp" />
+                    android:fontFamily="@font/bahnschrift_reg"
+                    android:textColor="@color/actionBarText"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/user_coins"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1000"
-                    android:fontFamily="@font/gilroy_bold_family"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/space_white"
-                    android:textSize="20sp" />
+                    android:fontFamily="@font/bahnschrift_reg"
+                    android:textColor="@color/actionBarText"
+                    android:textSize="18sp" />
             </LinearLayout>
 
         </LinearLayout>
     </LinearLayout>
 
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>
 

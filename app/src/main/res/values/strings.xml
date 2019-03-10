@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Loot</string>
+    <string name="app_name">Loot 2.0</string>
     <string name="title_activity_main2">Main2Activity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -41,6 +41,9 @@
     <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
     <string name="play_again">Play Again</string>
 
-
-
+    <string name="intro">I came out of detention cell. Isa\'s men were waiting for me they wanted their revenge. It was certain that I would die but the voice in my head kept my hope alive. It said \"You\'ll live Gaitonde. \"But I needed a miracle and it happened. Men dressed in black came and took me. I was half conscious but I was dying to meet the one who had saved my life and changed my fate. . . .</string>
+    <string name="intro2">. . . All my life I considered myself a God but now I had found a God, he was my third father, my Guru. After meeting Guruji it was clear to me that Mumbai had to be cleansed before it could be conquered. But Before all this I had to get at peace with my previous life. In other words the war between me and Isa had to end. Isa was somewhere in Noida but no one knew where, and that is why I need you. You are the key to my victory \"The One Who will find Isa\". The clues to find Isa have been spread all around you. Find him and you\'ll get rewarded.</string>
+    <string name="intro3">Missions will be given to the players on reaching certain checkpoints inside the campus.\n\nA riddle is to be asked in reference to the place. \nThe players can always skip a riddle to move to next checkpoint but it would result in losing of points.</string>
+    <string name="about">© Nibble Computer Society \n\nZealicon’19 brings to you the second edition and first-of-its-kind event, LOOT. Now put on your thinking caps and go about the campus with your GPS up and running, meet Gaitonde, a criminal mastermind from the Sacred Games, complete thrilling missions and solve mind-boggling puzzles, all with one Android application at your palm. We challenge you to keep up with us!! Get ready to get bamboozled!!!!</string>
+    <string name="how_to">Turn on your phone\'s GPS if it\'s off. For every mission, first reach location by decoding the provided information. Every time you reach a correct location, your phone will vibrate and you will be given a puzzle. Solve it to earn coins and be taken to the next mission! You can drop the mission if you wish to. However, keep in mind that there will be penalty for every mission dropped. Between an ongoing mission, you can also challenge any other online player for a duel in a mini game by placing a bet of coins of your choice. Your opponent can either accept or reject your challenge. If he/she chooses to accept, they also get to choose a bet of the equal number or coins as you, or less. The lesser number of coins will be the final bet placed. Your number of coins will decide your rank on the leaderboard. At the end of 2 days of the event going live, the top players on the leaderboard will be declared winners. Happy looting!</string>
 </resources>

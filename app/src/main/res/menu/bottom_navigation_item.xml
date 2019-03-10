@@ -5,16 +5,16 @@
         android:id="@+id/navigation_duel"
         android:title="@string/duel_mode"
         android:checked="false"
-        android:icon="@drawable/duel_icon"/>
+        android:icon="@drawable/duel_2"/>
 
     <item
         android:id="@+id/navigation_current_mission"
-        android:icon="@drawable/main_icon"
+        android:icon="@drawable/noun_pin_682494"
         android:checked="false"
         android:title="@string/current_task" />
     <item
         android:id="@+id/navigation_leaderboard"
-        android:icon="@drawable/leaderboard_icon"
+        android:icon="@drawable/leader"
         android:checked="false"
         android:title="@string/title_leaderBoard" />
 

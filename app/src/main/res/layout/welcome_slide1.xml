@@ -1,41 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/welcome_1">
+    android:background="@color/black">
 
-    <!--<LinearLayout-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_centerInParent="true"-->
-        <!--android:gravity="center_horizontal"-->
-        <!--android:orientation="vertical">-->
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/imageFilterView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="center"
+        android:src="@drawable/bg_1" />
 
-        <!--<ImageView-->
-            <!--android:layout_width="@dimen/img_width_height"-->
-            <!--android:layout_height="@dimen/img_width_height"-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginBottom="56dp"
+        android:background="@drawable/white_background70"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-            <!--app:srcCompat="@android:drawable/sym_def_app_icon" />-->
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="164dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/card_background_yellow"
+            android:fontFamily="@font/avenir_next_lt_pro_bold"
+            android:gravity="center"
+            android:text="Hey People"
+            android:textColor="@color/headingColor"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/slide_1_title"-->
-            <!--android:textColor="@android:color/white"-->
-            <!--android:textSize="@dimen/slide_title"-->
-            <!--android:textStyle="bold" />-->
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3">
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="20dp"-->
-            <!--android:paddingLeft="@dimen/desc_padding"-->
-            <!--android:paddingRight="@dimen/desc_padding"-->
-            <!--android:text="@string/slide_1_desc"-->
-            <!--android:textAlignment="center"-->
-            <!--android:textColor="@android:color/white"-->
-            <!--android:textSize="@dimen/slide_desc" />-->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/avenir_next_lt_pro_demi"
+            android:text="@string/intro"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:lineSpacingExtra="4dp"
+            android:textColor="@color/white"/>
+       </ScrollView>
 
-    <!--</LinearLayout>-->
-</RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

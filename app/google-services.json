@@ -49,6 +49,50 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:755281348975:android:135134922cfd2ce6",
+        "android_client_info": {
+          "package_name": "com.hackncs.zealicon.loot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "755281348975-auehd1jchduik91t336hpd9sbga7saih.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hackncs.zealicon.loot",
+            "certificate_hash": "04d799a8e6900fb914f5fe90f31583a8dba9ddcf"
+          }
+        },
+        {
+          "client_id": "755281348975-s76ur0rd2gisemrm5ve8jo62lt16c8m6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBf_qhgAyQcy7IgbNhe5QV2yV2q1275iY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "755281348975-s76ur0rd2gisemrm5ve8jo62lt16c8m6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"

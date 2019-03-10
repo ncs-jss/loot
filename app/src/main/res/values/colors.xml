@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorPrimary">#f9ca24</color>
-    <color name="colorPrimaryDark">#c43b67</color>
-    <color name="colorAccent">#ffffff</color>
+    <color name="colorPrimary">#FEC009</color>
+    <color name="colorPrimaryDark">#EEB81A</color>
+    <color name="colorAccent">#90ffffff</color>
+
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+    <color name="white70">#70ffffff</color>
+    <color name="darkGrey">#363131</color>
+    <color name="darkGrey70">#70363131</color>
+    <color name="darkGrey90">#80363131</color>
+    <color name="headingColor">#141212</color>
+    <color name="actionBarText">#272525</color>
+    <color name="redCard">#DB3A3A</color>
 
     <color name="text_color">#302e6b</color>
 
-    <color name="white30">#30ffffff</color>
+    <color name="white30">#ffffff</color>
     <color name="primary30">#30c43b67</color>
 
     <color name="bgBottomNavigation">#fe485a</color>
@@ -20,15 +30,15 @@
 
 
     <!-- dots inactive colors -->
-    <color name="dot_dark_screen1">#d1395c</color>
-    <color name="dot_dark_screen2">#14a895</color>
-    <color name="dot_dark_screen3">#2278d4</color>
+    <color name="dot_dark_screen1">#ffffff</color>
+    <color name="dot_dark_screen2">#ffffff</color>
+    <color name="dot_dark_screen3">#ffffff</color>
 
 
     <!-- dots active colors -->
-    <color name="dot_light_screen1">#f98da5</color>
-    <color name="dot_light_screen2">#8cf9eb</color>
-    <color name="dot_light_screen3">#93c6fd</color>
+    <color name="dot_light_screen1">#FEC009</color>
+    <color name="dot_light_screen2">#FEC009</color>
+    <color name="dot_light_screen3">#FEC009</color>
 
 
     <array name="array_dot_active">

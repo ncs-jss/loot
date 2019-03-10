@@ -1,23 +1,24 @@
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/space_transparent"
-    tools:context="com.example.dell.loot.Current_missions">
+    tools:context="com.hackncs.zealicon.loot.Current_missions">
 
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/gilroy_extrabold"
+        android:layout_marginStart="46dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="46dp"
+        android:fontFamily="@font/avenir_next_lt_pro_bold"
         android:text="Duel Mode"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="36sp"
-        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="35sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,65 +27,66 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="45dp"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
         <LinearLayout
-            android:layout_width="144dp"
-            android:layout_height="60dp"
-            android:layout_marginEnd="31dp"
-            android:layout_marginRight="31dp"
-            android:background="@drawable/card_background_red"
+            android:layout_width="129dp"
+            android:layout_height="51dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/card_background_white"
             android:gravity="center">
 
             <TextView
-                android:layout_width="68dp"
-                android:layout_height="21dp"
-                android:fontFamily="@font/gilroy_extrabold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/avenir_next_lt_pro_bold"
                 android:text="WON"
-                android:textColor="@color/space_white"
+                android:textColor="@color/darkGrey"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/won"
-                android:layout_width="30dp"
-                android:layout_height="21dp"
-                android:fontFamily="@font/gilroy_extrabold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:fontFamily="@font/avenir_next_lt_pro_bold"
                 android:text="0"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/darkGrey"
                 android:textSize="18sp" />
         </LinearLayout>
 
 
         <LinearLayout
-            android:layout_width="144dp"
-            android:layout_height="60dp"
+            android:layout_width="129dp"
+            android:layout_height="51dp"
             android:background="@drawable/card_background_red"
 
             android:gravity="center">
 
             <TextView
-                android:layout_width="68dp"
-                android:layout_height="21dp"
-                android:fontFamily="@font/gilroy_extrabold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/avenir_next_lt_pro_bold"
                 android:text="LOST"
-                android:textColor="@color/space_white"
+                android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/lost"
-                android:layout_width="30dp"
-                android:layout_height="21dp"
-                android:fontFamily="@font/gilroy_extrabold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:fontFamily="@font/avenir_next_lt_pro_bold"
                 android:text="0"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/darkGrey"
                 android:textSize="18sp" />
         </LinearLayout>
 
@@ -95,55 +97,46 @@
         android:id="@+id/imageView2"
         android:layout_width="236dp"
         android:layout_height="0dp"
-        android:layout_marginTop="64dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/dan"
+        android:layout_marginStart="153dp"
+        android:src="@drawable/gaitonde"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <LinearLayout
-        android:id="@+id/mission_desc"
-        android:layout_width="230dp"
-        android:layout_height="162dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/d_box"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.43"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView2"
-        app:layout_constraintVertical_bias="0.246">
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.575" />
 
 
-        <TextView
-            android:id="@+id/dan_msg"
-            android:layout_width="119dp"
-            android:layout_height="70dp"
-            android:layout_marginBottom="79.52dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginTop="46dp"
-            android:fontFamily="@font/gilroy_bold"
-            android:text="Ready To Loot?"
-            android:textColor="@color/black_overlay"
-            android:textSize="24sp" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/dan_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
+        android:layout_marginBottom="152dp"
+        android:fontFamily="@font/avenir_next_lt_pro_bold"
+        android:text="Ready To Loot?"
+        android:textColor="@color/colorPrimary"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageButton
+
+    <Button
         android:id="@+id/loot"
-        android:layout_width="85dp"
-        android:layout_height="52dp"
-        android:layout_marginBottom="90dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="129dp"
+        android:layout_height="51dp"
+        android:layout_marginBottom="80dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="20dp"
+        android:text="LOOT !"
+        android:textSize="20sp"
+        android:fontFamily="@font/avenir_next_lt_pro_bold"
         android:background="@drawable/card_background_yellow"
-        android:scaleType="fitXY"
-        android:src="@drawable/loot_box"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mission_desc"
+        app:layout_constraintTop_toBottomOf="@+id/dan_msg"
         app:layout_constraintVertical_bias="0.097" />
 
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

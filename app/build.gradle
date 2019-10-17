@@ -10,7 +10,7 @@ android {
         applicationId "com.hackncs.zealicon.loot"
         minSdkVersion 18
         targetSdkVersion 28
-        versionCode 6
+        versionCode 7
         versionName "2.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

@@ -19,7 +19,10 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.json.JSONException;
@@ -76,23 +79,55 @@ public class OnlineUsers extends Fragment {
         SharedPreferences sharedPreferences =getActivity().getSharedPreferences("LootPrefs", Context.MODE_PRIVATE);
         final String userId = sharedPreferences.getString("com.hackncs.userID","");
         mRecyclerView.setAdapter(mAdapter);
+//        db.collection("users")
+//                .whereEqualTo("online", true)
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (DocumentSnapshot document : task.getResult()) {
+//                                Map<String, Object> map = document.getData();
+//                                if(!map.get("userID").toString().equals(userId))
+//                                getUser(map.get("userID").toString());
+//                            }
+//                        } else {
+//                            Log.i("Error getting documents", task.getException().getMessage());
+//                        }
+//                    }
+//                });
         db.collection("users")
                 .whereEqualTo("online", true)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (DocumentSnapshot document : task.getResult()) {
-                                Map<String, Object> map = document.getData();
-                                if(!map.get("userID").toString().equals(userId))
-                                getUser(map.get("userID").toString());
-                            }
-                        } else {
-                            Log.i("Error getting documents", task.getException().getMessage());
+                    public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w("Online Error", "Listen failed.", e);
+                            return;
+                        }
+                        onlineUsers.clear();
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            Log.i("Data",doc.getString("userID"));
+                            if(!doc.get("userID").toString().equals(userId))
+                                    getUser(doc.get("userID").toString());
                         }
                     }
                 });
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (DocumentSnapshot document : task.getResult()) {
+//                                Map<String, Object> map = document.getData();
+//                                if(!map.get("userID").toString().equals(userId))
+//                                    getUser(map.get("userID").toString());
+//                            }
+//                        } else {
+//                            Log.i("Error getting documents", task.getException().getMessage());
+//                        }
+//                    }
+//                });
     }
 
 
@@ -132,7 +167,7 @@ public class OnlineUsers extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.i("Error",error.getMessage());
+//                        Log.i("Error",error.getMessage());
                     }
                 }){
                 @Override

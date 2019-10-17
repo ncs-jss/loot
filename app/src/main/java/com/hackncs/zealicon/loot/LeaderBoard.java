@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,6 +37,7 @@ public class LeaderBoard extends Fragment {
     ArrayList<String> usernames, coins;
     ArrayList<Integer> avatarIDs;
     View view;
+    RequestQueue requestQueue;
 
     public LeaderBoard() {
         // Required empty public constructor
@@ -62,9 +64,17 @@ public class LeaderBoard extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
         BottomNavigationView navigationView=getActivity().findViewById(R.id.bottom_nav);
         navigationView.getMenu().getItem(2).setChecked(true);
+
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         usernames = new ArrayList<>();
         coins = new ArrayList<>();
         avatarIDs = new ArrayList<>();
+        Log.i("times","times");
         StringRequest leaders = new StringRequest(Request.Method.GET, Endpoints.leaders,
                 new Response.Listener<String>() {
                     @Override
@@ -96,16 +106,17 @@ public class LeaderBoard extends Fragment {
 
                     }
                 }){
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("x-auth",Endpoints.apikey);
-                    return params;
-                }
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("x-auth",Endpoints.apikey);
+                return params;
+            }
         };
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        if(requestQueue==null) {
+            requestQueue = Volley.newRequestQueue(getActivity());
+        }
         requestQueue.add(leaders);
-        return view;
-    }
 
+    }
 }

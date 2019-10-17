@@ -289,7 +289,7 @@ public class DashboardLoot extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("updateVolley", error.getMessage());
+//                        Log.d("updateVolley", error.getMessage());
                     }
                 }) {
             @Override
